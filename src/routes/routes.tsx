@@ -1,3 +1,4 @@
+import LoadingSpinner from '@/components/loading-spinner';
 import { lazy } from 'react';
 import { createBrowserRouter, createRoutesFromElements, Route } from 'react-router-dom';
 
@@ -19,7 +20,7 @@ const DashBoardPage = lazy(() => import('@pages/dashboard'));
 const NotFoundPage = lazy(() => import('@pages/not-found'));
 
 const PrimaryRoute = (
-  <Route path='/'>
+  <Route path='/' element={<LoadingSpinner />}>
     <Route index element={<LandingPage />} />
     <Route path='sign-in' element={<SignInPage />} />
     <Route path='sign-up' element={<SignUpPage />} />
