@@ -6,6 +6,7 @@ const StSignInContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 170px 0;
 
   h3 {
     font-size: 2rem;
@@ -23,6 +24,7 @@ const StSignInContainer = styled.div`
   }
 
   form {
+    width: 100%;
     margin-top: 38px;
   }
 
@@ -30,6 +32,7 @@ const StSignInContainer = styled.div`
     font-size: 1.6rem;
     font-weight: 400;
     color: ${({ theme }) => theme.color.black_33};
+    margin-top: 26px;
 
     a {
       text-decoration: underline;
