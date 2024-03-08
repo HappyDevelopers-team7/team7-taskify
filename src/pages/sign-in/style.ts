@@ -49,7 +49,7 @@ const StSignInContainer = styled.div`
 
     h1 {
       img {
-        width: 119px;
+        width: 128px;
       }
     }
 
