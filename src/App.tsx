@@ -1,8 +1,8 @@
 import { RouterProvider } from 'react-router-dom';
 import { router } from './routes/routes';
 import GlobalStyle from './styles/globalStyle';
-import { ThemeProvider } from 'styled-components';
 import { theme } from './styles/theme/theme';
+import { ThemeProvider } from 'styled-components';
 
 /**
  * ThemeProvider 안에 공통으로 사용될 window 사이즈 및 컬러들을 모아두었음.
@@ -12,12 +12,10 @@ import { theme } from './styles/theme/theme';
 
 function App() {
   return (
-    <>
-      <ThemeProvider theme={theme}>
-        <GlobalStyle />
-        <RouterProvider router={router} />
-      </ThemeProvider>
-    </>
+    <ThemeProvider theme={theme}>
+      <GlobalStyle />
+      <RouterProvider router={router} />
+    </ThemeProvider>
   );
 }
 
