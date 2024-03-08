@@ -43,6 +43,20 @@ const StSignInContainer = styled.div`
       color: ${({ theme }) => theme.color.violet};
     }
   }
+
+  @media ${({ theme }) => theme.deviceSize.mobile} {
+    padding: 144px 12px;
+
+    h1 {
+      img {
+        width: 119px;
+      }
+    }
+
+    h5 {
+      margin-top: 24px;
+    }
+  }
 `;
 
 export default StSignInContainer;
