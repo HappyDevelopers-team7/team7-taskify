@@ -1,6 +1,7 @@
 import { authInputProps } from './authInputType';
 import { useState } from 'react';
 import { StInputContainer, StLabel } from './style';
+import { StErrorMessage } from '@/styles/input/style';
 
 /**
  * 로그인/회원가입에 사용되는 input
@@ -25,6 +26,9 @@ const AuthInput = ({
   placeholder = '내용을 입력하세요',
 }: authInputProps) => {
   const errorMessages = errors && errors[name] ? errors[name]?.message : null;
+  /**
+   * '!!'로 인해 강제로 boolean 값을 반환한다.
+   */
   const isError = !!(errors && errorMessages);
 
   const [isEyeOff, setIsEyeOff] = useState(true);
@@ -36,7 +40,7 @@ const AuthInput = ({
     <>
       {label ? <StLabel>{label}</StLabel> : null}
 
-      <StInputContainer>
+      <StInputContainer className={isError ? 'red' : ''}>
         {password ? (
           <>
             <input
@@ -57,7 +61,9 @@ const AuthInput = ({
           <input id={id} type={type} placeholder={placeholder} {...(register && register(name, rules))} />
         )}
       </StInputContainer>
-      {isError && typeof errorMessages === 'string' ? <p aria-live='assertive'>{errorMessages}</p> : null}
+      {isError && typeof errorMessages === 'string' ? (
+        <StErrorMessage aria-live='assertive'>{errorMessages}</StErrorMessage>
+      ) : null}
     </>
   );
 };
