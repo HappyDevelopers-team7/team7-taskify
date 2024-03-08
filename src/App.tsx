@@ -3,6 +3,7 @@ import { router } from './routes/routes';
 import GlobalStyle from './styles/globalStyle';
 import { theme } from './styles/theme/theme';
 import { ThemeProvider } from 'styled-components';
+import './styles/font-family.css';
 
 /**
  * ThemeProvider 안에 공통으로 사용될 window 사이즈 및 컬러들을 모아두었음.
