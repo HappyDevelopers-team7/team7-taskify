@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import StSignInContainer from './style';
 import AuthInput from '@/components/auth-input';
+import FullButton from '@/components/full-button';
 
 const SignIn = () => {
   return (
@@ -22,6 +23,9 @@ const SignIn = () => {
             placeholder='비밀번호를 입력해 주세요.'
             label='비밀번호'
           />
+          <div className='form__submit-button'>
+            <FullButton disabled>로그인</FullButton>
+          </div>
         </form>
         <h5>
           회원이 아니신가요? <Link to='/sign-up'>회원가입하기</Link>

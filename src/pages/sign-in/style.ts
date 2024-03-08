@@ -26,6 +26,10 @@ const StSignInContainer = styled.div`
   form {
     width: 100%;
     margin-top: 38px;
+
+    .form__submit-button {
+      margin-top: 20px;
+    }
   }
 
   h5 {
