@@ -28,14 +28,14 @@ const SignIn = () => {
   const handleSubmitLogin: SubmitHandler<FieldValues> = async (data) => {
     const result = await postSignIn(data.email, data.password);
 
-    if (result === 404) {
+    if (result?.status === 404) {
       return alert(AUTH_ERROR_MESSAGES.USER_NOT_FOUND);
     }
 
-    if (result === 400) {
-      setError('email', {
+    if (result?.status === 400) {
+      setError('password', {
         type: 'serverError',
-        message: AUTH_ERROR_MESSAGES.EMAIL_CHECK_FAILED,
+        message: result?.data.message,
       });
       return;
     }

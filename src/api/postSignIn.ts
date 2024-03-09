@@ -10,12 +10,11 @@ export const postSignIn = async (email: string, password: string) => {
     });
 
     const responseData = await response;
-    console.log(responseData);
     return responseData;
   } catch (e) {
     const error = e as AxiosError;
     if (error.response?.status) {
-      return error.response?.status;
+      return error.response;
     }
   }
 };
