@@ -8,8 +8,11 @@ import { emailPattern, passwordPattern } from '@/constants/regex';
 import { useCookies } from 'react-cookie';
 import { useEffect } from 'react';
 import { AUTH_ERROR_MESSAGES } from '@/constants/error';
+import { useDispatch } from 'react-redux';
+import { login } from '@/redux/userSlice';
 
 const SignIn = () => {
+  const dispatch = useDispatch();
   const [cookies, setCookie] = useCookies(['accessToken']);
   const navigate = useNavigate();
   const {
@@ -41,6 +44,7 @@ const SignIn = () => {
     }
 
     if (typeof result !== 'number' && result?.data?.accessToken) {
+      dispatch(login(result.data.user));
       setCookie('accessToken', result?.data?.accessToken, {
         path: '/',
       });
