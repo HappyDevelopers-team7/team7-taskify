@@ -2,7 +2,7 @@
  * 로그인/ 회원가입 관련 에러 메시지 상수 모음
  */
 export const AUTH_ERROR_MESSAGES = {
-  DUPLICATE_EMAIL: '중복된 이메일입니다.',
+  DUPLICATE_EMAIL: '이미 사용중인 이메일입니다.',
   EMAIL_REQUIRED: '이메일을 입력해주세요.',
   NICKNAME_REQUIRED: '닉네임을 입력해주세요.',
   PASSWORD_REQUIRED: '비밀번호를 입력해주세요.',

@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import AuthInput from '@/components/auth-input';
 import FullButton from '@/components/full-button';
 import StSignInContainer from '../sign-in/style';
@@ -9,11 +9,13 @@ import { emailPattern, nicknamePattern, passwordPattern } from '@/constants/rege
 import { AUTH_ERROR_MESSAGES } from '@/constants/error';
 
 const SignUp = () => {
+  const navigate = useNavigate();
   const {
     register,
     formState: { errors, isValid },
     handleSubmit,
     getValues,
+    setError,
   } = useForm({ mode: 'onBlur', shouldFocusError: true });
 
   const [agreeChecked, setAgreeChecked] = useState(false);
@@ -24,7 +26,16 @@ const SignUp = () => {
 
   const handleSubmitRegister: SubmitHandler<FieldValues> = async (data) => {
     const result = await postSignUp(data.email, data.nickname, data.password);
-    console.log(result);
+    if (result === 409) {
+      setError('email', {
+        type: 'serverError',
+        message: AUTH_ERROR_MESSAGES.DUPLICATE_EMAIL,
+      });
+    }
+
+    if (result === 201) {
+      return navigate('/sign-in');
+    }
   };
 
   return (
