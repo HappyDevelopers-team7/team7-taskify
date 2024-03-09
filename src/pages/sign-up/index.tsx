@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { postSignUp } from '@/api/postSignUp';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import { emailPattern, nicknamePattern, passwordPattern } from '@/constants/regex';
+import { AUTH_ERROR_MESSAGES } from '@/constants/error';
 
 const SignUp = () => {
   const {
@@ -43,7 +44,7 @@ const SignUp = () => {
             register={register}
             errors={errors}
             rules={{
-              required: '이메일을 입력해 주세요.',
+              required: AUTH_ERROR_MESSAGES.EMAIL_REQUIRED,
               pattern: emailPattern,
             }}
             placeholder='이메일을 입력해 주세요.'
@@ -56,7 +57,7 @@ const SignUp = () => {
             register={register}
             errors={errors}
             rules={{
-              required: '닉네임을 입력해 주세요.',
+              required: AUTH_ERROR_MESSAGES.NICKNAME_REQUIRED,
               pattern: nicknamePattern,
             }}
             placeholder='닉네임을 입력해 주세요.'
@@ -70,7 +71,7 @@ const SignUp = () => {
             register={register}
             errors={errors}
             rules={{
-              required: '8자 이상 입력해 주세요',
+              required: AUTH_ERROR_MESSAGES.PASSWORD_REQUIRED,
               pattern: passwordPattern,
             }}
             placeholder='8자 이상 입력해 주세요'
@@ -84,11 +85,11 @@ const SignUp = () => {
             register={register}
             errors={errors}
             rules={{
-              required: '비밀번호와 일치하는 값을 입력해 주세요.',
+              required: AUTH_ERROR_MESSAGES.CONFIRM_PASSWORD_REQUIRED,
               validate: {
                 matchPassword: (value) => {
                   const { password } = getValues();
-                  return password === value || '비밀번호가 일치하지 않습니다';
+                  return password === value || AUTH_ERROR_MESSAGES.INVALID_CONFIRM_PASSWORD;
                 },
               },
             }}

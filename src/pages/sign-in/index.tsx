@@ -7,6 +7,7 @@ import { postSignIn } from '@/api/postSignIn';
 import { emailPattern, passwordPattern } from '@/constants/regex';
 import { useCookies } from 'react-cookie';
 import { useEffect } from 'react';
+import { AUTH_ERROR_MESSAGES } from '@/constants/error';
 
 const SignIn = () => {
   const [cookies, setCookie] = useCookies(['accessToken']);
@@ -28,13 +29,13 @@ const SignIn = () => {
     const result = await postSignIn(data.email, data.password);
 
     if (result === 404) {
-      return alert('존재하지 않는 유저입니다.');
+      return alert(AUTH_ERROR_MESSAGES.USER_NOT_FOUND);
     }
-    // TODO : 에러 메시지 서버 쪽에서 받아올 수 있으니 확인하여 수정 필요
+
     if (result === 400) {
       setError('email', {
         type: 'serverError',
-        message: '이메일을 다시 확인해 주세요.',
+        message: AUTH_ERROR_MESSAGES.EMAIL_CHECK_FAILED,
       });
       return;
     }
@@ -68,7 +69,7 @@ const SignIn = () => {
             register={register}
             errors={errors}
             rules={{
-              required: '이메일을 입력해 주세요.',
+              required: AUTH_ERROR_MESSAGES.EMAIL_REQUIRED,
               pattern: emailPattern,
             }}
             placeholder='이메일을 입력해 주세요.'
@@ -82,7 +83,7 @@ const SignIn = () => {
             register={register}
             errors={errors}
             rules={{
-              required: '비밀번호를 입력해 주세요.',
+              required: AUTH_ERROR_MESSAGES.PASSWORD_REQUIRED,
               pattern: passwordPattern,
             }}
             placeholder='비밀번호를 입력해 주세요.'
