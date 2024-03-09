@@ -10,8 +10,7 @@ export const postSignUp = async (email: string, nickname: string, password: stri
       password,
     });
 
-    const responseData = await response;
-    console.log(responseData);
+    const responseData = await response.status;
     return responseData;
   } catch (e) {
     const error = e as AxiosError;
