@@ -19,7 +19,7 @@ const SignIn = () => {
   } = useForm({ mode: 'onBlur', shouldFocusError: true });
 
   const checkCookie = () => {
-    if (cookies) {
+    if (cookies.accessToken) {
       navigate('/mydashboard');
     }
   };
