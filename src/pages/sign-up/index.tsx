@@ -96,15 +96,18 @@ const SignUp = () => {
             placeholder='비밀번호를 한번 더 입력해 주세요'
             label='비밀번호 확인'
           />
-          <div className='form__agreement-checkbox'>
+          <div tabIndex={0} className='form__agreement-checkbox'>
             <input
+              tabIndex={0}
               type='checkbox'
               name='agree'
               id='agree'
               checked={agreeChecked}
               onChange={handleChangeActivateRegistration}
             />
-            <label htmlFor='agree'>이용약관에 동의합니다.</label>
+            <label tabIndex={0} htmlFor='agree'>
+              이용약관에 동의합니다.
+            </label>
           </div>
           <div className='form__submit-button'>
             <FullButton disabled={!agreeChecked}>가입하기</FullButton>
