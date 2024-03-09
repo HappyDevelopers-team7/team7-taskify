@@ -1,12 +1,16 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import StSignInContainer from './style';
 import AuthInput from '@/components/auth-input';
 import FullButton from '@/components/full-button';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import { postSignIn } from '@/api/postSignIn';
-import { emailPattern } from '@/constants/regex';
+import { emailPattern, passwordPattern } from '@/constants/regex';
+import { useCookies } from 'react-cookie';
+import { useEffect } from 'react';
 
 const SignIn = () => {
+  const [cookies, setCookie] = useCookies(['accessToken']);
+  const navigate = useNavigate();
   const {
     register,
     formState: { errors, isValid },
@@ -14,21 +18,38 @@ const SignIn = () => {
     setError,
   } = useForm({ mode: 'onBlur', shouldFocusError: true });
 
+  const checkCookie = () => {
+    if (cookies) {
+      navigate('/mydashboard');
+    }
+  };
+
   const handleSubmitLogin: SubmitHandler<FieldValues> = async (data) => {
     const result = await postSignIn(data.email, data.password);
 
+    if (result === 404) {
+      return alert('존재하지 않는 유저입니다.');
+    }
+    // TODO : 에러 메시지 서버 쪽에서 받아올 수 있으니 확인하여 수정 필요
     if (result === 400) {
       setError('email', {
         type: 'serverError',
         message: '이메일을 다시 확인해 주세요.',
       });
-      setError('password', {
-        type: 'serverError',
-        message: '비밀번호를 다시 확인해 주세요.',
-      });
       return;
     }
+
+    if (typeof result !== 'number' && result?.data?.accessToken) {
+      setCookie('accessToken', result?.data?.accessToken, {
+        path: '/',
+      });
+      navigate('/mydashboard');
+    }
   };
+
+  useEffect(() => {
+    checkCookie();
+  });
 
   return (
     <StSignInContainer>
@@ -62,6 +83,7 @@ const SignIn = () => {
             errors={errors}
             rules={{
               required: '비밀번호를 입력해 주세요.',
+              pattern: passwordPattern,
             }}
             placeholder='비밀번호를 입력해 주세요.'
             label='비밀번호'
