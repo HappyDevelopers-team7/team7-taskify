@@ -48,6 +48,10 @@ const StSignInContainer = styled.div`
         border: 1px solid ${({ theme }) => theme.color.gray_d9};
         cursor: pointer;
 
+        &:focus {
+          outline: 1px solid ${({ theme }) => theme.color.violet};
+        }
+
         &:checked {
           background: ${({ theme }) => theme.color.violet} url(assets/image/icons/checkWhiteIcon.svg) no-repeat center;
           background-size: 95%;
