@@ -37,6 +37,7 @@ const DashBoard = () => {
   // });
   return (
     <div>
+      <h1>{userData.accessToken}</h1>
       <h1>{userData.user.id}</h1>
       <h1>{userData.user.nickname}</h1>
       <h1>{userData.user.email}</h1>
