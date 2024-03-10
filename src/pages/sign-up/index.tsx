@@ -8,6 +8,7 @@ import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import { emailPattern, nicknamePattern, passwordPattern } from '@/constants/regex';
 import { AUTH_ERROR_MESSAGES, AUTH_MESSAGES } from '@/constants/message';
 import { toast } from 'react-toastify';
+import { useAsync } from '@/hooks/useAsync';
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -21,20 +22,24 @@ const SignUp = () => {
 
   const [agreeChecked, setAgreeChecked] = useState(false);
 
+  const { loading, result, setAsyncFunction } = useAsync(postSignUp);
+
   const handleChangeActivateRegistration = () => {
     setAgreeChecked((prevState) => !prevState);
   };
 
   const handleSubmitRegister: SubmitHandler<FieldValues> = async (data) => {
-    const result = await postSignUp(data.email, data.nickname, data.password);
-    if (result === 409) {
+    await setAsyncFunction(data.email, data.nickname, data.password);
+
+    if (result?.status === 409) {
       setError('email', {
         type: 'serverError',
         message: AUTH_ERROR_MESSAGES.DUPLICATE_EMAIL,
       });
+      return;
     }
 
-    if (result === 201) {
+    if (result?.status === 201) {
       toast.success(AUTH_MESSAGES.JOIN_SUCCESS);
       return navigate('/sign-in');
     }
@@ -120,7 +125,11 @@ const SignUp = () => {
             <label htmlFor='agree'>이용약관에 동의합니다.</label>
           </div>
           <div className='form__submit-button'>
-            <FullButton disabled={agreeChecked && isValid ? false : true}>가입하기</FullButton>
+            {loading ? (
+              <FullButton disabled={true}>잠시만 기다려주세요...</FullButton>
+            ) : (
+              <FullButton disabled={agreeChecked && isValid ? false : true}>가입하기</FullButton>
+            )}
           </div>
         </form>
         <h5>

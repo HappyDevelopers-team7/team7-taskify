@@ -2,7 +2,8 @@ import { AxiosError } from 'axios';
 import API from './constants';
 import axiosInstance from './instance/axiosInstance';
 
-export const postSignUp = async (email: string, nickname: string, password: string) => {
+export const postSignUp = async (email: unknown, nickname: unknown, password: unknown) => {
+  console.log(email, nickname, password);
   try {
     const response = await axiosInstance.post(API.USER.SIGN_UP, {
       email,
@@ -10,12 +11,10 @@ export const postSignUp = async (email: string, nickname: string, password: stri
       password,
     });
 
-    const responseData = await response.status;
+    const responseData = await response;
     return responseData;
   } catch (e) {
     const error = e as AxiosError;
-    if (error.response?.status) {
-      return error.response?.status;
-    }
+    return error.response;
   }
 };

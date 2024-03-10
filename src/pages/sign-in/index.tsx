@@ -11,6 +11,7 @@ import { AUTH_ERROR_MESSAGES, AUTH_MESSAGES } from '@/constants/message';
 import { useDispatch } from 'react-redux';
 import { login } from '@/redux/userSlice';
 import { toast } from 'react-toastify';
+import { useAsync } from '@/hooks/useAsync';
 
 const SignIn = () => {
   const dispatch = useDispatch();
@@ -23,6 +24,8 @@ const SignIn = () => {
     setError,
   } = useForm({ mode: 'onBlur', shouldFocusError: true });
 
+  const { loading, result, setAsyncFunction } = useAsync(postSignIn);
+
   const checkCookie = () => {
     if (cookies.accessToken) {
       navigate('/mydashboard');
@@ -30,7 +33,7 @@ const SignIn = () => {
   };
 
   const handleSubmitLogin: SubmitHandler<FieldValues> = async (data) => {
-    const result = await postSignIn(data.email, data.password);
+    await setAsyncFunction(data.email, data.password);
 
     if (result?.status === 404) {
       return alert(AUTH_ERROR_MESSAGES.USER_NOT_FOUND);
@@ -44,12 +47,12 @@ const SignIn = () => {
       return;
     }
 
-    if (typeof result !== 'number' && result?.data?.accessToken) {
+    if (result?.status === 201) {
       setCookie('accessToken', result?.data?.accessToken, {
         path: '/',
       }); // 유저 정보 쿠키 저장
       dispatch(login(result.data)); // 유저 정보 저장
-      toast.success(AUTH_MESSAGES.LOGIN_SUCCESS);
+      toast.success(AUTH_MESSAGES.LOGIN_SUCCESS); // 로그인 성공 토스트
       navigate('/mydashboard');
     }
   };
@@ -96,7 +99,11 @@ const SignIn = () => {
             label='비밀번호'
           />
           <div className='form__submit-button'>
-            <FullButton disabled={!isValid}>로그인</FullButton>
+            {loading ? (
+              <FullButton disabled={true}>잠시만 기다려주세요...</FullButton>
+            ) : (
+              <FullButton disabled={!isValid}>로그인</FullButton>
+            )}
           </div>
         </form>
         <h5>
