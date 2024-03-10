@@ -44,10 +44,10 @@ const SignIn = () => {
     }
 
     if (typeof result !== 'number' && result?.data?.accessToken) {
-      dispatch(login(result.data.user));
       setCookie('accessToken', result?.data?.accessToken, {
         path: '/',
-      });
+      }); // 유저 정보 쿠키 저장
+      dispatch(login(result.data)); // 유저 정보 저장
       navigate('/mydashboard');
     }
   };

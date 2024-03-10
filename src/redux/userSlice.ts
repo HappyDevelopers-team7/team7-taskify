@@ -1,32 +1,38 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-type LoginUserInfo = {
-  id: number;
-  nickname: string;
-  email: string;
-  profileImageUrl: string | null;
-  createdAt: string;
-  updatedAt: string;
-};
+interface LoginUserInfo {
+  accessToken: string;
+  user: {
+    id: number | null;
+    nickname: string;
+    email: string;
+    profileImageUrl: string | null;
+    createdAt: string;
+    updatedAt: string;
+  };
+}
 
 const initialStateValue: LoginUserInfo = {
-  id: 0,
-  email: '',
-  nickname: '',
-  profileImageUrl: null,
-  createdAt: '',
-  updatedAt: '',
+  accessToken: '',
+  user: {
+    id: null,
+    email: '',
+    nickname: '',
+    profileImageUrl: null,
+    createdAt: '',
+    updatedAt: '',
+  },
 };
 
 export const userSlice = createSlice({
   name: 'user',
-  initialState: { value: initialStateValue },
+  initialState: initialStateValue,
   reducers: {
     login: (state, action) => {
-      state.value = action.payload;
+      return { ...state, ...action.payload };
     },
-    logout: (state) => {
-      state.value = initialStateValue;
+    logout: () => {
+      return initialStateValue;
     },
   },
 });
