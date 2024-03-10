@@ -7,9 +7,10 @@ import { postSignIn } from '@/api/postSignIn';
 import { emailPattern, passwordPattern } from '@/constants/regex';
 import { useCookies } from 'react-cookie';
 import { useEffect } from 'react';
-import { AUTH_ERROR_MESSAGES } from '@/constants/error';
+import { AUTH_ERROR_MESSAGES, AUTH_MESSAGES } from '@/constants/message';
 import { useDispatch } from 'react-redux';
 import { login } from '@/redux/userSlice';
+import { toast } from 'react-toastify';
 
 const SignIn = () => {
   const dispatch = useDispatch();
@@ -48,6 +49,7 @@ const SignIn = () => {
         path: '/',
       }); // 유저 정보 쿠키 저장
       dispatch(login(result.data)); // 유저 정보 저장
+      toast.success(AUTH_MESSAGES.LOGIN_SUCCESS);
       navigate('/mydashboard');
     }
   };

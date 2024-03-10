@@ -6,7 +6,8 @@ import { useState } from 'react';
 import { postSignUp } from '@/api/postSignUp';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import { emailPattern, nicknamePattern, passwordPattern } from '@/constants/regex';
-import { AUTH_ERROR_MESSAGES } from '@/constants/error';
+import { AUTH_ERROR_MESSAGES, AUTH_MESSAGES } from '@/constants/message';
+import { toast } from 'react-toastify';
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -34,6 +35,7 @@ const SignUp = () => {
     }
 
     if (result === 201) {
+      toast.success(AUTH_MESSAGES.JOIN_SUCCESS);
       return navigate('/sign-in');
     }
   };

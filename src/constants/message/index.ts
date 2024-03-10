@@ -1,6 +1,11 @@
 /**
  * 로그인/ 회원가입 관련 에러 메시지 상수 모음
  */
+export const AUTH_MESSAGES = {
+  LOGIN_SUCCESS: '로그인 성공!',
+  JOIN_SUCCESS: '가입이 완료되었습니다!',
+} as const;
+
 export const AUTH_ERROR_MESSAGES = {
   DUPLICATE_EMAIL: '이미 사용중인 이메일입니다.',
   EMAIL_REQUIRED: '이메일을 입력해주세요.',
