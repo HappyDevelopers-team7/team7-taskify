@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import Container from './style';
 import { Dashboards } from '@/pages/dashboard';
@@ -14,6 +14,7 @@ const SideMenu = ({ dashboards, spreadDashboards /*accessToken*/ }: Props) => {
   const [selected, setSelected] = useState<number | null>(null);
   const [maximumPages, setMaximumPages] = useState<number>(1);
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const scrollHandler = useRef<HTMLDivElement>(null);
   const randomColor = generateRandomHexCode(); // PR전에 지울것!
   const TOKEN_NAME = 'accessToken'; // PR전에 지울것!
   const EXPRIES_IN = 30; // PR전에 지울것!
@@ -91,6 +92,9 @@ const SideMenu = ({ dashboards, spreadDashboards /*accessToken*/ }: Props) => {
       .then((res) => {
         setMaximumPages(Math.ceil(res.data.totalCount / 18));
         spreadDashboards(res.data.dashboards);
+        if (scrollHandler.current) {
+          scrollHandler.current.scrollTop = 0;
+        }
         console.log(res.data.dashboards);
       });
   };
@@ -112,7 +116,7 @@ const SideMenu = ({ dashboards, spreadDashboards /*accessToken*/ }: Props) => {
   }, [currentPage, token]);
 
   return (
-    <Container>
+    <Container ref={scrollHandler}>
       <Link to={'/'}>
         <img src='assets/image/logos/sideLogo.png' className='logo' alt='logo-image' />
       </Link>

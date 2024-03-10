@@ -6,7 +6,7 @@ const Container = styled.div`
   position: fixed;
   border-right: 1px solid ${({ theme }) => theme.color.gray_d9};
   overflow-x: hidden;
-  overflow-y: auto;
+  overflow-y: scroll;
 
   &::-webkit-scrollbar {
     width: 5px;
