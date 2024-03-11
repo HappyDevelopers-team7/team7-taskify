@@ -15,7 +15,6 @@ const SideMenu = ({ dashboards, spreadDashboards /*accessToken*/ }: Props) => {
   const [maximumPages, setMaximumPages] = useState<number>(1);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const scrollHandler = useRef<HTMLDivElement>(null);
-  const randomColor = generateRandomHexCode(); // PR전에 지울것!
   const TOKEN_NAME = 'accessToken'; // PR전에 지울것!
   const EXPRIES_IN = 30; // PR전에 지울것!
   const [token, setToken] = useState(''); // PR전에 지울것!
@@ -37,22 +36,22 @@ const SideMenu = ({ dashboards, spreadDashboards /*accessToken*/ }: Props) => {
       });
   };
 
-  function generateRandomHexCode() {
+  const generateRandomHexCode = () => {
     // PR전에 지울것!
     const letters = '0123456789ABCDEF';
     return '#' + Array.from({ length: 6 }, () => letters[Math.floor(Math.random() * 16)]).join('');
-  }
+  };
 
   const createDashboard = () => {
     // PR전에 지울것!
     const name = prompt('대시보드 이름을 입력하세요');
-    if (name !== null) {
+    if (name) {
       axios
         .post(
           'https://sp-taskify-api.vercel.app/3-7/dashboards',
           {
             title: name,
-            color: randomColor,
+            color: generateRandomHexCode(),
           },
           {
             headers: {
@@ -60,7 +59,11 @@ const SideMenu = ({ dashboards, spreadDashboards /*accessToken*/ }: Props) => {
             },
           },
         )
-        .then(() => viewDashboard());
+        .then(() => {
+          viewDashboard();
+        });
+    } else {
+      alert('대시보드 이름을 입력하세요');
     }
   };
 
@@ -74,7 +77,8 @@ const SideMenu = ({ dashboards, spreadDashboards /*accessToken*/ }: Props) => {
             Authorization: `Bearer ${token}`,
           },
         })
-        .then(() => viewDashboard());
+        .then(() => viewDashboard())
+        .catch(() => alert('존재하지 않는 ID입니다.'));
     }
   };
 
@@ -86,7 +90,7 @@ const SideMenu = ({ dashboards, spreadDashboards /*accessToken*/ }: Props) => {
     axios
       .get(`https://sp-taskify-api.vercel.app/3-7/dashboards?navigationMethod=pagination&page=${currentPage}&size=18`, {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${token /* accessToken */}`,
         },
       })
       .then((res) => {
@@ -113,7 +117,7 @@ const SideMenu = ({ dashboards, spreadDashboards /*accessToken*/ }: Props) => {
 
   useEffect(() => {
     viewDashboard();
-  }, [currentPage, token]);
+  }, [currentPage, token /* accessToken */]);
 
   return (
     <Container ref={scrollHandler}>
