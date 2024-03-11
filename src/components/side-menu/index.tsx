@@ -1,40 +1,26 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import Container from './style';
-import { Dashboards } from '@/pages/dashboard';
 import axios from 'axios';
+import Cookies from 'js-cookie';
 
-interface Props {
-  dashboards: Dashboards[];
-  spreadDashboards: (dashboards: Dashboards[]) => void;
-  // accessToken: string;
-}
+export type Dashboards = {
+  color: string;
+  createdAt: string;
+  createdByMe: boolean;
+  id: number;
+  title: string;
+  updatedAt: string;
+  userId: number;
+};
 
-const SideMenu = ({ dashboards, spreadDashboards /*accessToken*/ }: Props) => {
+const SideMenu = () => {
   const [selected, setSelected] = useState<number | null>(null);
   const [maximumPages, setMaximumPages] = useState<number>(1);
+  const [dashboards, setDashboards] = useState<Dashboards[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const [token, setToken] = useState<string>('');
   const scrollHandler = useRef<HTMLDivElement>(null);
-  const TOKEN_NAME = 'accessToken'; // PR전에 지울것!
-  const EXPRIES_IN = 30; // PR전에 지울것!
-  const [token, setToken] = useState(''); // PR전에 지울것!
-
-  const login = () => {
-    // PR전에 지울것!
-    const id = 'jyp1@jyp.com';
-    axios
-      .post('https://sp-taskify-api.vercel.app/3-7/auth/login', {
-        email: id,
-        password: '12345678',
-      })
-      .then((res) => {
-        console.log(res.data.accessToken);
-        const expires = new Date(Date.now() + EXPRIES_IN * 1000);
-        document.cookie = `${TOKEN_NAME}=${res.data.accessToken};expires=${expires.toUTCString()};path=/`;
-        setToken(res.data.accessToken);
-        alert(`${id}로 로그인 되었습니다`);
-      });
-  };
 
   const generateRandomHexCode = () => {
     // PR전에 지울것!
@@ -90,12 +76,12 @@ const SideMenu = ({ dashboards, spreadDashboards /*accessToken*/ }: Props) => {
     axios
       .get(`https://sp-taskify-api.vercel.app/3-7/dashboards?navigationMethod=pagination&page=${currentPage}&size=18`, {
         headers: {
-          Authorization: `Bearer ${token /* accessToken */}`,
+          Authorization: `Bearer ${token}`,
         },
       })
       .then((res) => {
         setMaximumPages(Math.ceil(res.data.totalCount / 18));
-        spreadDashboards(res.data.dashboards);
+        setDashboards(res.data.dashboards);
         if (scrollHandler.current) {
           scrollHandler.current.scrollTop = 0;
         }
@@ -116,8 +102,9 @@ const SideMenu = ({ dashboards, spreadDashboards /*accessToken*/ }: Props) => {
   };
 
   useEffect(() => {
+    setToken(Cookies.get('accessToken') as string);
     viewDashboard();
-  }, [currentPage, token /* accessToken */]);
+  }, [currentPage, token]);
 
   return (
     <Container ref={scrollHandler}>
@@ -169,10 +156,6 @@ const SideMenu = ({ dashboards, spreadDashboards /*accessToken*/ }: Props) => {
                 : 'assets/image/icons/arrowForwardIcon.svg'
             }
           />
-        </button>
-
-        <button className='temp-button' onClick={login} /* PR전에 지울것!*/>
-          로그인
         </button>
         <button className='temp-button' onClick={removeDashboard} /* PR전에 지울것!*/>
           삭제
