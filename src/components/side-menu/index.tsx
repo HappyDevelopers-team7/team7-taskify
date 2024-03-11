@@ -51,11 +51,7 @@ const SideMenu = () => {
     const id = prompt('삭제할 대시보드 id');
     if (id !== null) {
       axiosInstance
-        .delete(`${API.DASHBOARDS.DASHBOARDS}/${id}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
+        .delete(`${API.DASHBOARDS.DASHBOARDS}/${id}`)
         .then(() => viewDashboard())
         .catch(() => alert('존재하지 않는 ID입니다.'));
     }
@@ -63,11 +59,7 @@ const SideMenu = () => {
 
   const viewDashboard = () => {
     axiosInstance
-      .get(`${API.DASHBOARDS.DASHBOARDS}?navigationMethod=pagination&page=${currentPage}&size=18`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      .get(`${API.DASHBOARDS.DASHBOARDS}?navigationMethod=pagination&page=${currentPage}&size=18`)
       .then((res) => {
         setMaximumPages(Math.ceil(res.data.totalCount / 18));
         setDashboards(res.data.dashboards);
