@@ -94,7 +94,7 @@ const SideMenu = () => {
   return (
     <Container ref={scrollHandler}>
       <Link to={'/'}>
-        <img src='assets/image/logos/sideLogo.png' className='logo' alt='logo-image' />
+        <img src='assets/image/logos/mediumLogo.svg' className='logo' alt='logo-image' />
       </Link>
 
       <div className='sidemenu-head'>
