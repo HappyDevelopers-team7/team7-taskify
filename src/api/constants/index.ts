@@ -8,6 +8,9 @@ const API = {
     MY_INFO: 'users/me',
     UPLOAD_IMAGE: 'users/me/image',
   },
+  DASHBOARDS: {
+    DASHBOARDS: 'dashboards',
+  },
 } as const;
 
 export default API;
