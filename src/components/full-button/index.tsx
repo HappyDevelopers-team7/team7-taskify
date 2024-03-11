@@ -5,7 +5,7 @@ import StFullButton from './style';
 const FullButton = ({ disabled, children }: fullButtonProps) => {
   return (
     <>
-      <StFullButton className={disabled ? '' : 'active'}>
+      <StFullButton disabled={disabled}>
         <span>{children}</span>
       </StFullButton>
     </>
