@@ -53,7 +53,7 @@ const SignIn = () => {
       }); // 유저 정보 쿠키 저장
       dispatch(login(result.data)); // 유저 정보 저장
       toast.success(AUTH_MESSAGES.LOGIN_SUCCESS); // 로그인 성공 토스트
-      navigate('/dashboard');
+      navigate('/dashboard-test');
     }
   };
 
