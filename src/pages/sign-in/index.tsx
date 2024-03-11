@@ -5,17 +5,16 @@ import FullButton from '@/components/full-button';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import { postSignIn } from '@/api/postSignIn';
 import { emailPattern, passwordPattern } from '@/constants/regex';
-import { useCookies } from 'react-cookie';
 import { useEffect } from 'react';
 import { AUTH_ERROR_MESSAGES, AUTH_MESSAGES } from '@/constants/message';
 import { useDispatch } from 'react-redux';
 import { login } from '@/redux/userSlice';
 import { toast } from 'react-toastify';
 import { useAsync } from '@/hooks/useAsync';
+import Cookies from 'js-cookie';
 
 const SignIn = () => {
   const dispatch = useDispatch();
-  const [cookies, setCookie] = useCookies(['accessToken']);
   const navigate = useNavigate();
   const {
     register,
@@ -27,7 +26,7 @@ const SignIn = () => {
   const { loading, result, setAsyncFunction } = useAsync(postSignIn);
 
   const checkCookie = () => {
-    if (cookies.accessToken) {
+    if (Cookies.get('accessToken')) {
       navigate('/mydashboard');
     }
   };
@@ -48,7 +47,8 @@ const SignIn = () => {
     }
 
     if (result?.status === 201) {
-      setCookie('accessToken', result?.data?.accessToken, {
+      Cookies.set('accessToken', result?.data?.accessToken, {
+        expires: 1,
         path: '/',
       }); // 유저 정보 쿠키 저장
       dispatch(login(result.data)); // 유저 정보 저장
