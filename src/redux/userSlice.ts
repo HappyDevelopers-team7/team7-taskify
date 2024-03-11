@@ -6,7 +6,7 @@ import store from './store';
 
 export type AppDispatch = typeof store.dispatch;
 
-// 유저 정보 타입 정의
+// 로그인된 내 정보 타입 정의
 interface SetUserType {
   id: number | null;
   nickname: string;
@@ -23,6 +23,8 @@ interface UserSliceType {
   error: unknown;
 }
 
+// 초기 상태 정의했음
+// 예를 들어 로그인 되었을 때 이 상태로 돌아갈 예정
 const initialStateValue: UserSliceType = {
   status: null,
   user: {
@@ -36,7 +38,7 @@ const initialStateValue: UserSliceType = {
   error: null,
 };
 
-// 비동기 액션을 위한 thunk 생성
+// 비동기 처리를 여기서 해줌
 export const fetchMyInfo = createAsyncThunk('user/fetchUserInformation', async () => {
   try {
     const response = await axiosInstance.get(API.USER.MY_INFO);
@@ -49,6 +51,7 @@ export const fetchMyInfo = createAsyncThunk('user/fetchUserInformation', async (
 });
 
 // 슬라이스 생성
+// 프로미스 처리 순서 마다 상태를 저장한다.
 export const userSlice = createSlice({
   name: 'user',
   initialState: initialStateValue,
@@ -68,8 +71,8 @@ export const userSlice = createSlice({
       });
   },
 });
-// 선택자 함수 추가
+
+// 이렇게 내보내 줘야 전역에서 useSelector 훅 사용해서 데이터 꺼내 쓸 수 있다.
 export const getMyInfo = (state: { user: UserSliceType }) => state.user;
 
-// 기존 코드
 export default userSlice.reducer;
