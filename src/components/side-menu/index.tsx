@@ -28,7 +28,6 @@ const SideMenu = ({ dashboards, spreadDashboards /*accessToken*/ }: Props) => {
         password: '12345678',
       })
       .then((res) => {
-        console.log(res.data.accessToken);
         const expires = new Date(Date.now() + EXPRIES_IN * 1000);
         document.cookie = `${TOKEN_NAME}=${res.data.accessToken};expires=${expires.toUTCString()};path=/`;
         setToken(res.data.accessToken);
@@ -99,7 +98,6 @@ const SideMenu = ({ dashboards, spreadDashboards /*accessToken*/ }: Props) => {
         if (scrollHandler.current) {
           scrollHandler.current.scrollTop = 0;
         }
-        console.log(res.data.dashboards);
       });
   };
 
