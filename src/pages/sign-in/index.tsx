@@ -31,9 +31,12 @@ const SignIn = () => {
     }
   };
 
+  // TODO: redux toolkit 비동기 처리 찾아보기
   const handleSubmitLogin: SubmitHandler<FieldValues> = async (data) => {
     await setAsyncFunction(data.email, data.password);
+  };
 
+  useEffect(() => {
     if (result?.status === 404) {
       return alert(AUTH_ERROR_MESSAGES.USER_NOT_FOUND);
     }
@@ -53,9 +56,9 @@ const SignIn = () => {
       }); // 유저 정보 쿠키 저장
       dispatch(login(result.data)); // 유저 정보 저장
       toast.success(AUTH_MESSAGES.LOGIN_SUCCESS); // 로그인 성공 토스트
-      navigate('/dashboard-test');
+      navigate('/dashboard');
     }
-  };
+  }, [result, dispatch, navigate, setError]);
 
   useEffect(() => {
     checkCookie();
