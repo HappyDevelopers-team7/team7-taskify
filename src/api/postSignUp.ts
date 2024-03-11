@@ -3,7 +3,6 @@ import API from './constants';
 import axiosInstance from './instance/axiosInstance';
 
 export const postSignUp = async (email: unknown, nickname: unknown, password: unknown) => {
-  console.log(email, nickname, password);
   try {
     const response = await axiosInstance.post(API.USER.SIGN_UP, {
       email,
