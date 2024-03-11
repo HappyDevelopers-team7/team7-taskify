@@ -2,7 +2,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import AuthInput from '@/components/auth-input';
 import FullButton from '@/components/full-button';
 import StSignInContainer from '../sign-in/style';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { postSignUp } from '@/api/postSignUp';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import { emailPattern, nicknamePattern, passwordPattern } from '@/constants/regex';
@@ -30,7 +30,9 @@ const SignUp = () => {
 
   const handleSubmitRegister: SubmitHandler<FieldValues> = async (data) => {
     await setAsyncFunction(data.email, data.nickname, data.password);
+  };
 
+  useEffect(() => {
     if (result?.status === 409) {
       setError('email', {
         type: 'serverError',
@@ -43,7 +45,7 @@ const SignUp = () => {
       toast.success(AUTH_MESSAGES.JOIN_SUCCESS);
       return navigate('/sign-in');
     }
-  };
+  }, [result, navigate, setError]);
 
   return (
     <StSignInContainer>
