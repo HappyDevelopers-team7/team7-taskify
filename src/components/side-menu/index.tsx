@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import Container from './style';
-import axios from 'axios';
 import Cookies from 'js-cookie';
+import axiosInstance from '@/api/instance/axiosInstance';
+import API from '@/api/constants';
 
 export type Dashboards = {
   color: string;
@@ -22,43 +23,35 @@ const SideMenu = () => {
   const [token, setToken] = useState<string>('');
   const scrollHandler = useRef<HTMLDivElement>(null);
 
-  const generateRandomHexCode = () => {
-    // PR전에 지울것!
-    const letters = '0123456789ABCDEF';
-    return '#' + Array.from({ length: 6 }, () => letters[Math.floor(Math.random() * 16)]).join('');
-  };
-
   const createDashboard = () => {
-    // PR전에 지울것!
+    // 대시보드 생성 임시함수
+    const generateRandomHexCode = () => {
+      const letters = '0123456789ABCDEF';
+      return '#' + Array.from({ length: 6 }, () => letters[Math.floor(Math.random() * 16)]).join('');
+    };
+
     const name = prompt('대시보드 이름을 입력하세요');
+
     if (name) {
-      axios
-        .post(
-          'https://sp-taskify-api.vercel.app/3-7/dashboards',
-          {
-            title: name,
-            color: generateRandomHexCode(),
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          },
-        )
+      axiosInstance
+        .post(API.DASHBOARDS.DASHBOARDS, {
+          title: name,
+          color: generateRandomHexCode(),
+        })
         .then(() => {
           viewDashboard();
         });
     } else {
-      alert('대시보드 이름을 입력하세요');
+      alert('이름을 쓰라고');
     }
   };
 
   const removeDashboard = () => {
-    // PR전에 지울것!
+    // 대시보드 삭제 임시함수
     const id = prompt('삭제할 대시보드 id');
     if (id !== null) {
-      axios
-        .delete(`https://sp-taskify-api.vercel.app/3-7/dashboards/${id}`, {
+      axiosInstance
+        .delete(`${API.DASHBOARDS.DASHBOARDS}/${id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -68,13 +61,9 @@ const SideMenu = () => {
     }
   };
 
-  const handleSelectedDashboard = (id: number) => {
-    setSelected(id);
-  };
-
   const viewDashboard = () => {
-    axios
-      .get(`https://sp-taskify-api.vercel.app/3-7/dashboards?navigationMethod=pagination&page=${currentPage}&size=18`, {
+    axiosInstance
+      .get(`${API.DASHBOARDS.DASHBOARDS}?navigationMethod=pagination&page=${currentPage}&size=18`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -85,8 +74,12 @@ const SideMenu = () => {
         if (scrollHandler.current) {
           scrollHandler.current.scrollTop = 0;
         }
-        console.log(res.data.dashboards);
+        console.log(res.data.dashboards); //삭제할 대시보드 ID확인용
       });
+  };
+
+  const handleSelectedDashboard = (id: number) => {
+    setSelected(id);
   };
 
   const handlePrevPage = () => {
@@ -157,7 +150,7 @@ const SideMenu = () => {
             }
           />
         </button>
-        <button className='temp-button' onClick={removeDashboard} /* PR전에 지울것!*/>
+        <button className='temp-button' onClick={removeDashboard} /*테스트 종료시 삭제*/>
           삭제
         </button>
       </div>
