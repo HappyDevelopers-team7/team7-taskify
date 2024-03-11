@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Container from './style';
 import Cookies from 'js-cookie';
 import axiosInstance from '@/api/instance/axiosInstance';
@@ -22,6 +22,7 @@ const SideMenu = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [token, setToken] = useState<string>('');
   const scrollHandler = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
   const createDashboard = () => {
     // 대시보드 생성 임시함수
@@ -67,6 +68,12 @@ const SideMenu = () => {
           scrollHandler.current.scrollTop = 0;
         }
         console.log(res.data.dashboards); //삭제할 대시보드 ID확인용
+      })
+      .catch((err) => {
+        if (err.response && err.response.status === 401) {
+          console.error('액세스 토큰이 만료되었거나 유효하지 않습니다.');
+          navigate('/');
+        }
       });
   };
 
