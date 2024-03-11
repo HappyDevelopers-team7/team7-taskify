@@ -24,7 +24,7 @@ const PrimaryRoute = (
     <Route index element={<LandingPage />} />
     <Route path='sign-in' element={<SignInPage />} />
     <Route path='sign-up' element={<SignUpPage />} />
-    <Route path='mydashboard' element={<DashBoardPage />} />
+    <Route path='dashboard' element={<DashBoardPage />} />
     <Route path='*' element={<NotFoundPage />} />
   </Route>
 );
