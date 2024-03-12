@@ -1,6 +1,9 @@
 import styled from 'styled-components';
 
-const Container = styled.div`
+const Container = styled.header`
+  position: absolute;
+  top: 0;
+  left: 0;
   padding-left: 300px;
   width: 100%;
   height: 70px;
