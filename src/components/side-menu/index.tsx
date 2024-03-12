@@ -1,104 +1,84 @@
 import { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Container from './style';
-import { Dashboards } from '@/pages/dashboard';
-import axios from 'axios';
+import Cookies from 'js-cookie';
+import axiosInstance from '@/api/instance/axiosInstance';
+import API from '@/api/constants';
 
-interface Props {
-  dashboards: Dashboards[];
-  spreadDashboards: (dashboards: Dashboards[]) => void;
-  // accessToken: string;
-}
+export type Dashboards = {
+  color: string;
+  createdAt: string;
+  createdByMe: boolean;
+  id: number;
+  title: string;
+  updatedAt: string;
+  userId: number;
+};
 
-const SideMenu = ({ dashboards, spreadDashboards /*accessToken*/ }: Props) => {
+const SideMenu = () => {
   const [selected, setSelected] = useState<number | null>(null);
   const [maximumPages, setMaximumPages] = useState<number>(1);
+  const [dashboards, setDashboards] = useState<Dashboards[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const [token, setToken] = useState<string>('');
   const scrollHandler = useRef<HTMLDivElement>(null);
-  const TOKEN_NAME = 'accessToken'; // PR전에 지울것!
-  const EXPRIES_IN = 30; // PR전에 지울것!
-  const [token, setToken] = useState(''); // PR전에 지울것!
-
-  const login = () => {
-    // PR전에 지울것!
-    const id = 'jyp1@jyp.com';
-    axios
-      .post('https://sp-taskify-api.vercel.app/3-7/auth/login', {
-        email: id,
-        password: '12345678',
-      })
-      .then((res) => {
-        const expires = new Date(Date.now() + EXPRIES_IN * 1000);
-        document.cookie = `${TOKEN_NAME}=${res.data.accessToken};expires=${expires.toUTCString()};path=/`;
-        setToken(res.data.accessToken);
-        alert(`${id}로 로그인 되었습니다`);
-      });
-  };
-
-  const generateRandomHexCode = () => {
-    // PR전에 지울것!
-    const letters = '0123456789ABCDEF';
-    return '#' + Array.from({ length: 6 }, () => letters[Math.floor(Math.random() * 16)]).join('');
-  };
+  const navigate = useNavigate();
 
   const createDashboard = () => {
-    // PR전에 지울것!
+    // 대시보드 생성 임시함수
+    const generateRandomHexCode = () => {
+      const letters = '0123456789ABCDEF';
+      return '#' + Array.from({ length: 6 }, () => letters[Math.floor(Math.random() * 16)]).join('');
+    };
+
     const name = prompt('대시보드 이름을 입력하세요');
+
     if (name) {
-      axios
-        .post(
-          'https://sp-taskify-api.vercel.app/3-7/dashboards',
-          {
-            title: name,
-            color: generateRandomHexCode(),
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          },
-        )
+      axiosInstance
+        .post(API.DASHBOARDS.DASHBOARDS, {
+          title: name,
+          color: generateRandomHexCode(),
+        })
         .then(() => {
           viewDashboard();
         });
     } else {
-      alert('대시보드 이름을 입력하세요');
+      alert('이름을 쓰라고');
     }
   };
 
   const removeDashboard = () => {
-    // PR전에 지울것!
+    // 대시보드 삭제 임시함수
     const id = prompt('삭제할 대시보드 id');
     if (id !== null) {
-      axios
-        .delete(`https://sp-taskify-api.vercel.app/3-7/dashboards/${id}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
+      axiosInstance
+        .delete(`${API.DASHBOARDS.DASHBOARDS}/${id}`)
         .then(() => viewDashboard())
         .catch(() => alert('존재하지 않는 ID입니다.'));
     }
   };
 
-  const handleSelectedDashboard = (id: number) => {
-    setSelected(id);
-  };
-
   const viewDashboard = () => {
-    axios
-      .get(`https://sp-taskify-api.vercel.app/3-7/dashboards?navigationMethod=pagination&page=${currentPage}&size=18`, {
-        headers: {
-          Authorization: `Bearer ${token /* accessToken */}`,
-        },
-      })
+    axiosInstance
+      .get(`${API.DASHBOARDS.DASHBOARDS}?navigationMethod=pagination&page=${currentPage}&size=18`)
       .then((res) => {
         setMaximumPages(Math.ceil(res.data.totalCount / 18));
-        spreadDashboards(res.data.dashboards);
+        setDashboards(res.data.dashboards);
         if (scrollHandler.current) {
           scrollHandler.current.scrollTop = 0;
         }
+        console.log(res.data.dashboards); //삭제할 대시보드 ID확인용
+      })
+      .catch((err) => {
+        if (err.response && err.response.status === 401) {
+          console.error('액세스 토큰이 만료되었거나 유효하지 않습니다.');
+          navigate('/');
+        }
       });
+  };
+
+  const handleSelectedDashboard = (id: number) => {
+    setSelected(id);
   };
 
   const handlePrevPage = () => {
@@ -114,13 +94,14 @@ const SideMenu = ({ dashboards, spreadDashboards /*accessToken*/ }: Props) => {
   };
 
   useEffect(() => {
+    setToken(Cookies.get('accessToken') as string);
     viewDashboard();
-  }, [currentPage, token /* accessToken */]);
+  }, [currentPage, token]);
 
   return (
     <Container ref={scrollHandler}>
       <Link to={'/'}>
-        <img src='assets/image/logos/sideLogo.png' className='logo' alt='logo-image' />
+        <img src='assets/image/logos/mediumLogo.svg' className='logo' alt='logo-image' />
       </Link>
 
       <div className='sidemenu-head'>
@@ -168,11 +149,7 @@ const SideMenu = ({ dashboards, spreadDashboards /*accessToken*/ }: Props) => {
             }
           />
         </button>
-
-        <button className='temp-button' onClick={login} /* PR전에 지울것!*/>
-          로그인
-        </button>
-        <button className='temp-button' onClick={removeDashboard} /* PR전에 지울것!*/>
+        <button className='temp-button' onClick={removeDashboard} /*테스트 종료시 삭제*/>
           삭제
         </button>
       </div>
