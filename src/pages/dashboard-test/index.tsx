@@ -1,10 +1,8 @@
-// MyComponent.tsx 파일
-
 import { AppDispatch, fetchMyInfo, getMyInfo, getStatus } from '@/redux/userSlice';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-const MyComponent = () => {
+const DashBoardTest = () => {
   const dispatch = useDispatch<AppDispatch>();
   // useSelector로 getMyInfo안에 담긴 내 정보 가져옴
   const myData = useSelector(getMyInfo);
@@ -37,4 +35,4 @@ const MyComponent = () => {
   );
 };
 
-export default MyComponent;
+export default DashBoardTest;
