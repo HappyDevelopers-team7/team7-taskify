@@ -24,7 +24,7 @@ interface MyInfoSliceType {
 }
 
 // 초기 상태 정의했음
-// 예를 들어 로그인 되었을 때 이 상태로 돌아갈 예정
+// 예를 들어 로그아웃 되었을 때 이 상태로 돌아갈 예정
 const initialStateValue: MyInfoSliceType = {
   status: null,
   user: {
