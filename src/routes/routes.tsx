@@ -18,15 +18,20 @@ const SignInPage = lazy(() => import('@pages/sign-in'));
 const SignUpPage = lazy(() => import('@pages/sign-up'));
 const DashBoardPage = lazy(() => import('@pages/dashboard'));
 const DashBoardTestPage = lazy(() => import('@pages/dashboard-test'));
+const ProtectedRoutes = lazy(() => import('@routes/protected-routes'));
 const NotFoundPage = lazy(() => import('@pages/not-found'));
 
 const PrimaryRoute = (
   <Route path='/' element={<Loading />}>
-    <Route index element={<LandingPage />} />
-    <Route path='sign-in' element={<SignInPage />} />
-    <Route path='sign-up' element={<SignUpPage />} />
-    <Route path='dashboard' element={<DashBoardPage />} />
-    <Route path='dashboard-test' element={<DashBoardTestPage />} />
+    <Route element={<ProtectedRoutes authentication={false} />}>
+      <Route index element={<LandingPage />} />
+      <Route path='sign-in' element={<SignInPage />} />
+      <Route path='sign-up' element={<SignUpPage />} />
+    </Route>
+    <Route element={<ProtectedRoutes authentication={true} />}>
+      <Route path='dashboard' element={<DashBoardPage />} />
+      <Route path='dashboard-test' element={<DashBoardTestPage />} />
+    </Route>
     <Route path='*' element={<NotFoundPage />} />
   </Route>
 );
