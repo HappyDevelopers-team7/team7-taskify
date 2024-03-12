@@ -120,7 +120,10 @@ const SideMenu = () => {
             <li
               key={data.id}
               className={`dashboard ${selected === data.id ? 'selected' : ''}`}
-              onClick={() => handleSelectedDashboard(data.id)}
+              onClick={() => {
+                handleSelectedDashboard(data.id);
+                navigate(`/dashboard/${data.id}`);
+              }}
             >
               <div className='dashboard-color' style={{ background: data.color }} />
               <span>{data.title}</span>
