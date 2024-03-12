@@ -7,13 +7,12 @@ const axiosInstance = axios.create({
 });
 
 /**
- * 쿠키가 이미 있다면 헤더에 자동으로 accessToken 담아서 요청
+ * 쿠키가 이미 있다면 = 로그인상태 헤더에 자동으로 accessToken 담아서 요청
  */
 axiosInstance.interceptors.request.use(
   (config) => {
     const accessToken = Cookies.get('accessToken');
     if (accessToken) {
-      console.log(accessToken);
       config.headers['Authorization'] = `Bearer ${accessToken}`;
     }
     return config;
