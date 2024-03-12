@@ -101,13 +101,13 @@ const SideMenu = () => {
   return (
     <Container ref={scrollHandler}>
       <Link to={'/'}>
-        <img src='assets/image/logos/mediumLogo.svg' className='logo' alt='logo-image' />
+        <img src='/assets/image/logos/mediumLogo.svg' className='logo' alt='logo-image' />
       </Link>
 
       <div className='sidemenu-head'>
         <span>Dash Boards</span>
         <img
-          src='assets/image/icons/addBoxIcon.svg'
+          src='/assets/image/icons/addBoxIcon.svg'
           className='add-button'
           alt='add-button'
           onClick={createDashboard}
@@ -124,7 +124,7 @@ const SideMenu = () => {
             >
               <div className='dashboard-color' style={{ background: data.color }} />
               <span>{data.title}</span>
-              {data.createdByMe && <img src='assets/image/icons/crownIcon.svg' />}
+              {data.createdByMe && <img src='/assets/image/icons/crownIcon.svg' />}
             </li>
           ))}
         </ul>
@@ -135,8 +135,8 @@ const SideMenu = () => {
           <img
             src={
               currentPage === 1
-                ? 'assets/image/icons/arrowForwardIcon(gray-left).svg'
-                : 'assets/image/icons/arrowForwardIcon(left).svg'
+                ? '/assets/image/icons/arrowForwardIcon(gray-left).svg'
+                : '/assets/image/icons/arrowForwardIcon(left).svg'
             }
           />
         </button>
@@ -144,8 +144,8 @@ const SideMenu = () => {
           <img
             src={
               currentPage === maximumPages
-                ? 'assets/image/icons/arrowForwardIcon(gray).svg'
-                : 'assets/image/icons/arrowForwardIcon.svg'
+                ? '/assets/image/icons/arrowForwardIcon(gray).svg'
+                : '/assets/image/icons/arrowForwardIcon.svg'
             }
           />
         </button>
