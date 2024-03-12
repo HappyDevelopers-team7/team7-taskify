@@ -16,8 +16,8 @@ const ModalContainer = ({
   title,
   closeButtonName,
   submitButtonName,
+  modalWidth,
   children,
-  modalWidth = 506,
   handleCloseModal,
   handleSubmitModal,
 }: ModalProps) => {
@@ -29,10 +29,10 @@ const ModalContainer = ({
           <h2>{title}</h2>
           {children}
           <div className='modal-button-group'>
-            <button type='button' onClick={handleCloseModal}>
+            <button className='modal-button__close' type='button' onClick={handleCloseModal}>
               {closeButtonName}
             </button>
-            <button type='button' onClick={handleSubmitModal}>
+            <button className='modal-button__submit' type='button' onClick={handleSubmitModal}>
               {submitButtonName}
             </button>
           </div>

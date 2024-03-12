@@ -33,10 +33,11 @@ const DashBoard = () => {
           title='대시보드 생성'
           closeButtonName='취소'
           submitButtonName='생성'
+          modalWidth={506}
           handleCloseModal={handleCloseCreateDashboardModal}
           handleSubmitModal={handleSubmitCreateDashboardModal}
         >
-          modal content is here
+          <div>여기에 모달 컴포넌트를 넣어주세요</div>
         </ModalContainer>
       ) : null}
     </>
