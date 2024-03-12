@@ -11,6 +11,9 @@ const API = {
   DASHBOARDS: {
     DASHBOARDS: 'dashboards',
   },
+  COLUMNS: {
+    COLUMNS: 'columns',
+  },
 } as const;
 
 export default API;

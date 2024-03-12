@@ -3,11 +3,12 @@ import Button from './style';
 
 interface Props {
   children: ReactNode;
+  createColumns: () => void;
 }
 
-const AddColumnButton = ({ children }: Props) => {
+const AddColumnButton = ({ children, createColumns }: Props) => {
   return (
-    <Button>
+    <Button onClick={createColumns}>
       {children}
       <img src='/assets/image/icons/bannerAddIcon.svg' />
     </Button>

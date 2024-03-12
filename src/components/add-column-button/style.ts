@@ -11,6 +11,7 @@ const Button = styled.button`
   border-radius: 8px;
   border: 1px solid ${({ theme }) => theme.color.gray_d9};
   background: ${({ theme }) => theme.color.white};
+  outline: none;
 
   font-size: 1.8rem;
   font-weight: 700;
