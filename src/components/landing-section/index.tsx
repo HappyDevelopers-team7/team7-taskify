@@ -10,7 +10,7 @@ const SectionRightImage = () => {
           일의 <span>우선순위</span>를<br /> 관리하세요
         </div>
       </div>
-      <LandingImage src='assets\image\images\landingImage1.svg' alt='Taskify' />
+      <LandingImage src='assets\image\images\landingImage1.svg' alt='우선순위 관리 예시 이미지' />
     </StSectionRightImage>
   );
 };
@@ -18,7 +18,7 @@ const SectionRightImage = () => {
 const SectionLeftImage = () => {
   return (
     <StSectionLeftImage className='landing-wide-section-left-image'>
-      <LandingImage src='assets\image\images\landingImage2.svg' alt='Taskify' />
+      <LandingImage src='assets\image\images\landingImage2.svg' alt='할 일 등록 예시 이미지' />
       <div className='point-and-description'>
         <div className='section-point'>Point 2</div>
         <div className='section-description'>
@@ -38,7 +38,7 @@ const SmallSection = () => {
         <StSettingItem>
           <SettingItem
             src='assets\image\images\landingImage3.svg'
-            alt='Taskify'
+            alt='대시보드 설정 예시 이미지'
             title='대시보드 설정'
             description='대시보드 사진과 이름을 변경할 수 있어요.'
           />
@@ -46,7 +46,7 @@ const SmallSection = () => {
         <StSettingItem>
           <SettingItem
             src='assets\image\images\landingImage4.svg'
-            alt='Taskify'
+            alt='초대 내역 예시 이미지'
             title='초대'
             description='새로운 팀원을 초대할 수 있어요.'
           />
@@ -54,7 +54,7 @@ const SmallSection = () => {
         <StSettingItem>
           <SettingItem
             src='assets\image\images\landingImage5.svg'
-            alt='Taskify'
+            alt='구성원 초대 예시 이미지'
             title='구성원'
             description='구성원을 초대하고 내보낼 수 있어요.'
           />

@@ -6,13 +6,13 @@ const SnsIconList = () => {
   return (
     <>
       <Link to=''>
-        <LandingImage src='assets\image\icons\emailIcon.svg' alt='' />
+        <LandingImage src='assets\image\icons\emailIcon.svg' alt='email 아이콘' />
       </Link>
       <Link to=''>
-        <LandingImage src='assets\image\icons\facebookIcon.svg' alt='' />
+        <LandingImage src='assets\image\icons\facebookIcon.svg' alt='facebook 아이콘' />
       </Link>
       <Link to=''>
-        <LandingImage src='assets\image\icons\instagramIcon.svg' alt='' />
+        <LandingImage src='assets\image\icons\instagramIcon.svg' alt='instagram 아이콘' />
       </Link>
     </>
   );
