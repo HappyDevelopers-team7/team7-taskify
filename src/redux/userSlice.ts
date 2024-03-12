@@ -73,7 +73,7 @@ export const userSlice = createSlice({
 });
 
 // 이렇게 내보내 줘야 전역에서 useSelector 훅 사용해서 데이터 꺼내 쓸 수 있다.
-export const getMyInfo = (state: { user: UserSliceType }) => state.user;
-export const getMyInfoStatus = (state: { status: string }) => state.status;
+export const getMyInfo = (state: { user: UserSliceType }) => state.user.user;
+export const getStatus = (state: { user: UserSliceType }) => state.user.status;
 
 export default userSlice.reducer;
