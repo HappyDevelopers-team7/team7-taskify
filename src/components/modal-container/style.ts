@@ -59,13 +59,26 @@ const StModalContainer = styled.div<StModalContainer>`
 
     .modal-button__close {
       color: ${({ theme }) => theme.color.gray_78};
-      border: 1px solid ${({ theme }) => theme.color.gray_d9};
+      outline: 1px solid ${({ theme }) => theme.color.gray_d9};
       background: ${({ theme }) => theme.color.white};
+      transition: all 0.2s;
+
+      &:hover {
+        color: ${({ theme }) => theme.color.violet};
+        outline: 1px solid ${({ theme }) => theme.color.violet};
+      }
     }
 
     .modal-button__submit {
       color: ${({ theme }) => theme.color.white};
       background: ${({ theme }) => theme.color.violet};
+      transition: background-color 0.1s;
+
+      &:hover {
+        color: ${({ theme }) => theme.color.violet};
+        outline: 1px solid ${({ theme }) => theme.color.violet};
+        background: ${({ theme }) => theme.color.white};
+      }
     }
   }
 
