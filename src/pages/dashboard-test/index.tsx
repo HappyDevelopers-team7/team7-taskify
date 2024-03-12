@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 const DashBoardTest = () => {
   const dispatch = useDispatch<AppDispatch>();
-  // useSelector로 getMyInfo안에 담긴 내 정보 가져옴
+  // useSelector로 전역 정보 가져옴
   const myData = useSelector(getMyInfo);
   const myDataLoading = useSelector(getStatus);
 
