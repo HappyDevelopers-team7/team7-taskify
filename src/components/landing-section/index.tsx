@@ -33,7 +33,6 @@ const SectionLeftImage = () => {
 const SmallSection = () => {
   return (
     <StSmallSection>
-      {/* <div className='landing-small-section'> */}
       <div className='small-section-title'>생산성을 높이는 다양한 설정⚡</div>
       <div className='setting-items-container'>
         <StSettingItem>
@@ -65,7 +64,14 @@ const SmallSection = () => {
   );
 };
 
-const SettingItem = ({ src, alt, title, description }) => {
+interface SettingItemType {
+  src: string;
+  alt: string;
+  title: string;
+  description: string;
+}
+
+const SettingItem = ({ src, alt, title, description }: SettingItemType) => {
   return (
     <div>
       <div className='image-container'>

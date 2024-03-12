@@ -48,7 +48,7 @@ export const StHeader = styled.div`
     color: ${({ theme }) => theme.color.white};
     text-align: center;
     font-family: Pretendard;
-    font-size: 18px;
+    font-size: 1.8rem;
     font-style: normal;
     font-weight: 500;
     line-height: normal;

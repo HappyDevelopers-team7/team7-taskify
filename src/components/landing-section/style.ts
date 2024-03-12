@@ -6,7 +6,7 @@ export const StSectionLeftImage = styled.div`
   margin: 90px auto;
   flex-shrink: 0;
   border-radius: 8px;
-  background: var(--black-black_171717, #171717);
+  background: ${({ theme }) => theme.color.black_17};
   display: flex;
 
   .point-and-description {
@@ -15,12 +15,12 @@ export const StSectionLeftImage = styled.div`
   }
 
   .section-point {
-    color: var(--gray-gray_9FA6B2, #9fa6b2);
+    color: ${({ theme }) => theme.color.gray_9f};
     font-feature-settings:
       'clig' off,
       'liga' off;
     font-family: Pretendard;
-    font-size: 22px;
+    font-size: 2.2rem;
     font-style: normal;
     font-weight: 500;
     line-height: normal;
@@ -28,12 +28,12 @@ export const StSectionLeftImage = styled.div`
   }
 
   .section-description {
-    color: var(--white-white_FFFFFF, #fff);
+    color: ${({ theme }) => theme.color.white};
     font-feature-settings:
       'clig' off,
       'liga' off;
     font-family: Pretendard;
-    font-size: 48px;
+    font-size: 4.8rem;
     font-style: normal;
     font-weight: 700;
     line-height: 64px;
@@ -41,13 +41,13 @@ export const StSectionLeftImage = styled.div`
     margin-top: 100px;
 
     span {
-      color: var(--gray-gray_D9D9D9, #d9d9d9);
+      color: ${({ theme }) => theme.color.gray_d9};
       font-feature-settings:
         'clig' off,
         'liga' off;
       font-family: Pretendard;
 
-      font-size: 48px;
+      font-size: 4.8rem;
       font-style: normal;
       font-weight: 700;
       line-height: 64px;
@@ -76,7 +76,7 @@ export const StSmallSection = styled.div`
   /* display: flex; */
 
   .small-section-title {
-    color: var(--white-white_FFFFFF, #fff);
+    color: ${({ theme }) => theme.color.white};
     font-feature-settings:
       'clig' off,
       'liga' off;
@@ -101,7 +101,7 @@ export const StSettingItem = styled.div`
     height: 260px;
     flex-shrink: 0;
     border-radius: 8px 8px 0px 0px;
-    background: var(--black-black_4B4B4B, #4b4b4b);
+    background: ${({ theme }) => theme.color.black_4b};
     display: flex;
     justify-content: center;
     align-items: center;
@@ -112,22 +112,22 @@ export const StSettingItem = styled.div`
     height: 124px;
     flex-shrink: 0;
     border-radius: 0px 0px 8px 8px;
-    background: var(--black-black_171717, #171717);
+    background: ${({ theme }) => theme.color.black_17};
     padding: 33px;
 
     .description-title {
-      color: var(--white-white_FFFFFF, #fff);
+      color: ${({ theme }) => theme.color.white};
       font-family: Pretendard;
-      font-size: 18px;
+      font-size: 1.8rem;
       font-style: normal;
       font-weight: 700;
       line-height: normal;
     }
 
     .description-content {
-      color: var(--white-white_FFFFFF, #fff);
+      color: ${({ theme }) => theme.color.white};
       font-family: Pretendard;
-      font-size: 16px;
+      font-size: 1.6rem;
       font-style: normal;
       font-weight: 500;
       line-height: normal;

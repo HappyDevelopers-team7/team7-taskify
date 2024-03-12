@@ -1,6 +1,12 @@
 import { Link } from 'react-router-dom';
 import { StHeader } from './style';
 import { LandingImage } from '@/pages/landing';
+import { ReactNode } from 'react';
+
+interface MediumButtonProps {
+  children: ReactNode;
+  type?: 'button';
+}
 
 const Title = () => {
   return (
@@ -10,12 +16,12 @@ const Title = () => {
   );
 };
 
-const Description = ({ children }) => {
+const Description = ({ children }: MediumButtonProps) => {
   return <h3>{children}</h3>;
 };
 
-const MediumButton = ({ children }) => {
-  return <button>{children}</button>;
+const MediumButton = ({ children, type }: MediumButtonProps) => {
+  return <button type={type}>{children}</button>;
 };
 
 export const Header = () => {

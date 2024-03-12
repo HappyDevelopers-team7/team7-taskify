@@ -4,11 +4,14 @@ import { Header } from '@/components/landing-header';
 import { Section } from '@/components/landing-section';
 import { Footer } from '@/components/landing-footer';
 
-export const LandingImage = ({ src, alt }) => {
+interface imageSrcType {
+  src: string;
+  alt: string;
+}
+
+export const LandingImage = ({ src, alt }: imageSrcType) => {
   return <img src={src} alt={alt} />;
 };
-
-// ==================== Landing ==================
 
 const Landing = () => {
   return (
