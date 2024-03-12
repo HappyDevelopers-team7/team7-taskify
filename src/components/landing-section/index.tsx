@@ -17,7 +17,7 @@ const SectionRightImage = () => {
 
 const SectionLeftImage = () => {
   return (
-    <StSectionLeftImage className='landing-wide-section-left-image'>
+    <StSectionLeftImage>
       <LandingImage src='assets\image\images\landingImage2.svg' alt='할 일 등록 예시 이미지' />
       <div className='point-and-description'>
         <div className='section-point'>Point 2</div>
