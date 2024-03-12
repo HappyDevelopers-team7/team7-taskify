@@ -5,6 +5,7 @@ import AddColumnButton from '@/components/add-column-button';
 import API from '@/api/constants';
 import { useEffect, useState } from 'react';
 import Column from '@/components/column';
+import LoadingSpinner from '@/components/loading-spinner';
 
 export type Columns = {
   createdAt: string;
@@ -18,6 +19,7 @@ export type Columns = {
 const DashBoardId = () => {
   const { id } = useParams();
   const [columns, setColumns] = useState<Columns[]>();
+  const [isLoading, setIsLoading] = useState(true);
 
   const createColumns = () => {
     const name = prompt('컬럼 이름');
@@ -34,9 +36,11 @@ const DashBoardId = () => {
   };
 
   const viewColumns = () => {
+    setIsLoading(true);
     axiosInstance.get(`${API.COLUMNS.COLUMNS}?dashboardId=${id}`).then((res) => {
       console.log(res.data.data);
       setColumns(res.data.data);
+      setIsLoading(false);
     });
   };
 
@@ -46,6 +50,7 @@ const DashBoardId = () => {
 
   return (
     <Container>
+      {isLoading && <LoadingSpinner />}
       {columns && columns.map((it) => <Column key={it.id} props={it} viewColumns={viewColumns} />)}
       <div className='button-box'>
         <AddColumnButton createColumns={createColumns}>새로운 컬럼 추가하기</AddColumnButton>
