@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { combineReducers } from 'redux';
 import myInfoReducer from '../myInfoSlice';
+import modalReducer from '../modalSlice';
 
 const rootReducer = combineReducers({
   myInfo: myInfoReducer,
+  modal: modalReducer,
 });
 
 const store = configureStore({

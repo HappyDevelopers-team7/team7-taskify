@@ -1,13 +1,18 @@
+import { MouseEvent } from 'react';
 import MyDashBoardListItem from '../my-dashboard-list-item';
 import StDashBoardListSection from './style';
 
-const MyDashBoardList = () => {
+interface MyDashBoardListProps {
+  handleCreateDashboard: (e: MouseEvent<HTMLButtonElement | HTMLDivElement>) => void;
+}
+
+const MyDashBoardList = ({ handleCreateDashboard }: MyDashBoardListProps) => {
   return (
     <>
       <StDashBoardListSection>
         <ul>
           <li>
-            <button type='button'>
+            <button type='button' onClick={handleCreateDashboard}>
               <p>새로운 대시보드 생성</p>
               <img src='assets/image/icons/bannerAddIcon.svg' alt='새로운 대시보드 생성하려면 클릭' />
             </button>
