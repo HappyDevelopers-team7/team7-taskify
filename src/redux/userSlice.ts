@@ -73,6 +73,8 @@ export const userSlice = createSlice({
 });
 
 // 이렇게 내보내 줘야 전역에서 useSelector 훅 사용해서 데이터 꺼내 쓸 수 있다.
+// userSlice의 이름이 'user' 니까 아래 state에 우리가 만든 user를 넣어 내보내 준다.
+// 객체 전체를 내보내고 꺼내써도 되지만 아래처럼 나눠서 내보낼 수도 있으니 참고.
 export const getMyInfo = (state: { user: UserSliceType }) => state.user.user;
 export const getStatus = (state: { user: UserSliceType }) => state.user.status;
 
