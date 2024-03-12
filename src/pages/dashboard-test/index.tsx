@@ -1,4 +1,4 @@
-import { AppDispatch, fetchMyInfo, getMyInfo, getStatus } from '@/redux/userSlice';
+import { AppDispatch, fetchMyInfo, getMyInfo, getStatus } from '@/redux/myInfoSlice';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
