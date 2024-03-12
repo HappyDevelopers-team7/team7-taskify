@@ -24,7 +24,6 @@ const SignIn = () => {
 
   const { loading, result, setAsyncFunction } = useAsync(postSignIn);
 
-  // TODO: redux toolkit 비동기 처리 찾아보기
   const handleSubmitLogin: SubmitHandler<FieldValues> = async (data) => {
     await setAsyncFunction(data.email, data.password);
   };
