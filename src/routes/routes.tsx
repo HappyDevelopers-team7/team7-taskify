@@ -1,6 +1,7 @@
 import { lazy } from 'react';
 import { createBrowserRouter, createRoutesFromElements, Route } from 'react-router-dom';
 import Loading from './loading';
+import Layout from './layout';
 
 /*
 사용자가 처음 웹페이지에 진입하면, 번들링된 js파일을 다운받게 되는데,
@@ -29,8 +30,10 @@ const PrimaryRoute = (
       <Route path='sign-up' element={<SignUpPage />} />
     </Route>
     <Route element={<ProtectedRoutes authentication={true} />}>
-      <Route path='dashboard' element={<DashBoardPage />} />
-      <Route path='dashboard-test' element={<DashBoardTestPage />} />
+      <Route path='/' element={<Layout />}>
+        <Route path='dashboard' element={<DashBoardPage />} />
+        <Route path='dashboard-test' element={<DashBoardTestPage />} />
+      </Route>
     </Route>
     <Route path='*' element={<NotFoundPage />} />
   </Route>
