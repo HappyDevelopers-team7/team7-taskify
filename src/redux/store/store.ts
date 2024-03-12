@@ -3,7 +3,7 @@ import { combineReducers } from 'redux';
 import myInfoReducer from '../myInfoSlice';
 
 const rootReducer = combineReducers({
-  user: myInfoReducer,
+  myInfo: myInfoReducer,
 });
 
 const store = configureStore({
