@@ -1,9 +1,15 @@
-import { useParams } from 'react-router-dom';
+import Container from './style';
+import AddColumnButton from '@/components/add-column-button';
 
 const DashBoardId = () => {
-  // 로그인 후에는 동일한 헤더와 네브를 봐야하니 layout 파일로 옮김.
-  const { id } = useParams();
-  return <>{id}</>;
+  return (
+    <Container>
+      <div className='column-box'></div>
+      <div className='button-box'>
+        <AddColumnButton>새로운 컬럼 추가하기</AddColumnButton>
+      </div>
+    </Container>
+  );
 };
 
 export default DashBoardId;
