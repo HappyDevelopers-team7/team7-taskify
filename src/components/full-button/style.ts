@@ -8,6 +8,7 @@ const StFullButton = styled.button.attrs({ type: 'submit' })`
 
   &:disabled {
     background-color: ${({ theme }) => theme.color.gray_9f};
+    cursor: not-allowed;
   }
 
   span {

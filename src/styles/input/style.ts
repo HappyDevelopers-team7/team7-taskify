@@ -34,6 +34,10 @@ export const input = css`
   &:placeholder {
     color: ${({ theme }) => theme.color.gray_9f};
   }
+
+  @media ${({ theme }) => theme.deviceSize.mobile} {
+    font-size: 1.4rem;
+  }
 `;
 
 /**

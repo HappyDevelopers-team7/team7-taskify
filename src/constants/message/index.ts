@@ -19,3 +19,7 @@ export const AUTH_ERROR_MESSAGES = {
   INVALID_CONFIRM_PASSWORD: '비밀번호가 일치하지 않습니다.',
   USER_NOT_FOUND: '존재하지 않는 유저입니다.',
 } as const;
+
+export const INPUT_ERROR_MESSAGES = {
+  PLEASE_ENTER_VALUE: '값을 입력해주세요.',
+};
