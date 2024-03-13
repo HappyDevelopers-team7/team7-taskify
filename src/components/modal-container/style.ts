@@ -27,7 +27,7 @@ const StModalContainer = styled.div<StModalContainer>`
   .modal-content {
     position: relative;
     max-height: 90vh;
-    max-width: ${(props) => props.$modalWidth}px;
+    max-width: ${(props) => (props.$modalWidth ? props.$modalWidth : 'auto')}px;
     width: 100%;
     background: #fff;
     border-radius: 15px;
