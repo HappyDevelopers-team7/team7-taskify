@@ -6,11 +6,9 @@ const StInvitedSection = styled.section`
   max-width: 1022px;
   width: 100%;
   border-radius: 8px;
-  height: 100vh;
-  overflow: hidden;
+  margin-top: 44px;
 
-  .invite-header {
-    margin: 0 0 24px;
+  .invite-wrapper {
     padding: 0 28px;
   }
 
@@ -44,6 +42,10 @@ const StInvitedSection = styled.section`
       display: flex;
       align-items: center;
       gap: 10px;
+
+      span {
+        color: ${({ theme }) => theme.color.gray_9f};
+      }
 
       button {
         display: flex;

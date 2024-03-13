@@ -2,6 +2,7 @@ import { MouseEvent, useEffect, useState } from 'react';
 import MyDashBoardListItem from '../my-dashboard-list-item';
 import StDashBoardListSection from './style';
 import { getDashboardList } from '@/api/getDashboardList';
+import axiosInstance from '@/api/instance/axiosInstance';
 
 interface MyDashBoardListProps {
   handleCreateDashboard: (e: MouseEvent<HTMLButtonElement | HTMLDivElement>) => void;
@@ -40,12 +41,23 @@ const MyDashBoardList = ({ handleCreateDashboard }: MyDashBoardListProps) => {
     }
   };
 
+  const handleInviteMember = async () => {
+    const response = await axiosInstance.post(`dashboards/${4767}/invitations`, {
+      email: 'yum@naver.com',
+    });
+
+    const responseData = await response;
+    console.log(responseData);
+    return responseData;
+  };
+
   useEffect(() => {
     setDashboard();
   }, [currentPage]);
 
   return (
     <>
+      <button onClick={handleInviteMember}>초대하기 버튼 입니다.</button>
       <StDashBoardListSection>
         <ul>
           <li>
@@ -65,19 +77,21 @@ const MyDashBoardList = ({ handleCreateDashboard }: MyDashBoardListProps) => {
             </li>
           ))}
         </ul>
-        <div className='list-pagination'>
-          <p>
-            {totalPage} 페이지 중 {currentPage}
-          </p>
-          <div className=''>
-            <button type='button' aria-label='이전 목록' onClick={handleClickPreview}>
-              prev
-            </button>
-            <button type='button' aria-label='다음 목록' onClick={handleClickNext}>
-              next
-            </button>
+        {totalPage > 0 ? (
+          <div className='list-pagination'>
+            <p>
+              {totalPage} 페이지 중 {currentPage}
+            </p>
+            <div className=''>
+              <button type='button' aria-label='이전 목록' onClick={handleClickPreview}>
+                prev
+              </button>
+              <button type='button' aria-label='다음 목록' onClick={handleClickNext}>
+                next
+              </button>
+            </div>
           </div>
-        </div>
+        ) : null}
       </StDashBoardListSection>
     </>
   );

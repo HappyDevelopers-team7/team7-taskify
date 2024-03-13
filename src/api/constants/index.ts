@@ -11,6 +11,9 @@ const API = {
   DASHBOARDS: {
     DASHBOARDS: 'dashboards',
   },
+  INVITATIONS: {
+    INVITATIONS: 'invitations',
+  },
   COLUMNS: {
     COLUMNS: 'columns',
   },

@@ -10,7 +10,6 @@ const DashBoard = () => {
   const openModalName = useSelector((state: RootState) => state.modal.openModalName);
 
   const handleOpenCreateDashboardModal = () => {
-    // 대시보드 생성 모달을 열어준다.
     dispatch(setOpenModalName('createDashboard'));
     dispatch(openModal('createDashboard'));
   };
