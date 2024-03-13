@@ -4,7 +4,7 @@ import ModalContainer from '@/components/modal-container';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, closeModal, openModal, setOpenModalName } from '@/redux/modalSlice';
 import InputText from '@/components/input/input-text';
-import { FormEvent, useState } from 'react';
+import { SyntheticEvent, useState } from 'react';
 
 const DashBoard = () => {
   const [inputValue, setInputValue] = useState('');
@@ -20,7 +20,7 @@ const DashBoard = () => {
     // 대시보드 생성 모달을 닫아준다.
     dispatch(closeModal());
   };
-  const handleSubmitCreateDashboardModal = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmitCreateDashboardModal = (e: SyntheticEvent) => {
     e.preventDefault();
     // 대시보드 생성 submit 동작을 넣어준다.
     if (inputValue) {
