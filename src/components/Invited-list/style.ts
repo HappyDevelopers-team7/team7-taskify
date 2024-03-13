@@ -6,6 +6,8 @@ const StInvitedSection = styled.section`
   max-width: 1022px;
   width: 100%;
   border-radius: 8px;
+  height: 100vh;
+  overflow: hidden;
 
   .invite-header {
     margin: 0 0 24px;
