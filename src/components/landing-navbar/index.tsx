@@ -16,9 +16,15 @@ export const Navbar = () => {
   return (
     <StNavbar>
       <Link to='/'>
-        <LandingImage src='\assets\image\logos\whiteLogo.svg' alt='Taskify 로고 이미지' />
+        {window.innerWidth >= 375 && window.innerWidth <= 767 ? (
+          <LandingImage src='assets\image\logos\whiteLogoSmall.svg' alt='Taskify 로고 이미지' />
+        ) : (
+          <LandingImage src='assets\image\logos\whiteLogo.svg' alt='Taskify 로고 이미지' />
+        )}
       </Link>
       <SignInandUpLinks />
     </StNavbar>
   );
+
+  // @media (min-width: 375px) and (max-width: 767px){}
 };

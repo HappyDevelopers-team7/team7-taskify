@@ -18,4 +18,10 @@ export const StNavbarSigninSignup = styled.div`
   margin: 20px;
   display: flex;
   justify-content: space-between;
+
+  @media (min-width: 375px) and (max-width: 767px) {
+    font-size: 14px;
+    font-weight: 400;
+    gap: 20px;
+  }
 `;

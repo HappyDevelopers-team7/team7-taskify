@@ -27,7 +27,11 @@ const MediumButton = ({ children, type }: MediumButtonProps) => {
 export const Header = () => {
   return (
     <StHeader>
-      <LandingImage src='assets\image\images\landingMainImage1(desktop).svg' alt='Taskify 메인 이미지' />
+      {window.innerWidth >= 375 && window.innerWidth <= 767 ? (
+        <LandingImage src='public\assets\image\images\landingMainImage1(mobile).svg' alt='Taskify 메인 이미지' />
+      ) : (
+        <LandingImage src='assets\image\images\landingMainImage1(desktop).svg' alt='Taskify 메인 이미지' />
+      )}
       <Title />
       <Description>
         <h3>서비스 메인 설명 들어갑니다.</h3>

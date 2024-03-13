@@ -21,6 +21,14 @@ export const StHeader = styled.div`
     letter-spacing: -2px;
     margin: 50px auto;
 
+    @media (min-width: 375px) and (max-width: 767px) {
+      text-align: center;
+      font-size: 4rem;
+      flex-direction: column;
+      margin: 25px 5px;
+      line-height: normal;
+    }
+
     span {
       color: ${({ theme }) => theme.color.violet};
       text-align: center;
@@ -30,6 +38,12 @@ export const StHeader = styled.div`
       letter-spacing: -1px;
       margin-left: 28px;
       padding-bottom: 8px;
+
+      @media (min-width: 375px) and (max-width: 767px) {
+        text-align: center;
+        font-size: 4rem;
+        margin: 0;
+      }
     }
   }
 
@@ -42,6 +56,11 @@ export const StHeader = styled.div`
     font-weight: 400;
     line-height: normal;
     letter-spacing: -1px;
+
+    @media (min-width: 375px) and (max-width: 767px) {
+      text-align: center;
+      font-size: 1.2rem;
+    }
   }
 
   button {
