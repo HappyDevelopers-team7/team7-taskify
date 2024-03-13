@@ -12,6 +12,11 @@ interface ModalProps {
   handleSubmitModal: (e: MouseEvent<HTMLButtonElement | HTMLDivElement>) => void;
 }
 
+/**
+ *
+ * @param param0
+ * @returns
+ */
 const ModalContainer = ({
   title,
   closeButtonName,
