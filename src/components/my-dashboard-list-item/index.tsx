@@ -8,7 +8,7 @@ interface MyDashBoardListItemProps {
 const MyDashBoardListItem = ({ stateColor }: MyDashBoardListItemProps) => {
   return (
     <>
-      <Link to='/' role='button' tabIndex={0}>
+      <Link to='/' role='button'>
         <StListItem $stateColor={stateColor}>
           <span className='list-item__color'></span>
           <div className='list-item__title'>
