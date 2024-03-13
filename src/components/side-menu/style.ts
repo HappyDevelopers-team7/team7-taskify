@@ -3,10 +3,11 @@ import styled from 'styled-components';
 const Container = styled.div`
   width: 300px;
   height: 100%;
-  position: fixed;
   border-right: 1px solid ${({ theme }) => theme.color.gray_d9};
   overflow-x: hidden;
   overflow-y: scroll;
+  background-color: ${({ theme }) => theme.color.white};
+  z-index: 10;
 
   &::-webkit-scrollbar {
     width: 5px;

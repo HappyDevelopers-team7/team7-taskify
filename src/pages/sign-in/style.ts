@@ -30,6 +30,40 @@ const StSignInContainer = styled.div`
     .form__submit-button {
       margin-top: 20px;
     }
+
+    .form__agreement-checkbox {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 24px;
+
+      input {
+        -webkit-appearance: none; /* safari / chrome */
+        -moz-appearance: none; /* Mozilla */
+        appearance: none;
+        width: 20px;
+        height: 20px;
+        display: block;
+        border-radius: 4px;
+        border: 1px solid ${({ theme }) => theme.color.gray_d9};
+        cursor: pointer;
+
+        &:focus {
+          outline: 1px solid ${({ theme }) => theme.color.violet};
+        }
+
+        &:checked {
+          background: ${({ theme }) => theme.color.violet} url(assets/image/icons/checkWhiteIcon.svg) no-repeat center;
+          background-size: 95%;
+        }
+      }
+
+      label {
+        font-size: 1.6rem;
+        color: ${({ theme }) => theme.color.black_33};
+        cursor: pointer;
+      }
+    }
   }
 
   h5 {

@@ -1,29 +1,6 @@
-import { useState } from 'react';
-import SideMenu from '@/components/side-menu';
-
-export type Dashboards = {
-  color: string;
-  createdAt: string;
-  createdByMe: boolean;
-  id: number;
-  title: string;
-  updatedAt: string;
-  userId: number;
-};
-
 const DashBoard = () => {
-  const [dashboards, setDashboards] = useState<Dashboards[]>([]);
-
-  const spreadDashboards = (dashboards: Dashboards[]) => {
-    const data = dashboards;
-    setDashboards(data);
-  };
-
-  return (
-    <>
-      <SideMenu dashboards={dashboards} spreadDashboards={spreadDashboards} /*accessToken={accessToken}*/ />
-    </>
-  );
+  // 로그인 후에는 동일한 헤더와 네브를 봐야하니 layout 파일로 옮김.
+  return <></>;
 };
 
 export default DashBoard;
