@@ -26,6 +26,7 @@ const DashBoard = () => {
     if (inputValue) {
       console.log(inputValue);
       dispatch(closeModal());
+      setInputValue('');
     } else {
       alert('값을 입력해 주세요.');
     }

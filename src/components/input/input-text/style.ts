@@ -30,6 +30,14 @@ const StInputContainer = styled.div`
       ${input}
     }
   }
+
+  @media ${({ theme }) => theme.deviceSize.mobile} {
+    .label-box {
+      label {
+        font-size: 1.6rem;
+      }
+    }
+  }
 `;
 
 export default StInputContainer;
