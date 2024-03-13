@@ -42,6 +42,10 @@ const resetCss = css`
       outline: none;
       resize: none;
     }
+
+    ul {
+      list-style-type: none;
+    }
   }
 `;
 
