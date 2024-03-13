@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-const StSection = styled.div`
+const StSection = styled.section`
   width: 1200px;
   height: 600px;
   margin: 90px auto;

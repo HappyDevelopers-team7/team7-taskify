@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const StFooter = styled.div`
+export const StFooter = styled.footer`
   height: 100px;
   margin: 40px;
   display: flex;

@@ -28,9 +28,9 @@ export const Header = () => {
   return (
     <StHeader>
       {window.innerWidth >= 375 && window.innerWidth <= 767 ? (
-        <LandingImage src='public\assets\image\images\landingMainImage1(mobile).svg' alt='Taskify 메인 이미지' />
+        <LandingImage src='public\assets\image\images\landingMainImageMobile.png' alt='Taskify 메인 이미지' />
       ) : (
-        <LandingImage src='assets\image\images\landingMainImage1(desktop).svg' alt='Taskify 메인 이미지' />
+        <LandingImage src='assets\image\images\landingMainImageDesktop.png' alt='Taskify 메인 이미지' />
       )}
       <Title />
       <Description>

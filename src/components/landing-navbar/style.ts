@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const StNavbar = styled.div`
+export const StNavbar = styled.nav`
   height: 70px;
   color: ${({ theme }) => theme.color.white};
   font-size: 1.6rem;
