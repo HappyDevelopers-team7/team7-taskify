@@ -44,40 +44,59 @@ const StModalContainer = styled.div<StModalContainer>`
 
   .modal-button-group {
     display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 12px;
+    align-items: flex-end;
+    justify-content: space-between;
     margin-top: 28px;
 
-    button {
-      padding: 14px 46px;
-      border-radius: 8px;
-      color: ${({ theme }) => theme.color.gray_78};
-      font-size: 1.6rem;
-      font-weight: 500;
-    }
+    .delete-button-box {
+      button {
+        color: ${({ theme }) => theme.color.gray_9f};
+        font-size: 1.4rem;
+        font-weight: 400;
+        text-decoration: underline;
+        transition: 0.15s;
 
-    .modal-button__close {
-      color: ${({ theme }) => theme.color.gray_78};
-      outline: 1px solid ${({ theme }) => theme.color.gray_d9};
-      background: ${({ theme }) => theme.color.white};
-      transition: all 0.2s;
-
-      &:hover {
-        color: ${({ theme }) => theme.color.violet};
-        outline: 1px solid ${({ theme }) => theme.color.violet};
+        &:hover {
+          color: ${({ theme }) => theme.color.red};
+        }
       }
     }
 
-    .modal-button__submit {
-      color: ${({ theme }) => theme.color.white};
-      background: ${({ theme }) => theme.color.violet};
-      transition: background-color 0.1s;
+    .submit-button-box {
+      display: flex;
+      align-items: center;
+      gap: 12px;
 
-      &:hover {
-        color: ${({ theme }) => theme.color.violet};
-        outline: 1px solid ${({ theme }) => theme.color.violet};
+      button {
+        padding: 14px 46px;
+        border-radius: 8px;
+        color: ${({ theme }) => theme.color.gray_78};
+        font-size: 1.6rem;
+        font-weight: 500;
+      }
+
+      .modal-button__close {
+        color: ${({ theme }) => theme.color.gray_78};
+        outline: 1px solid ${({ theme }) => theme.color.gray_d9};
         background: ${({ theme }) => theme.color.white};
+        transition: all 0.2s;
+
+        &:hover {
+          color: ${({ theme }) => theme.color.violet};
+          outline: 1px solid ${({ theme }) => theme.color.violet};
+        }
+      }
+
+      .modal-button__submit {
+        color: ${({ theme }) => theme.color.white};
+        background: ${({ theme }) => theme.color.violet};
+        transition: background-color 0.1s;
+
+        &:hover {
+          color: ${({ theme }) => theme.color.violet};
+          outline: 1px solid ${({ theme }) => theme.color.violet};
+          background: ${({ theme }) => theme.color.white};
+        }
       }
     }
   }

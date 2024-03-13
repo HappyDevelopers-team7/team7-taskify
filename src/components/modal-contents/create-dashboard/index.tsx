@@ -28,6 +28,7 @@ const CreateDashboard = () => {
       title='대시보드 생성'
       closeButtonName='취소'
       submitButtonName='생성'
+      isDeletable
       modalWidth={506}
       handleCloseModal={handleCloseCreateDashboardModal}
       handleSubmitModal={handleSubmitCreateDashboardModal}
