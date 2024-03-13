@@ -69,7 +69,7 @@ const StInvitedSection = styled.section`
     tr {
       td {
         &:nth-child(1) {
-          padding-left: 28px;
+          padding-left: 48px;
         }
 
         &:nth-last-child() {
