@@ -1,7 +1,7 @@
 import { input, inputContainer } from '@/styles/input/style';
 import styled from 'styled-components';
 
-export const StLabel = styled.label`
+export const StAuthLabel = styled.label`
   display: block;
   font-size: 1.6rem;
   color: ${({ theme }) => theme.color.black_33};
@@ -12,7 +12,7 @@ export const StLabel = styled.label`
   }
 `;
 
-export const StInputContainer = styled.div`
+export const StAuthInputContainer = styled.div`
   ${inputContainer}
 
   padding: 12px 16px;

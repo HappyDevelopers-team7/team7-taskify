@@ -3,8 +3,11 @@ import StDashBoardWrap from './style';
 import ModalContainer from '@/components/modal-container';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, closeModal, openModal, setOpenModalName } from '@/redux/modalSlice';
+import InputText from '@/components/input/input-text';
+import { FormEvent, useState } from 'react';
 
 const DashBoard = () => {
+  const [inputValue, setInputValue] = useState('');
   const dispatch = useDispatch();
   const openModalName = useSelector((state: RootState) => state.modal.openModalName);
 
@@ -17,8 +20,15 @@ const DashBoard = () => {
     // 대시보드 생성 모달을 닫아준다.
     dispatch(closeModal());
   };
-  const handleSubmitCreateDashboardModal = () => {
+  const handleSubmitCreateDashboardModal = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     // 대시보드 생성 submit 동작을 넣어준다.
+    if (inputValue) {
+      console.log(inputValue);
+      dispatch(closeModal());
+    } else {
+      alert('값을 입력해 주세요.');
+    }
   };
 
   // 모달 하나 이상 열때 아래와 같이 반복
@@ -49,7 +59,14 @@ const DashBoard = () => {
           handleCloseModal={handleCloseCreateDashboardModal}
           handleSubmitModal={handleSubmitCreateDashboardModal}
         >
-          <div>여기에 모달 컴포넌트를 넣어주세요</div>
+          <form onSubmit={handleSubmitCreateDashboardModal}>
+            <InputText
+              setValue={setInputValue}
+              required
+              labelName='대시보드 이름'
+              placeholder='대시보드 이름을 입력하세요.'
+            />
+          </form>
         </ModalContainer>
       ) : null}
       {openModalName === 'testModal' ? (

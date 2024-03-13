@@ -1,6 +1,6 @@
 import { authInputProps } from './authInputType';
 import { useState } from 'react';
-import { StInputContainer, StLabel } from './style';
+import { StAuthInputContainer, StAuthLabel } from './style';
 import { StErrorMessage } from '@/styles/input/style';
 
 /**
@@ -38,9 +38,9 @@ const AuthInput = ({
 
   return (
     <>
-      {label ? <StLabel>{label}</StLabel> : null}
+      {label ? <StAuthLabel>{label}</StAuthLabel> : null}
 
-      <StInputContainer className={isError ? 'red' : ''}>
+      <StAuthInputContainer className={isError ? 'red' : ''}>
         {password ? (
           <>
             <input
@@ -60,7 +60,7 @@ const AuthInput = ({
         ) : (
           <input id={id} type={type} placeholder={placeholder} {...(register && register(name, rules))} />
         )}
-      </StInputContainer>
+      </StAuthInputContainer>
       {isError && typeof errorMessages === 'string' ? (
         <StErrorMessage aria-live='assertive'>{errorMessages}</StErrorMessage>
       ) : null}

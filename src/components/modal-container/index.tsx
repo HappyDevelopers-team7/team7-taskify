@@ -1,4 +1,4 @@
-import { MouseEvent, ReactNode } from 'react';
+import { FormEvent, MouseEvent, ReactNode } from 'react';
 import PortalContainer from '../portal';
 import StModalContainer from './style';
 
@@ -9,7 +9,7 @@ interface ModalProps {
   modalWidth?: number;
   children: ReactNode;
   handleCloseModal: (e: MouseEvent<HTMLButtonElement | HTMLDivElement>) => void;
-  handleSubmitModal: (e: MouseEvent<HTMLButtonElement | HTMLDivElement>) => void;
+  handleSubmitModal: (e: FormEvent<HTMLButtonElement>) => void;
 }
 
 /**
@@ -43,7 +43,7 @@ const ModalContainer = ({
             <button className='modal-button__close' type='button' onClick={handleCloseModal}>
               {closeButtonName}
             </button>
-            <button className='modal-button__submit' type='button' onClick={handleSubmitModal}>
+            <button className='modal-button__submit' type='submit' onClick={handleSubmitModal}>
               {submitButtonName}
             </button>
           </div>
