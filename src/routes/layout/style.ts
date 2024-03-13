@@ -6,6 +6,7 @@ const StWrapper = styled.div`
 
   #container {
     padding-top: 70px;
+    width: 100%;
   }
 `;
 
