@@ -1,5 +1,6 @@
 import InputText from '@/components/input/input-text';
 import ModalContainer from '@/components/modal-container';
+import { INPUT_ERROR_MESSAGES } from '@/constants/message';
 import { closeModal } from '@/redux/modalSlice';
 import { SyntheticEvent, useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -19,7 +20,7 @@ const CreateDashboard = () => {
       dispatch(closeModal());
       setInputValue('');
     } else {
-      alert('값을 입력해 주세요.');
+      alert(INPUT_ERROR_MESSAGES.PLEASE_ENTER_VALUE);
     }
   };
   return (
@@ -34,6 +35,7 @@ const CreateDashboard = () => {
       <form onSubmit={handleSubmitCreateDashboardModal}>
         <InputText
           setValue={setInputValue}
+          autoFocus={true}
           required
           labelName='대시보드 이름'
           placeholder='대시보드 이름을 입력하세요.'
