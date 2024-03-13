@@ -13,7 +13,7 @@ interface ModalProps {
 }
 
 /**
- *
+ * 예시는 dashboard 페이지 참고.
  * @param {string} title - 모달 대제목
  * @param {string} closeButtonName - 모달 닫는 버튼 이름
  * @param {string} submitButtonName - 모달 submit 동작 버튼 이름
