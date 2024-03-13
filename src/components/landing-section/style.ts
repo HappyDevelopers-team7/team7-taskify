@@ -30,7 +30,7 @@ const StSection = styled.div`
     margin: 100px 60px 0;
 
     @media (min-width: 375px) and (max-width: 767px) {
-      font-size: 18px;
+      font-size: 1.8rem;
     }
   }
 
@@ -52,7 +52,6 @@ const StSection = styled.div`
     span {
       color: ${({ theme }) => theme.color.gray_d9};
       font-size: 4.8rem;
-      font-style: normal;
       font-weight: 700;
       line-height: 64px;
 
@@ -131,7 +130,6 @@ export const StSectionLeftImage = styled(StSection)`
 `;
 
 export const StSmallSection = styled.div`
-  // 작은 섹션 컨테이너 스타일
   width: 1200px;
   height: 600px;
   margin: 90px auto;
@@ -158,7 +156,7 @@ export const StSmallSection = styled.div`
 
     @media (min-width: 375px) and (max-width: 767px) {
       text-align: center;
-      font-size: 22px;
+      font-size: 2.2rem;
     }
   }
 
@@ -185,7 +183,6 @@ export const StSettingItem = styled.div`
   .image-container {
     width: 378px;
     height: 260px;
-    flex-shrink: 0;
     border-radius: 8px 8px 0px 0px;
     background: ${({ theme }) => theme.color.black_4b};
     display: flex;
@@ -201,7 +198,6 @@ export const StSettingItem = styled.div`
   .description-container {
     width: 378px;
     height: 124px;
-    flex-shrink: 0;
     border-radius: 0px 0px 8px 8px;
     background: ${({ theme }) => theme.color.black_17};
     padding: 33px;
@@ -213,18 +209,14 @@ export const StSettingItem = styled.div`
 
     .description-title {
       color: ${({ theme }) => theme.color.white};
-      font-family: Pretendard;
       font-size: 1.8rem;
-      font-style: normal;
       font-weight: 700;
       line-height: normal;
     }
 
     .description-content {
       color: ${({ theme }) => theme.color.white};
-      font-family: Pretendard;
       font-size: 1.6rem;
-      font-style: normal;
       font-weight: 500;
       line-height: normal;
       margin-top: 18px;

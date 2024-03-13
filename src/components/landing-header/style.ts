@@ -50,9 +50,7 @@ export const StHeader = styled.div`
   h3 {
     color: ${({ theme }) => theme.color.white};
     text-align: center;
-    font-family: Pretendard;
     font-size: 1.8rem;
-    font-style: normal;
     font-weight: 400;
     line-height: normal;
     letter-spacing: -1px;
@@ -66,9 +64,7 @@ export const StHeader = styled.div`
   button {
     color: ${({ theme }) => theme.color.white};
     text-align: center;
-    font-family: Pretendard;
     font-size: 1.8rem;
-    font-style: normal;
     font-weight: 500;
     line-height: normal;
     display: flex;
