@@ -14,9 +14,8 @@ const CreateDashboard = () => {
   };
   const handleSubmitCreateDashboardModal = (e: SyntheticEvent) => {
     e.preventDefault();
-    // 대시보드 생성 submit 동작을 넣어준다.
     if (inputValue) {
-      console.log(inputValue);
+      // 대시보드 생성 submit 동작을 넣어준다.
       dispatch(closeModal());
       setInputValue('');
     } else {
