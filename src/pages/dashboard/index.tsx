@@ -1,22 +1,20 @@
 import MyDashBoardList from '@/components/my-dashboard-list';
 import StDashBoardWrap from './style';
 import ModalContainer from '@/components/modal-container';
-import { useDispatch } from 'react-redux';
-import { closeModal, openModal } from '@/redux/modalSlice';
-import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState, closeModal, openModal, setOpenModalName } from '@/redux/modalSlice';
 
 const DashBoard = () => {
   const dispatch = useDispatch();
-  const [modalName, setModalName] = useState<string>(''); // 모달의 이름을 관리한다.
+  const openModalName = useSelector((state: RootState) => state.modal.openModalName);
 
   const handleOpenCreateDashboardModal = () => {
     // 대시보드 생성 모달을 열어준다.
-    setModalName('createDashboard');
-    dispatch(openModal(modalName));
+    dispatch(setOpenModalName('createDashboard'));
+    dispatch(openModal('createDashboard'));
   };
   const handleCloseCreateDashboardModal = () => {
     // 대시보드 생성 모달을 닫아준다.
-    setModalName('');
     dispatch(closeModal());
   };
   const handleSubmitCreateDashboardModal = () => {
@@ -25,14 +23,14 @@ const DashBoard = () => {
 
   // 모달 하나 이상 열때 아래와 같이 반복
   const handleOpenTestModal = () => {
-    setModalName('testModal');
-    dispatch(openModal(modalName));
+    dispatch(setOpenModalName('testModal'));
+    dispatch(openModal('testModal'));
   };
 
   const handleCloseTestModal = () => {
-    setModalName('');
     dispatch(closeModal());
   };
+
   return (
     <>
       <StDashBoardWrap>
@@ -41,7 +39,7 @@ const DashBoard = () => {
           테스트 모달 열기
         </button>
       </StDashBoardWrap>
-      {modalName === 'createDashboard' ? (
+      {openModalName === 'createDashboard' ? (
         // state에 저장되어있는 modal 이름과 createDashboard이 같다면 보여주고 아니면 닫아라.
         <ModalContainer
           title='대시보드 생성'
@@ -54,7 +52,7 @@ const DashBoard = () => {
           <div>여기에 모달 컴포넌트를 넣어주세요</div>
         </ModalContainer>
       ) : null}
-      {modalName === 'testModal' ? (
+      {openModalName === 'testModal' ? (
         <ModalContainer
           title='테스트 모달'
           closeButtonName='취소'

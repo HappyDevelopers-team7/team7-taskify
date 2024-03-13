@@ -1,7 +1,10 @@
 // modalSlice.js
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import store from './store/store';
 
-interface ModalState {
+export type RootState = ReturnType<typeof store.getState>;
+
+export interface ModalState {
   openModalName: string | number | null;
   prevScrollPosition: number;
   currentScrollPosition: number;
@@ -23,6 +26,9 @@ const modalSlice = createSlice({
   name: 'modal',
   initialState,
   reducers: {
+    setOpenModalName: (state, action) => {
+      state.openModalName = action.payload;
+    },
     openModal: (state, action: PayloadAction<string | number>) => {
       state.prevScrollPosition = window.scrollY;
       document.body.style.position = 'fixed';
@@ -45,5 +51,5 @@ const modalSlice = createSlice({
   },
 });
 
-export const { openModal, closeModal, setCurrentScrollPosition } = modalSlice.actions;
+export const { setOpenModalName, openModal, closeModal, setCurrentScrollPosition } = modalSlice.actions;
 export default modalSlice.reducer;
