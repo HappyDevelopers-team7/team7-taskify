@@ -21,11 +21,11 @@ const Column = ({ props, viewColumns }: Props) => {
         <div className='column-color' />
         <h2>{props.title}</h2>
         <div className='inner-cards'>3</div>
-        <img src='/assets/image/icons/settingIcon.svg' onClick={removeColumn} />
+        <img src='/assets/image/icons/settingIcon.svg' alt='settin-icon' onClick={removeColumn} />
       </div>
       <div className='column-body'>
-        <button className='add-card'>
-          <img src='/assets/image/icons/bannerAddIcon.svg' />
+        <button type='button' className='add-card'>
+          <img src='/assets/image/icons/bannerAddIcon.svg' alt='add-icon' />
         </button>
       </div>
     </Container>

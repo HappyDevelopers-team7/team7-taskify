@@ -106,12 +106,7 @@ const SideMenu = () => {
 
       <div className='sidemenu-head'>
         <span>Dash Boards</span>
-        <img
-          src='/assets/image/icons/addBoxIcon.svg'
-          className='add-button'
-          alt='add-button'
-          onClick={createDashboard}
-        />
+        <img src='/assets/image/icons/addBoxIcon.svg' className='add-button' alt='add-icon' onClick={createDashboard} />
       </div>
 
       <div className='sidemenu-body'>
@@ -127,32 +122,34 @@ const SideMenu = () => {
             >
               <div className='dashboard-color' style={{ background: data.color }} />
               <span>{data.title}</span>
-              {data.createdByMe && <img src='/assets/image/icons/crownIcon.svg' />}
+              {data.createdByMe && <img src='/assets/image/icons/crownIcon.svg' alt='crown-icon' />}
             </li>
           ))}
         </ul>
       </div>
 
       <div className='sidemenu-foot'>
-        <button className='page-button prev-page' onClick={handlePrevPage}>
+        <button type='button' className='page-button prev-page' onClick={handlePrevPage}>
           <img
             src={
               currentPage === 1
                 ? '/assets/image/icons/arrowForwardIcon(gray-left).svg'
                 : '/assets/image/icons/arrowForwardIcon(left).svg'
             }
+            alt='prev-icon'
           />
         </button>
-        <button className='page-button next-page' onClick={handleNextPage}>
+        <button type='button' className='page-button next-page' onClick={handleNextPage}>
           <img
             src={
               currentPage === maximumPages
                 ? '/assets/image/icons/arrowForwardIcon(gray).svg'
                 : '/assets/image/icons/arrowForwardIcon.svg'
             }
+            alt='next-icon'
           />
         </button>
-        <button className='temp-button' onClick={removeDashboard} /*테스트 종료시 삭제*/>
+        <button type='button' className='temp-button' onClick={removeDashboard} /*테스트 종료시 삭제*/>
           삭제
         </button>
       </div>

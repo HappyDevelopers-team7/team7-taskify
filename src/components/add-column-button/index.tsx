@@ -8,9 +8,9 @@ interface Props {
 
 const AddColumnButton = ({ children, createColumns }: Props) => {
   return (
-    <Button onClick={createColumns}>
+    <Button type='button' onClick={createColumns}>
       {children}
-      <img src='/assets/image/icons/bannerAddIcon.svg' />
+      <img src='/assets/image/icons/bannerAddIcon.svg' alt='add-icon' />
     </Button>
   );
 };
