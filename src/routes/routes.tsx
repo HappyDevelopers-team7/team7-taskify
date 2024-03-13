@@ -18,6 +18,7 @@ const LandingPage = lazy(() => import('@pages/landing'));
 const SignInPage = lazy(() => import('@pages/sign-in'));
 const SignUpPage = lazy(() => import('@pages/sign-up'));
 const DashBoardPage = lazy(() => import('@pages/dashboard'));
+const DashBoardIdPage = lazy(() => import('@pages/dashboard-id'));
 const DashBoardTestPage = lazy(() => import('@pages/dashboard-test'));
 const ProtectedRoutes = lazy(() => import('@routes/protected-routes'));
 const NotFoundPage = lazy(() => import('@pages/not-found'));
@@ -32,6 +33,7 @@ const PrimaryRoute = (
     <Route element={<ProtectedRoutes authentication={true} />}>
       <Route path='/' element={<Layout />}>
         <Route path='dashboard' element={<DashBoardPage />} />
+        <Route path='dashboard/:id' element={<DashBoardIdPage />} />
         <Route path='dashboard-test' element={<DashBoardTestPage />} />
       </Route>
     </Route>

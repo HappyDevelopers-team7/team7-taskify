@@ -100,17 +100,12 @@ const SideMenu = () => {
   return (
     <Container ref={scrollHandler}>
       <Link to={'/'}>
-        <img src='assets/image/logos/mediumLogo.svg' className='logo' alt='logo-image' />
+        <img src='/assets/image/logos/mediumLogo.svg' className='logo' alt='logo-image' />
       </Link>
 
       <div className='sidemenu-head'>
         <span>Dash Boards</span>
-        <img
-          src='assets/image/icons/addBoxIcon.svg'
-          className='add-button'
-          alt='add-button'
-          onClick={createDashboard}
-        />
+        <img src='/assets/image/icons/addBoxIcon.svg' className='add-button' alt='add-icon' onClick={createDashboard} />
       </div>
 
       <div className='sidemenu-body'>
@@ -119,36 +114,41 @@ const SideMenu = () => {
             <li
               key={data.id}
               className={`dashboard ${selected === data.id ? 'selected' : ''}`}
-              onClick={() => handleSelectedDashboard(data.id)}
+              onClick={() => {
+                handleSelectedDashboard(data.id);
+                navigate(`/dashboard/${data.id}`);
+              }}
             >
               <div className='dashboard-color' style={{ background: data.color }} />
               <span>{data.title}</span>
-              {data.createdByMe && <img src='assets/image/icons/crownIcon.svg' />}
+              {data.createdByMe && <img src='/assets/image/icons/crownIcon.svg' alt='crown-icon' />}
             </li>
           ))}
         </ul>
       </div>
 
       <div className='sidemenu-foot'>
-        <button className='page-button prev-page' onClick={handlePrevPage}>
+        <button type='button' className='page-button prev-page' onClick={handlePrevPage}>
           <img
             src={
               currentPage === 1
-                ? 'assets/image/icons/arrowForwardIcon(gray-left).svg'
-                : 'assets/image/icons/arrowForwardIcon(left).svg'
+                ? '/assets/image/icons/arrowForwardIcon(gray-left).svg'
+                : '/assets/image/icons/arrowForwardIcon(left).svg'
             }
+            alt='prev-icon'
           />
         </button>
-        <button className='page-button next-page' onClick={handleNextPage}>
+        <button type='button' className='page-button next-page' onClick={handleNextPage}>
           <img
             src={
               currentPage === maximumPages
-                ? 'assets/image/icons/arrowForwardIcon(gray).svg'
-                : 'assets/image/icons/arrowForwardIcon.svg'
+                ? '/assets/image/icons/arrowForwardIcon(gray).svg'
+                : '/assets/image/icons/arrowForwardIcon.svg'
             }
+            alt='next-icon'
           />
         </button>
-        <button className='temp-button' onClick={removeDashboard} /*테스트 종료시 삭제*/>
+        <button type='button' className='temp-button' onClick={removeDashboard} /*테스트 종료시 삭제*/>
           삭제
         </button>
       </div>
