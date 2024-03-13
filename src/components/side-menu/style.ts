@@ -7,7 +7,7 @@ const Container = styled.div`
   overflow-x: hidden;
   overflow-y: scroll;
   background-color: ${({ theme }) => theme.color.white};
-  z-index: 1;
+  z-index: 10;
   flex-shrink: 0;
 
   &::-webkit-scrollbar {

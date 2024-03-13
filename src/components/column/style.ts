@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-const Container = styled.div`
+export const ColumnContainer = styled.div`
   width: 354px;
   height: 100%;
   background-color: ${({ theme }) => theme.color.gray_fa};
@@ -62,6 +62,67 @@ const Container = styled.div`
       border-radius: 6px;
     }
   }
+
+  h3 {
+    font-size: 3rem;
+  }
 `;
 
-export default Container;
+export const ModalContent = styled.div`
+  h3 {
+    font-size: 1.8rem;
+    font-weight: 500;
+    margin-bottom: 10px;
+  }
+
+  .asignee {
+    color: ${({ theme }) => theme.color.gray_9f};
+  }
+
+  span {
+    color: ${({ theme }) => theme.color.violet};
+  }
+
+  .input-box {
+    width: 100%;
+    padding: 15px 0px 15px 16px;
+    margin-bottom: 32px;
+
+    border-radius: 6px;
+    border: 1px solid ${({ theme }) => theme.color.gray_d9};
+    background: ${({ theme }) => theme.color.white};
+
+    font-size: 1.6rem;
+  }
+
+  .input-box::placeholder {
+    color: ${({ theme }) => theme.color.gray_9f};
+  }
+
+  .input-box.date-box {
+    padding-left: 40px;
+  }
+
+  .date-box {
+    background-image: url('/assets/image/icons/calendarIcon.svg');
+    background-repeat: no-repeat;
+    background-position: 3%;
+    background-size: 22px;
+  }
+
+  .calendar {
+    width: 22px;
+    height: 22px;
+    position: absolute;
+    bottom: 370px;
+    left: 40px;
+    cursor: pointer;
+  }
+
+  .add-image {
+    width: 76px;
+    height: 76px;
+    border-radius: 6px;
+    background-color: #f5f5f5;
+  }
+`;

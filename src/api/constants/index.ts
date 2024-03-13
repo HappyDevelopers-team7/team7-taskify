@@ -14,6 +14,9 @@ const API = {
   COLUMNS: {
     COLUMNS: 'columns',
   },
+  CARDS: {
+    CARDS: 'cards',
+  },
 } as const;
 
 export default API;

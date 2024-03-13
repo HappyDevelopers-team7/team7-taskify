@@ -51,7 +51,7 @@ const DashBoardId = () => {
   return (
     <Container>
       {isLoading && <LoadingSpinner />}
-      {columns && columns.map((it) => <Column key={it.id} props={it} viewColumns={viewColumns} />)}
+      {columns && columns.map((it) => <Column key={it.id} props={it} viewColumns={viewColumns} dashboardId={id} />)}
       <div className='button-box'>
         <AddColumnButton createColumns={createColumns}>새로운 컬럼 추가하기</AddColumnButton>
       </div>
