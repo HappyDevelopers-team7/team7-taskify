@@ -112,12 +112,23 @@ const StModalContainer = styled.div<StModalContainer>`
     }
 
     .modal-button-group {
-      gap: 10px;
+      flex-direction: column;
+      align-items: flex-start;
+      margin-top: 24px;
 
-      button {
-        width: calc(100% / 2);
-        padding: 12px 46px;
-        font-size: 1.4rem;
+      .delete-button-box {
+        margin-bottom: 16px;
+      }
+
+      .submit-button-box {
+        width: 100%;
+        gap: 10px;
+
+        button {
+          width: calc(100% / 2);
+          padding: 12px 46px;
+          font-size: 1.4rem;
+        }
       }
     }
   }
