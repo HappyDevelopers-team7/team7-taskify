@@ -3,6 +3,7 @@ import StDashBoardWrap from './style';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, openModal, setOpenModalName } from '@/redux/modalSlice';
 import CreateDashboard from '@/components/modal-contents/create-dashboard';
+import InvitedList from '@/components/Invited-list';
 
 const DashBoard = () => {
   const dispatch = useDispatch();
@@ -18,6 +19,7 @@ const DashBoard = () => {
     <>
       <StDashBoardWrap>
         <MyDashBoardList handleCreateDashboard={handleOpenCreateDashboardModal} />
+        <InvitedList />
       </StDashBoardWrap>
       {openModalName === 'createDashboard' ? <CreateDashboard /> : null}
     </>
