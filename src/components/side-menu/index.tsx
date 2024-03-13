@@ -67,7 +67,6 @@ const SideMenu = () => {
         if (scrollHandler.current) {
           scrollHandler.current.scrollTop = 0;
         }
-        console.log(res.data.dashboards); //삭제할 대시보드 ID확인용
       })
       .catch((err) => {
         if (err.response && err.response.status === 401) {
