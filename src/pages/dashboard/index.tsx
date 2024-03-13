@@ -14,19 +14,10 @@ const DashBoard = () => {
     dispatch(openModal('createDashboard'));
   };
 
-  // 모달 하나 이상 열때 아래와 같이 반복
-  const handleOpenTestModal = () => {
-    dispatch(setOpenModalName('testModal'));
-    dispatch(openModal('testModal'));
-  };
-
   return (
     <>
       <StDashBoardWrap>
         <MyDashBoardList handleCreateDashboard={handleOpenCreateDashboardModal} />
-        <button onClick={handleOpenTestModal} type='button'>
-          테스트 모달 열기
-        </button>
       </StDashBoardWrap>
       {openModalName === 'createDashboard' ? <CreateDashboard /> : null}
     </>
