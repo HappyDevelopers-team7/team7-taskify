@@ -3,31 +3,30 @@ import MyDashBoardListItem from '../my-dashboard-list-item';
 import StDashBoardListSection from './style';
 import { getDashboardList } from '@/api/getDashboardList';
 import axiosInstance from '@/api/instance/axiosInstance';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState, setDashboardList } from '@/redux/dashboardListSlice';
 
 interface MyDashBoardListProps {
   handleCreateDashboard: (e: MouseEvent<HTMLButtonElement | HTMLDivElement>) => void;
 }
 
-interface DashBoardList {
-  id: number;
-  title: string;
-  color: string;
-  userId: number;
-  createdByMe: boolean;
-  createdAt: string;
-  updatedAt: string;
-}
-
 const MyDashBoardList = ({ handleCreateDashboard }: MyDashBoardListProps) => {
+  const dispatch = useDispatch();
+  const dashboardList = useSelector((state: RootState) => state.dashboardList.dashboardList);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPage, setTotalPage] = useState(0);
-  const [dashboardList, setDashboardList] = useState<DashBoardList[]>([]);
-
+  const [errorMessage, setErrorMessage] = useState('');
   const setDashboard = async () => {
-    const result = await getDashboardList(currentPage);
-    console.log(result);
-    setDashboardList(result.dashboards);
-    setTotalPage(result.totalCount / 5);
+    try {
+      const result = await getDashboardList(currentPage);
+      dispatch(setDashboardList(result.dashboards));
+      // setDashboardList(result.dashboards);
+      setTotalPage(Math.ceil(result.totalCount / 5));
+    } catch (error) {
+      if (error instanceof Error) {
+        setErrorMessage(error.message);
+      }
+    }
   };
 
   const handleClickPreview = () => {
@@ -67,16 +66,20 @@ const MyDashBoardList = ({ handleCreateDashboard }: MyDashBoardListProps) => {
               <img src='assets/image/icons/bannerAddIcon.svg' alt='새로운 대시보드 생성하려면 클릭' />
             </button>
           </li>
-          {dashboardList.map((item) => (
-            <li key={item.id}>
-              <MyDashBoardListItem
-                dashBoardId={item.id}
-                stateColor={item.color}
-                title={item.title}
-                isCreatedByMe={item.createdByMe}
-              />
-            </li>
-          ))}
+          {errorMessage ? (
+            <p>{errorMessage}</p>
+          ) : (
+            dashboardList.map((item) => (
+              <li key={item.id}>
+                <MyDashBoardListItem
+                  dashBoardId={item.id}
+                  stateColor={item.color}
+                  title={item.title}
+                  isCreatedByMe={item.createdByMe}
+                />
+              </li>
+            ))
+          )}
         </ul>
         {totalPage > 1 ? (
           <div className='list-pagination'>

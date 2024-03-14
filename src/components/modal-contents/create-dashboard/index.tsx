@@ -9,6 +9,7 @@ import StCreateDashboard from './style';
 import InputColorPicker from '@/components/input/input-color-picker';
 import { postCreateDashboard } from '@/api/postCreateDashboard';
 import { toast } from 'react-toastify';
+import { addDashboard } from '@/redux/dashboardListSlice';
 
 const CreateDashboard = () => {
   const dispatch = useDispatch();
@@ -26,6 +27,7 @@ const CreateDashboard = () => {
     if (dashboardNameInputValue && dashboardColorValue) {
       const result = await postCreateDashboard(dashboardNameInputValue, dashboardColorValue);
       if (result && result.status === 201) {
+        dispatch(addDashboard(result.data));
         toast.success(DASHBOARD_MESSAGES.CREATE_DASHBOARD); // 대시보드 생성 성공!
       }
       dispatch(closeModal());
@@ -64,7 +66,7 @@ const CreateDashboard = () => {
             placeholder='대시보드 이름을 입력하세요.'
           />
           <div className='input-colorpicker__group'>
-            <div className='' onClick={handleShowColorPicker}>
+            <div className='' onClick={handleShowColorPicker} role='button'>
               <InputColorPicker
                 value={dashboardColorValue}
                 required

@@ -2,10 +2,12 @@ import { configureStore } from '@reduxjs/toolkit';
 import { combineReducers } from 'redux';
 import myInfoReducer from '../myInfoSlice';
 import modalReducer from '../modalSlice';
+import dashboardListReducer from '../dashboardListSlice';
 
 const rootReducer = combineReducers({
   myInfo: myInfoReducer,
   modal: modalReducer,
+  dashboardList: dashboardListReducer,
 });
 
 const store = configureStore({
