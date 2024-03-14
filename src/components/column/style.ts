@@ -69,6 +69,15 @@ export const ColumnContainer = styled.div`
 `;
 
 export const ModalContent = styled.div`
+  height: 630px;
+  overflow: auto;
+  &::-webkit-scrollbar {
+    width: 3px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: ${({ theme }) => theme.color.gray_d9};
+    border-radius: 5px;
+  }
   h3 {
     font-size: 1.8rem;
     font-weight: 500;
@@ -99,8 +108,16 @@ export const ModalContent = styled.div`
     color: ${({ theme }) => theme.color.gray_9f};
   }
 
+  .input-box.asignee-box {
+    width: 50%;
+  }
+
   .input-box.date-box {
     padding-left: 40px;
+  }
+
+  .input-box.description-box {
+    height: 96px;
   }
 
   .date-box {
@@ -124,5 +141,9 @@ export const ModalContent = styled.div`
     height: 76px;
     border-radius: 6px;
     background-color: #f5f5f5;
+  }
+
+  .file-name {
+    font-size: 1.4rem;
   }
 `;
