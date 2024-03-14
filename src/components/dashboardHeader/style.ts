@@ -7,6 +7,7 @@ const Container = styled.div`
   border-bottom: 1px solid ${({ theme }) => theme.color.gray_d9};
   flex-shrink: 0;
   display: flex;
+  justify-content: space-between;
 
   .titlebox {
     width: 70px;
@@ -18,7 +19,7 @@ const Container = styled.div`
     font-style: normal;
     font-weight: 700;
     line-height: normal;
-    padding: 23px 1488px 23px 40px;
+    padding: 23px 0px 23px 40px;
 
     .showIcon {
       margin: 4px 0px 4px 8px;
@@ -33,11 +34,28 @@ const Container = styled.div`
 
   .myinfo {
     display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 26px 80px 25px 0px;
 
     .myinfo-color {
+      display: flex;
       width: 38px;
       height: 38px;
       flex-shrink: 0;
+      border-radius: 100%;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .myinfo-name {
+      color: #333236;
+      font-family: Pretendard;
+      font-size: 1.6rem;
+      font-style: normal;
+      font-weight: 500;
+      line-height: normal;
     }
 
     .myinfo-color-green {

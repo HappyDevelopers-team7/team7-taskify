@@ -119,8 +119,7 @@ function ProfileInfo({ myInfo }: { myInfo: SetMyInfo | null }) {
     //가져온 정보들을 가지고 여기서 프로필을 띄운다.
     <div className='myinfo'>
       <div className={`myinfo-color myinfo-color-${imageBackgroundColor}`}>
-        {/* 이름 첫글자 딴 거 나오게하는 컴포넌트 넣기 */}
-        <div>{initial}</div>
+        <div className='myinfo-initial'>{initial}</div>
       </div>
       <div className='myinfo-name'>{myInfo?.nickname}</div>
     </div>
