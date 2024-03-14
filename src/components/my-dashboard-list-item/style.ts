@@ -25,7 +25,7 @@ const StListItem = styled.div<StListItemProps>`
     gap: 8px;
 
     h5 {
-      width: 80%;
+      max-width: 80%;
       white-space: nowrap;
       text-overflow: ellipsis;
       overflow: hidden;

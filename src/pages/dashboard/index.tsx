@@ -3,13 +3,13 @@ import StDashBoardWrap from './style';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, openModal, setOpenModalName } from '@/redux/modalSlice';
 import CreateDashboard from '@/components/modal-contents/create-dashboard';
+import InvitedList from '@/components/Invited-list';
 
 const DashBoard = () => {
   const dispatch = useDispatch();
   const openModalName = useSelector((state: RootState) => state.modal.openModalName);
 
   const handleOpenCreateDashboardModal = () => {
-    // 대시보드 생성 모달을 열어준다.
     dispatch(setOpenModalName('createDashboard'));
     dispatch(openModal('createDashboard'));
   };
@@ -18,6 +18,7 @@ const DashBoard = () => {
     <>
       <StDashBoardWrap>
         <MyDashBoardList handleCreateDashboard={handleOpenCreateDashboardModal} />
+        <InvitedList />
       </StDashBoardWrap>
       {openModalName === 'createDashboard' ? <CreateDashboard /> : null}
     </>

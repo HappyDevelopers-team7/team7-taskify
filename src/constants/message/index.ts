@@ -22,4 +22,4 @@ export const AUTH_ERROR_MESSAGES = {
 
 export const INPUT_ERROR_MESSAGES = {
   PLEASE_ENTER_VALUE: '값을 입력해주세요.',
-};
+} as const;

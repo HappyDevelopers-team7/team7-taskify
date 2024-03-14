@@ -35,6 +35,10 @@ const resetCss = css`
       text-decoration: none;
       color: unset;
       cursor: pointer;
+
+      &[role='button']:focus-visible {
+        border: 1px solid #007bff;
+      }
     }
 
     input,
