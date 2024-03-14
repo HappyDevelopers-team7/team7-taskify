@@ -47,17 +47,6 @@ const SideMenu = () => {
     }
   };
 
-  const removeDashboard = () => {
-    // 대시보드 삭제 임시함수
-    const id = prompt('삭제할 대시보드 id');
-    if (id !== null) {
-      axiosInstance
-        .delete(`${API.DASHBOARDS.DASHBOARDS}/${id}`)
-        .then(() => viewDashboard())
-        .catch(() => alert('존재하지 않는 ID입니다.'));
-    }
-  };
-
   const viewDashboard = () => {
     axiosInstance
       .get(`${API.DASHBOARDS.DASHBOARDS}?navigationMethod=pagination&page=${currentPage}&size=18`)
@@ -147,9 +136,6 @@ const SideMenu = () => {
             }
             alt='next-icon'
           />
-        </button>
-        <button type='button' className='temp-button' onClick={removeDashboard} /*테스트 종료시 삭제*/>
-          삭제
         </button>
       </div>
     </Container>
