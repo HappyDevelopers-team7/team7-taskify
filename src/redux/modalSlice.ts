@@ -30,6 +30,7 @@ const modalSlice = createSlice({
       state.openModalName = action.payload;
     },
     openModal: (state, action: PayloadAction<string | number>) => {
+      state.currentScrollPosition = state.prevScrollPosition;
       document.body.style.position = 'fixed';
       document.body.style.width = '100%';
       document.body.style.top = `-${state.prevScrollPosition}px`;
@@ -41,7 +42,7 @@ const modalSlice = createSlice({
       document.body.style.width = '';
       document.body.style.top = '';
       document.body.style.overflowY = '';
-      window.scrollTo(0, state.prevScrollPosition);
+      window.scrollTo(0, state.currentScrollPosition);
       state.openModalName = null;
     },
     setPrevScrollPosition: (state, action: PayloadAction<number>) => {
