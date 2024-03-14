@@ -1,42 +1,23 @@
 import { getInvitation } from '@/api/getInvitation';
 import InputSearch from '../input/input-search';
 import StInvitedSection from './style';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect } from 'react';
 import NoInvitation from '../no-invitation';
-
-interface InvitationList {
-  id: number;
-  inviter: {
-    nickname: string;
-    email: string;
-    id: number;
-  };
-  teamId: string;
-  dashboard: {
-    title: string;
-    id: number;
-  };
-  invitee: {
-    nickname: string;
-    email: string;
-    id: number;
-  };
-  inviteAccepted: boolean;
-  createdAt: string;
-  updatedAt: string;
-}
+import { RootState, setInvitationList } from '@/redux/invitationSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 const InvitedList = () => {
-  const [invitationList, setInvitationList] = useState<InvitationList[]>([]);
+  const dispatch = useDispatch();
+  const invitationList = useSelector((state: RootState) => state.invitationList.invitations);
 
-  const setInvitation = async () => {
+  const setInvitation = useCallback(async () => {
     const result = await getInvitation();
-    setInvitationList(result.invitations);
-  };
+    dispatch(setInvitationList(result.invitations));
+  }, [dispatch]);
 
   useEffect(() => {
     setInvitation();
-  }, []);
+  }, [setInvitation]);
   return (
     <>
       <StInvitedSection>
