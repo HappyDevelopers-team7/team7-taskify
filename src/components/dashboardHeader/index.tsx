@@ -1,9 +1,12 @@
+import { AppDispatch, fetchMyInfo, getMyInfo } from '@/redux/myInfoSlice';
+import { useDispatch, useSelector } from 'react-redux';
 import Container from './style';
 import { Dashboards } from '../side-menu';
-// import { useSelector } from 'react-redux';
-// import { getMyInfo, SetMyInfo } from '@/redux/myInfoSlice';
 import { SetMyInfo } from '@/redux/myInfoSlice';
-// import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import API from '@/api/constants';
+import axiosInstance from '@/api/instance/axiosInstance';
+import { useEffect, useState } from 'react';
 
 // interface User {
 //   id: number;
@@ -17,50 +20,56 @@ import { SetMyInfo } from '@/redux/myInfoSlice';
 interface Props {
   currentDashboard?: Dashboards;
 }
+// export interface DashboardId {
+//   currentDashboardId: string;
+// }
 
 // const dashboardHeader = ({ currentDashboard }: Props) => {
 // 임시
-const dashboardHeader = () => {
-  const currentDashboard = {
-    id: 0,
-    title: '대시보드일까?',
-    color: 'string',
-    createdAt: '2024-03-13T13:09:30.708Z',
-    updatedAt: '2024-03-13T13:09:30.708Z',
-    createdByMe: true,
-    userId: 0,
-  };
+const DashboardHeader = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const myInfo = useSelector(getMyInfo);
+  const [currentDashboard, setCurrentDashboard] = useState<Dashboards | undefined>(undefined);
+  const { id } = useParams();
+  // console.log(id);
+  //상태를 전역으로 관리해서 로그인정보가 바뀌거나 하면 바로 다시 렌더링
+  useEffect(() => {
+    dispatch(fetchMyInfo());
+  }, [dispatch]);
 
-  //임시
-  const myInfo = {
-    id: 0,
-    email: 'jyp1@jyp.com',
-    nickname: '준용용',
-    profileImageUrl: null,
-    createdAt: '2024-03-13T13:09:30.708Z',
-    updatedAt: '2024-03-13T13:09:30.708Z',
-  };
+  // const getDashboardInfo = async () => {
+  //   const res = await axiosInstance.get(`${API.DASHBOARDS.DASHBOARDS}/${id}}`);
+  //   const responseData = await res.data;
+  //   return responseData;
+  // };
 
-  //전역에서 내 로그인정보 가져옴
-  // const myInfo = useSelector(getMyInfo);
+  useEffect(() => {
+    // const fetchDashboard = async () => {
+    //   const dashboard = await getDashboardInfo();
+    //   setCurrentDashboard(dashboard);
+    //   };
 
-  // const [myInfo, setMyInfo] = useState<User | null>(null);
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const res = await getMyInfo();
-  //       if (res) {
-  //         setMyInfo(res.data);
-  //       } else {
-  //         console.log('profile정보를 가져오지 못했습니다.');
-  //       }
-  //     } catch (error) {
-  //       console.log('profile정보를 가져오지 못했습니다.');
-  //     }
-  //   };
-  //   fetchData();
-  // }, []);
-  console.log(myInfo.nickname);
+    //   fetchDashboard();
+    // }, [id]);
+    const fetchDashboardInfo = async () => {
+      try {
+        const res = await axiosInstance.get(`${API.DASHBOARDS.DASHBOARDS}/${id}`);
+        const responseData = await res.data;
+        setCurrentDashboard(responseData);
+      } catch (error) {
+        console.error('Error fetching dashboard info:', error);
+        // 오류 처리 로직 추가
+      }
+    };
+
+    fetchDashboardInfo();
+  }, [id]);
+
+  // console.log(myInfo);
+  // console.log(myInfo.nickname);
+  // console.log(myInfo.nickname.toUpperCase()[0]); // 됨
+  // console.log(myInfo.nickname[0]);
+  // console.log(myInfo.nickname[0].toUpperCase()); //안됨
   return (
     <Container>
       <DashboardId currentDashboard={currentDashboard} />
@@ -69,7 +78,7 @@ const dashboardHeader = () => {
   );
 };
 
-export default dashboardHeader;
+export default DashboardHeader;
 
 function DashboardId({ currentDashboard }: Props) {
   const showIconClass = 'showIcon';
@@ -86,13 +95,18 @@ function DashboardId({ currentDashboard }: Props) {
 }
 
 function ProfileInfo({ myInfo }: { myInfo: SetMyInfo | null }) {
+  //todo
   //프로필 배경색 정해주기
 
-  const COLORS = ['green', 'purple', 'orange', 'blue', 'pink'] as const;
-  type COLORS_TYPE = 'green' | 'purple' | 'orange' | 'blue' | 'pink';
+  if (!myInfo) {
+    console.log('마이인포가 없다!');
+    return null; // myInfo가 없을 경우 렌더링하지 않음
+  }
 
-  const generateColor = (name: string): COLORS_TYPE => {
-    const key = name[0].toUpperCase();
+  const COLORS = ['green', 'purple', 'orange', 'blue', 'pink'] as const;
+
+  const generateColor = (name: string) => {
+    const key = name.toUpperCase()[0];
 
     switch (true) {
       case (key >= 'A' && key < 'F') || (key >= '가' && key < '다'):
@@ -108,7 +122,7 @@ function ProfileInfo({ myInfo }: { myInfo: SetMyInfo | null }) {
     }
   };
 
-  const initial = myInfo!.nickname[0].toUpperCase();
+  const initial = myInfo!.nickname.toUpperCase()[0];
 
   let imageBackgroundColor: string = '';
   if (myInfo && myInfo.profileImageUrl == null) {

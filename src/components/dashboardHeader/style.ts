@@ -10,16 +10,16 @@ const Container = styled.div`
   justify-content: space-between;
 
   .titlebox {
-    width: 70px;
-    height: 24px;
+    width: 20%;
+    height: 30%;
     display: flex;
     color: var(--black-black_333236, #333236);
     font-family: Pretendard;
-    font-size: 20px;
+    font-size: 2rem;
     font-style: normal;
     font-weight: 700;
     line-height: normal;
-    padding: 23px 0px 23px 40px;
+    margin: 23px 0px 23px 40px;
 
     .showIcon {
       margin: 4px 0px 4px 8px;
@@ -47,6 +47,16 @@ const Container = styled.div`
       border-radius: 100%;
       align-items: center;
       justify-content: center;
+
+      .myinfo-initial {
+        color: var(--white-white_FFFFFF, #fff);
+        text-align: center;
+        font-family: Montserrat;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 600;
+        line-height: normal;
+      }
     }
 
     .myinfo-name {
