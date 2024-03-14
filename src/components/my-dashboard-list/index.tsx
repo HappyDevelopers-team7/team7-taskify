@@ -20,7 +20,6 @@ const MyDashBoardList = ({ handleCreateDashboard }: MyDashBoardListProps) => {
     try {
       const result = await getDashboardList(currentPage);
       dispatch(setDashboardList(result.dashboards));
-      // setDashboardList(result.dashboards);
       setTotalPage(Math.ceil(result.totalCount / 5));
     } catch (error) {
       if (error instanceof Error) {
