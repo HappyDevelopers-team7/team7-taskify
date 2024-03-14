@@ -20,7 +20,7 @@ const initialState: ModalState = {
  * 모달을 전역으로 관리해 준다.
  * openModal - 인자로 모달의 이름을 string으로 넘겨주면 해당 모달이 열림
  * closeModal - openModal할 때 들어온 모달 이름을 없애줌
- * setCurrentScrollPosition - 모달이 열린 위치를 체크해서 해당 위치에 멈춰있을 수 있도록 + 스크롤바 숨김
+ * setPrevScrollPosition, setCurrentScrollPosition - 모달이 열린 위치를 체크해서 해당 위치에 멈춰있을 수 있도록
  */
 const modalSlice = createSlice({
   name: 'modal',
