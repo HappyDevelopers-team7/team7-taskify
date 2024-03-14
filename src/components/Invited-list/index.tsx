@@ -1,30 +1,31 @@
 import { getInvitation } from '@/api/getInvitation';
 import InputSearch from '../input/input-search';
 import StInvitedSection from './style';
-import { useCallback, useEffect } from 'react';
+import { useEffect } from 'react';
 import NoInvitation from '../no-invitation';
-import { RootState, setInvitationList } from '@/redux/invitationSlice';
+import { RootState, setInvitationList, updateInvitationList } from '@/redux/invitationSlice';
 import { useDispatch, useSelector } from 'react-redux';
 
 const InvitedList = () => {
   const dispatch = useDispatch();
-  const invitationList = useSelector((state: RootState) => state.invitationList.invitations);
+  const updatedInvitationList = useSelector((state: RootState) => state.invitationList.updatedList);
 
-  const setInvitation = useCallback(async () => {
+  const setInvitation = async () => {
     const result = await getInvitation();
     dispatch(setInvitationList(result.invitations));
-  }, [dispatch]);
+    dispatch(updateInvitationList(result.invitations));
+  };
 
   useEffect(() => {
     setInvitation();
-  }, [setInvitation]);
+  }, []);
   return (
     <>
       <StInvitedSection>
         <div className='invite-wrapper'>
           <h3>초대받은 대시보드</h3>
         </div>
-        {invitationList.length > 0 ? (
+        {updatedInvitationList.length > 0 ? (
           <>
             <div className='invite-wrapper'>
               <InputSearch />
@@ -44,7 +45,7 @@ const InvitedList = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {invitationList.map((item) => (
+                  {updatedInvitationList.map((item) => (
                     <tr key={item.id}>
                       <td>{item.dashboard.title}</td>
                       <td>{item.inviter.nickname}</td>

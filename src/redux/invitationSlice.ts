@@ -24,16 +24,19 @@ export interface InvitationList {
 
 export interface RootState {
   invitationList: {
-    invitations: InvitationList[];
+    initialList: InvitationList[];
+    updatedList: InvitationList[];
   };
 }
 
 interface InvitationState {
-  invitations: InvitationList[];
+  initialList: InvitationList[];
+  updatedList: InvitationList[];
 }
 
 const initialState: InvitationState = {
-  invitations: [],
+  initialList: [],
+  updatedList: [],
 };
 
 const invitationSlice = createSlice({
@@ -41,14 +44,22 @@ const invitationSlice = createSlice({
   initialState: initialState,
   reducers: {
     setInvitationList(state, action) {
-      state.invitations = action.payload;
+      state.initialList = action.payload;
     },
     addInvitationList(state, action: PayloadAction<InvitationList>) {
-      state.invitations.push(action.payload);
+      state.initialList.push(action.payload);
+    },
+    updateInvitationList(state, action: PayloadAction<InvitationList[]>) {
+      state.updatedList = action.payload;
     },
   },
 });
 
-export const { setInvitationList, addInvitationList } = invitationSlice.actions;
+export const { setInvitationList, addInvitationList, updateInvitationList } = invitationSlice.actions;
 
 export default invitationSlice.reducer;
+
+export const filterInvitationsByTitle = (items: InvitationList[], keyword: string) => {
+  const loweredKeyword = keyword.toLowerCase();
+  return items.filter(({ dashboard }) => dashboard.title?.toLowerCase().includes(loweredKeyword));
+};

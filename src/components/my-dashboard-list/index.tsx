@@ -41,7 +41,7 @@ const MyDashBoardList = ({ handleCreateDashboard }: MyDashBoardListProps) => {
   };
 
   const handleInviteMember = async () => {
-    const response = await axiosInstance.post(`dashboards/${4767}/invitations`, {
+    const response = await axiosInstance.post(`dashboards/${4742}/invitations`, {
       email: 'yum@naver.com',
     });
 
