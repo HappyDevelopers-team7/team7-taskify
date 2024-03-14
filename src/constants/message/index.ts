@@ -23,3 +23,7 @@ export const AUTH_ERROR_MESSAGES = {
 export const INPUT_ERROR_MESSAGES = {
   PLEASE_ENTER_VALUE: '값을 입력해주세요.',
 } as const;
+
+export const DASHBOARD_MESSAGES = {
+  CREATE_DASHBOARD: '대시보드가 생성되었습니다.',
+} as const;
