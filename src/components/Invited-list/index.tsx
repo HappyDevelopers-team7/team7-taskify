@@ -31,7 +31,6 @@ const InvitedList = () => {
 
   const setInvitation = async () => {
     const result = await getInvitation();
-    console.log(result);
     setInvitationList(result.invitations);
   };
 
