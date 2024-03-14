@@ -21,9 +21,10 @@ const CreateDashboard = () => {
   const handleSubmitCreateDashboardModal = (e: SyntheticEvent) => {
     e.preventDefault();
 
-    if (dashboardNameInputValue) {
+    if (dashboardNameInputValue && dashboardColorValue) {
       dispatch(closeModal());
       setDashboardNameInputValue('');
+      setDashboardColorValue('');
     } else {
       alert(INPUT_ERROR_MESSAGES.PLEASE_ENTER_VALUE);
     }
@@ -43,7 +44,6 @@ const CreateDashboard = () => {
       title='대시보드 생성'
       closeButtonName='취소'
       submitButtonName='생성'
-      isDeletable
       modalWidth={506}
       handleCloseModal={handleCloseCreateDashboardModal}
       handleSubmitModal={handleSubmitCreateDashboardModal}
