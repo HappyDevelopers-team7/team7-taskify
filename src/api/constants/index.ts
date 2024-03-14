@@ -11,8 +11,14 @@ const API = {
   DASHBOARDS: {
     DASHBOARDS: 'dashboards',
   },
+  INVITATIONS: {
+    INVITATIONS: 'invitations',
+  },
   COLUMNS: {
     COLUMNS: 'columns',
+  },
+  CARDS: {
+    CARDS: 'cards',
   },
 } as const;
 

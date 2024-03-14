@@ -1,13 +1,16 @@
 import styled from 'styled-components';
 
 const Container = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 300px;
-  height: 100%;
+  height: 100vh;
   border-right: 1px solid ${({ theme }) => theme.color.gray_d9};
   overflow-x: hidden;
   overflow-y: scroll;
   background-color: ${({ theme }) => theme.color.white};
-  z-index: 1;
+  z-index: 10;
   flex-shrink: 0;
 
   &::-webkit-scrollbar {
