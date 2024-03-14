@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 const InvitedList = () => {
   const dispatch = useDispatch();
+  const initialInvitationList = useSelector((state: RootState) => state.invitationList.initialList);
   const updatedInvitationList = useSelector((state: RootState) => state.invitationList.updatedList);
 
   const setInvitation = async () => {
@@ -25,7 +26,7 @@ const InvitedList = () => {
         <div className='invite-wrapper'>
           <h3>초대받은 대시보드</h3>
         </div>
-        {updatedInvitationList.length > 0 ? (
+        {initialInvitationList.length > 0 ? (
           <>
             <div className='invite-wrapper'>
               <InputSearch />

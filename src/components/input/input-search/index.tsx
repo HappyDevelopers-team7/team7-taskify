@@ -13,6 +13,11 @@ const InputSearch = () => {
     setSearchKeyword(e.target.value);
   };
 
+  const handleClickDeleteValue = () => {
+    setSearchKeyword('');
+    dispatch(updateInvitationList(initialInvitationList));
+  };
+
   const handleSubmitSearchForm = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (searchKeyword) {
@@ -28,7 +33,17 @@ const InputSearch = () => {
       <form onSubmit={handleSubmitSearchForm}>
         <StInputSearchContainer>
           <img src='/assets/image/icons/searchFileIcon.svg' alt='초대 대시보드 이름 및 초대자 검색' />
-          <input type='text' placeholder='검색어를 입력하세요.' onChange={handleChangeSearchKeyword} />
+          <input
+            value={searchKeyword}
+            type='text'
+            placeholder='검색어를 입력하세요.'
+            onChange={handleChangeSearchKeyword}
+          />
+          {searchKeyword ? (
+            <button type='button' onClick={handleClickDeleteValue}>
+              <img src='/assets/image/icons/closeIcon.svg' />
+            </button>
+          ) : null}
         </StInputSearchContainer>
       </form>
     </>
