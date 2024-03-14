@@ -5,18 +5,22 @@ import StWrapper from './style';
 import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { setPrevScrollPosition } from '@/redux/modalSlice';
+import { debounce } from 'lodash';
 
 const Layout = () => {
   const dispatch = useDispatch();
 
-  const handleScroll = () => {
+  const handleScroll = debounce(() => {
     dispatch(setPrevScrollPosition(window.scrollY));
-  };
+  }, 100); // 디바운싱 대기 시간 (밀리초)
 
   useEffect(() => {
     dispatch(setPrevScrollPosition(window.scrollY));
-    // 혹시 여기에 Intersection Observer 의 사용이 필요할까요?
     window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, []);
 
   return (
