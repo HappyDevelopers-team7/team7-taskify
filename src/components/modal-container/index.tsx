@@ -43,7 +43,7 @@ const ModalContainer = ({
         <div className='modal-dim' onClick={handleCloseModal}></div>
         <div className='modal-content'>
           <h2>{title}</h2>
-          {children}
+          <div className='modal-content__box'>{children}</div>
           <div className='modal-button-group'>
             <div className='delete-button-box'>
               {isDeletable ? (
