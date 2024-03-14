@@ -25,8 +25,9 @@ const MyDashBoardList = ({ handleCreateDashboard }: MyDashBoardListProps) => {
 
   const setDashboard = async () => {
     const result = await getDashboardList(currentPage);
+    console.log(result);
     setDashboardList(result.dashboards);
-    setTotalPage(result.totalCount);
+    setTotalPage(result.totalCount / 5);
   };
 
   const handleClickPreview = () => {
@@ -77,7 +78,7 @@ const MyDashBoardList = ({ handleCreateDashboard }: MyDashBoardListProps) => {
             </li>
           ))}
         </ul>
-        {totalPage > 0 ? (
+        {totalPage > 1 ? (
           <div className='list-pagination'>
             <p>
               {totalPage} 페이지 중 {currentPage}
