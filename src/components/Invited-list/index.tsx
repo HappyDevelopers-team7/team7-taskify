@@ -40,7 +40,7 @@ const InvitedList = () => {
                 </colgroup>
                 <thead>
                   <tr>
-                    <th>이름</th>
+                    <th>대시보드 이름</th>
                     <th>초대자</th>
                     <th>수락 여부</th>
                   </tr>
