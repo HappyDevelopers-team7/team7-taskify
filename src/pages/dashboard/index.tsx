@@ -3,7 +3,7 @@ import StDashBoardWrap from './style';
 import { useDispatch, useSelector } from 'react-redux';
 import { ModalRootState, openModal, setOpenModalName } from '@/redux/modalSlice';
 import CreateDashboard from '@/components/modal-contents/create-dashboard';
-import InvitedList from '@/components/Invited-list';
+import InvitedList from '@/components/invitation-list';
 
 const DashBoard = () => {
   const dispatch = useDispatch();

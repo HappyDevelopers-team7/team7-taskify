@@ -1,38 +1,38 @@
 import ModalContainer from '@/components/modal-container';
 import { closeModal } from '@/redux/modalSlice';
 import { useDispatch } from 'react-redux';
-import StAlertModalContent from './style';
+import StAlertModalContent from '../reject-invitation/style';
 import { putInviteAccepted } from '@/api/putInviteAccepted';
-import { toast } from 'react-toastify';
 import { INVITATION_ERROR_MESSAGES, INVITATION_MESSAGES, SIMPLE_MESSAGES } from '@/constants/message';
+import { toast } from 'react-toastify';
 import { getInvitation } from '@/api/getInvitation';
 import { setInvitationList, updateInvitationList } from '@/redux/invitationSlice';
 
-interface RejectInvitationProps {
+interface AcceptInvitationProps {
   invitationId: number;
 }
 
-const RejectInvitation = ({ invitationId }: RejectInvitationProps) => {
+const AcceptInvitation = ({ invitationId }: AcceptInvitationProps) => {
   const dispatch = useDispatch();
-  const handleCloseReject = () => {
+  const handleCloseAccept = () => {
     dispatch(closeModal());
     toast.success(SIMPLE_MESSAGES.CANCELED);
   };
 
-  const handleSubmitReject = async () => {
+  const handleSubmitAccept = async () => {
     try {
-      const result = await putInviteAccepted(false, invitationId);
-      dispatch(closeModal());
+      const result = await putInviteAccepted(true, invitationId);
       if (result?.status === 200) {
-        toast.success(INVITATION_MESSAGES.REJECT_INVITATION);
         const invitationListResult = await getInvitation();
         dispatch(setInvitationList(invitationListResult.invitations));
         dispatch(updateInvitationList(invitationListResult.invitations));
+        toast.success(INVITATION_MESSAGES.ACCEPT_INVITATION);
       }
 
       if (result?.status === 404) {
         toast.success(INVITATION_ERROR_MESSAGES.NOT_FOUND);
       }
+      dispatch(closeModal());
     } catch (error) {
       if (error instanceof Error) {
         console.error(error.message);
@@ -42,17 +42,17 @@ const RejectInvitation = ({ invitationId }: RejectInvitationProps) => {
   return (
     <ModalContainer
       closeButtonName='취소'
-      submitButtonName='거절'
+      submitButtonName='수락'
       modalWidth={506}
-      handleCloseModal={handleCloseReject}
-      handleSubmitModal={handleSubmitReject}
+      handleCloseModal={handleCloseAccept}
+      handleSubmitModal={handleSubmitAccept}
     >
       <StAlertModalContent>
-        <h5>대시보드 초대가 거절됩니다.</h5>
-        <p>한 번 거절된 초대는 되돌릴 수 없습니다.</p>
+        <h5>대시보드 초대를 수락합니다.</h5>
+        <p>한 번 수락된 초대는 되돌릴 수 없습니다.</p>
       </StAlertModalContent>
     </ModalContainer>
   );
 };
 
-export default RejectInvitation;
+export default AcceptInvitation;
