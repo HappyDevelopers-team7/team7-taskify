@@ -72,27 +72,29 @@ export const ColumnContainer = styled.div`
   }
 `;
 
-export const ModalContent = styled.div<{ Image: string | null }>`
+export const ModalContent = styled.div<{ $Image: string | null; $Text: boolean; $Profile: string | undefined }>`
   height: auto;
-  overflow: auto;
+
   &::-webkit-scrollbar {
     width: 3px;
   }
+
   &::-webkit-scrollbar-thumb {
     background-color: ${({ theme }) => theme.color.gray_d9};
     border-radius: 5px;
   }
+
+  .first-div {
+    position: relative;
+  }
+
   h3 {
     font-size: 1.8rem;
     font-weight: 500;
     margin-bottom: 10px;
   }
 
-  .asignee {
-    color: ${({ theme }) => theme.color.gray_9f};
-  }
-
-  span {
+  .essential {
     color: ${({ theme }) => theme.color.violet};
   }
 
@@ -112,12 +114,62 @@ export const ModalContent = styled.div<{ Image: string | null }>`
     color: ${({ theme }) => theme.color.gray_9f};
   }
 
+  .input-box:focus {
+    border-color: ${({ theme }) => theme.color.violet};
+  }
+
   .input-box.asignee-box {
     width: 50%;
+    ${(props) => props.$Profile && 'padding-left: 45px;'}
+  }
+
+  .input-box.member-list {
+    ${(props) => (props.$Text ? 'display:flex;' : 'display:none;')}
+    width: 43%;
+    position: absolute;
+    top: 85px;
+    box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.08);
+    flex-direction: column;
+  }
+
+  .member {
+    width: 90%;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  .user-image {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+  }
+
+  .user-image.in-searchbar {
+    position: absolute;
+    left: 13px;
+    top: 43px;
+  }
+
+  .member:hover {
+    background-color: ${({ theme }) => theme.color.violet_8};
+  }
+
+  .member.clicked {
+    background-color: #a374db;
   }
 
   .input-box.description-box {
     height: 96px;
+  }
+
+  .date-box {
+    background-image: url('/assets/image/icons/calendarIcon.svg');
+    background-repeat: no-repeat;
+    background-position: 10px;
+    padding-left: 35px;
   }
 
   .upload-button-box {
@@ -127,11 +179,11 @@ export const ModalContent = styled.div<{ Image: string | null }>`
       display: inline-block;
       width: 76px;
       height: 76px;
-      background-image: url(${(props) => (props.Image ? props.Image : '/assets/image/icons/modalAddIcon.svg')});
+      background-image: url(${(props) => (props.$Image ? props.$Image : '/assets/image/icons/modalAddIcon.svg')});
       background-color: #f5f5f5;
       background-repeat: no-repeat;
       background-position: center;
-      ${(props) => props.Image && 'background-size: contain;'}
+      ${(props) => props.$Image && 'background-size: contain;'}
       border-radius: 6px;
       cursor: pointer;
     }

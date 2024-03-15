@@ -1,11 +1,11 @@
-import { AppDispatch, fetchMyInfo, getMyInfo } from '@/redux/myInfoSlice';
+import { AppDispatch, fetchMyInfo /*getMyInfo*/ } from '@/redux/myInfoSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { ColumnContainer, ModalContent } from './style';
-import { Columns } from '@/pages/dashboard-id';
+import { Columns, Members } from '@/pages/dashboard-id';
 import axiosInstance from '@/api/instance/axiosInstance';
 import API from '@/api/constants';
-import { ChangeEvent, useEffect, useState } from 'react';
-import { RootState, closeModal, openModal, setOpenModalName } from '@/redux/modalSlice';
+import { ChangeEvent, useEffect, useState, useRef } from 'react';
+import { ModalRootState, closeModal, openModal, setOpenModalName } from '@/redux/modalSlice';
 import ModalContainer from '../modal-container';
 import LoadingSpinner from '@/components/loading-spinner';
 import Flatpickr from 'react-flatpickr';
@@ -13,61 +13,76 @@ import 'flatpickr/dist/flatpickr.min.css';
 import dateExtractor from '@/hooks/dateExtractor';
 
 interface Props {
-  props: Columns;
+  columnData: Columns;
+  memberData: Members[];
   viewColumns: () => void;
   dashboardId: string | undefined;
 }
 
-type CreateCardData = {
-  title: string | undefined;
-  description: string | undefined;
-  dueDate: string | undefined;
-};
+interface Types {
+  CardInfo: {
+    card: unknown;
+    totalCount: number;
+    cursorId: null;
+  };
+  CreateCardData: {
+    asignee: string;
+    title: string;
+    description: string;
+    dueDate: string;
+  };
+}
 
-type CardInfo = {
-  cards: unknown;
-  totalCount: number;
-  cursorId: null;
-};
-const Column = ({ props, viewColumns, dashboardId }: Props) => {
+const Column = ({ columnData, memberData, viewColumns, dashboardId }: Props) => {
   const today = new Date();
   const dispatch = useDispatch<AppDispatch>();
-  const myData = useSelector(getMyInfo);
-  const [cardInfo, setCardInfo] = useState<CardInfo | undefined>();
+  // const myData = useSelector(getMyInfo);
+  const [cardInfo, setCardInfo] = useState<Types['CardInfo'] | undefined>();
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const [createCardData, setCreateCardData] = useState<CreateCardData>({
-    title: undefined,
-    description: undefined,
-    dueDate: undefined,
+  const [isDropdown, setIsDropdown] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [filterdMember, SetFilterdMember] = useState<Members[]>([]);
+  const [userProfile, setUserProfile] = useState<string | undefined>('');
+  const asigneeRef = useRef<number | null>(null);
+  const [createCardData, setCreateCardData] = useState<Types['CreateCardData']>({
+    asignee: '',
+    title: '',
+    description: '',
+    dueDate: '',
   });
 
-  const openModalName = useSelector((state: RootState) => state.modal.openModalName);
+  const openModalName = useSelector((state: ModalRootState) => state.modal.openModalName);
 
   const handleCreateCard = () => {
-    dispatch(setOpenModalName(`createcard${props.id}`));
-    dispatch(openModal(`createcard${props.id}`));
+    // 모달 여는 함수
+    dispatch(setOpenModalName(`createcard${columnData.id}`));
+    dispatch(openModal(`createcard${columnData.id}`));
   };
 
   const handleCloseCreateCard = () => {
+    // 모달 닫는 함수
     dispatch(closeModal());
     setUploadedFile(null);
     setPreviewUrl(null);
+    setUserProfile(undefined);
+    setCreateCardData({ asignee: '', title: '', description: '', dueDate: '' });
+    asigneeRef.current = null;
   };
 
   const handleSubmitCreateCard = async () => {
+    // 카드 생성 함수
     try {
       setIsLoading(true);
       const formData = new FormData();
       formData.append('image', uploadedFile as Blob);
-      const res = await axiosInstance.post(`${API.COLUMNS.COLUMNS}/${props.id}/card-image`, formData);
-      console.log(res.data.profileImageUrl);
+      const res = await axiosInstance.post(`${API.COLUMNS.COLUMNS}/${columnData.id}/card-image`, formData);
 
       await axiosInstance.post(API.CARDS.CARDS, {
-        assigneeUserId: myData.id,
+        assigneeUserId: asigneeRef.current,
         dashboardId: Number(dashboardId),
-        columnId: props.id,
+        columnId: columnData.id,
         title: createCardData.title,
         description: createCardData.description,
         dueDate: createCardData.dueDate,
@@ -76,9 +91,10 @@ const Column = ({ props, viewColumns, dashboardId }: Props) => {
       });
 
       alert('카드생성 완료');
-      setCreateCardData({ title: undefined, description: undefined, dueDate: undefined });
+      setCreateCardData({ asignee: '', title: '', description: '', dueDate: '' });
       setPreviewUrl(null);
       setUploadedFile(null);
+      setUserProfile(undefined);
       dispatch(closeModal());
       viewCards();
     } catch (err) {
@@ -89,12 +105,14 @@ const Column = ({ props, viewColumns, dashboardId }: Props) => {
   };
 
   const viewCards = () => {
-    axiosInstance.get(`${API.CARDS.CARDS}?size=10&columnId=${props.id}`).then((res) => {
+    // 카드 조회 함수
+    axiosInstance.get(`${API.CARDS.CARDS}?size=10&columnId=${columnData.id}`).then((res) => {
       setCardInfo(res.data);
     });
   };
 
   const handleUploadFile = (e: ChangeEvent<HTMLInputElement>) => {
+    // 카드 이미지 첨부 & 미리보기 출력 함수
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
       if (!file.type.startsWith('image/') || file.type === 'image/gif') {
@@ -114,7 +132,29 @@ const Column = ({ props, viewColumns, dashboardId }: Props) => {
     // 컬럼 삭제 임시 함수
     const isConfirmed = confirm('삭제?');
     if (isConfirmed) {
-      axiosInstance.delete(`${API.COLUMNS.COLUMNS}/${props.id}`).then(() => viewColumns());
+      axiosInstance.delete(`${API.COLUMNS.COLUMNS}/${columnData.id}`).then(() => viewColumns());
+    }
+  };
+
+  const dropdownChecker = (e: ChangeEvent<HTMLInputElement>) => {
+    // 모달 드롭다운 온오프 함수
+    if (e.target.value || document.activeElement === e.target) {
+      setCreateCardData({ ...createCardData, asignee: e.target.value });
+      setIsDropdown(true);
+      setUserProfile(undefined);
+    } else {
+      setIsDropdown(false);
+    }
+  };
+
+  const handleClickedMember = (member: Members) => {
+    // 클릭된 담당자
+    setCreateCardData({ ...createCardData, asignee: member.nickname });
+    setIsDropdown(false);
+    setUserProfile(member.profileImageUrl);
+    asigneeRef.current = member.userId;
+    if (inputRef.current) {
+      inputRef.current.value = member.nickname;
     }
   };
 
@@ -123,11 +163,24 @@ const Column = ({ props, viewColumns, dashboardId }: Props) => {
     dispatch(fetchMyInfo());
   }, [dispatch]);
 
+  useEffect(() => {
+    // 입력값이 변할때마다 검색결과 재적용
+    if (createCardData.asignee !== '') {
+      const data = [...memberData];
+      const filterdData = data.filter((member) => {
+        return member.nickname.includes(createCardData.asignee);
+      });
+      SetFilterdMember(filterdData);
+    } else if (createCardData.asignee === '') {
+      SetFilterdMember(memberData);
+    }
+  }, [createCardData]);
+
   return (
     <ColumnContainer>
       <div className='column-header'>
         <div className='column-color' />
-        <h2>{props.title}</h2>
+        <h2>{columnData.title}</h2>
         <div className='inner-cards'>{cardInfo?.totalCount}</div>
         <img src='/assets/image/icons/settingIcon.svg' alt='setting-icon' onClick={removeColumn} />
       </div>
@@ -137,7 +190,7 @@ const Column = ({ props, viewColumns, dashboardId }: Props) => {
           <img src='/assets/image/icons/bannerAddIcon.svg' alt='add-icon' />
         </button>
       </div>
-      {openModalName === `createcard${props.id}` ? (
+      {openModalName === `createcard${columnData.id}` ? (
         <ModalContainer
           title='할 일 생성'
           closeButtonName='취소'
@@ -146,18 +199,40 @@ const Column = ({ props, viewColumns, dashboardId }: Props) => {
           handleCloseModal={handleCloseCreateCard}
           handleSubmitModal={handleSubmitCreateCard}
         >
-          <ModalContent Image={previewUrl}>
+          <ModalContent $Image={previewUrl} $Text={isDropdown} $Profile={userProfile}>
             {isLoading && <LoadingSpinner />}
 
-            <div>
+            <div className='first-div'>
               <h3>담당자</h3>
-              <div className='input-box asignee-box'>
-                <span className='asignee'>이름을 입력해주세요</span>
+              <input
+                className='input-box asignee-box'
+                placeholder='이름을 입력해 주세요'
+                type='text'
+                ref={inputRef}
+                onChange={(e) => dropdownChecker(e)}
+                onFocus={(e) => dropdownChecker(e)}
+                onBlur={() => setIsDropdown(false)}
+              />
+              {userProfile && <img src={userProfile} className='user-image in-searchbar' />}
+              <div className='input-box member-list'>
+                {isDropdown &&
+                  filterdMember.map((member) => (
+                    <div
+                      key={member.id}
+                      className={`member ${asigneeRef.current === member.userId ? 'clicked' : ''}`}
+                      onMouseDown={() => {
+                        handleClickedMember(member);
+                      }}
+                    >
+                      <img src={member.profileImageUrl} alt='profile-image' className='user-image' />
+                      <span className='user-name'>{member.nickname}</span>
+                    </div>
+                  ))}
               </div>
             </div>
             <div>
               <h3>
-                제목<span> *</span>
+                제목<span className='essential'> *</span>
               </h3>
               <input
                 className='input-box'
@@ -169,7 +244,7 @@ const Column = ({ props, viewColumns, dashboardId }: Props) => {
             </div>
             <div>
               <h3>
-                설명<span> *</span>
+                설명<span className='essential'> *</span>
               </h3>
               <textarea
                 className='input-box description-box'
@@ -181,12 +256,13 @@ const Column = ({ props, viewColumns, dashboardId }: Props) => {
             <div>
               <h3>마감일</h3>
               <Flatpickr
-                className='input-box'
+                className='input-box date-box'
                 placeholder='날짜를 입력해 주세요'
                 value={createCardData.dueDate}
                 options={{
                   enableTime: true,
                   minDate: dateExtractor(today).slice(0, 10),
+                  closeOnSelect: true,
                 }}
                 onChange={(e) => {
                   setCreateCardData({ ...createCardData, dueDate: dateExtractor(e[0]) });
