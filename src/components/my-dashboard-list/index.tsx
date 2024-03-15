@@ -2,7 +2,6 @@ import { MouseEvent, useEffect, useState } from 'react';
 import MyDashBoardListItem from '../my-dashboard-list-item';
 import StDashBoardListSection from './style';
 import { getDashboardList } from '@/api/getDashboardList';
-import axiosInstance from '@/api/instance/axiosInstance';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, setDashboardList } from '@/redux/dashboardListSlice';
 
@@ -41,22 +40,12 @@ const MyDashBoardList = ({ handleCreateDashboard }: MyDashBoardListProps) => {
     }
   };
 
-  const handleInviteMember = async () => {
-    const response = await axiosInstance.post(`dashboards/${4849}/invitations`, {
-      email: 'jyp1@jyp.com',
-    });
-
-    const responseData = await response;
-    return responseData;
-  };
-
   useEffect(() => {
     setDashboard();
   }, [currentPage]);
 
   return (
     <>
-      <button onClick={handleInviteMember}>초대하기 버튼 입니다.</button>
       <StDashBoardListSection>
         <ul>
           <li>
