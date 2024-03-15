@@ -7,6 +7,10 @@ export const ColumnContainer = styled.div`
   border-right: 1px solid ${({ theme }) => theme.color.gray_ee};
   flex-shrink: 0;
 
+  .flat {
+    background-color: tomato;
+  }
+
   .column-header {
     position: relative;
     display: flex;
@@ -127,16 +131,7 @@ export const ModalContent = styled.div<{ Image: string | null }>`
     background-size: 22px;
   }
 
-  .calendar {
-    width: 22px;
-    height: 22px;
-    position: absolute;
-    bottom: 370px;
-    left: 40px;
-    cursor: pointer;
-  }
-
-  .add-image {
+  .upload-button-box {
     position: relative;
 
     label {

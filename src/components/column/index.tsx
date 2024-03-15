@@ -8,8 +8,9 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import { RootState, closeModal, openModal, setOpenModalName } from '@/redux/modalSlice';
 import ModalContainer from '../modal-container';
 import LoadingSpinner from '@/components/loading-spinner';
-import flatpickr from 'flatpickr';
+import Flatpickr from 'react-flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
+import dateExtractor from '@/hooks/dateExtractor';
 
 interface Props {
   props: Columns;
@@ -29,6 +30,7 @@ type CardInfo = {
   cursorId: null;
 };
 const Column = ({ props, viewColumns, dashboardId }: Props) => {
+  const today = new Date();
   const dispatch = useDispatch<AppDispatch>();
   const myData = useSelector(getMyInfo);
   const [cardInfo, setCardInfo] = useState<CardInfo | undefined>();
@@ -42,11 +44,6 @@ const Column = ({ props, viewColumns, dashboardId }: Props) => {
   });
 
   const openModalName = useSelector((state: RootState) => state.modal.openModalName);
-
-  flatpickr('.date-box', {
-    enableTime: true,
-    dateFormat: 'Y-m-d H:i',
-  });
 
   const handleCreateCard = () => {
     dispatch(setOpenModalName(`createcard${props.id}`));
@@ -80,6 +77,8 @@ const Column = ({ props, viewColumns, dashboardId }: Props) => {
 
       alert('카드생성 완료');
       setCreateCardData({ title: undefined, description: undefined, dueDate: undefined });
+      setPreviewUrl(null);
+      setUploadedFile(null);
       dispatch(closeModal());
       viewCards();
     } catch (err) {
@@ -87,15 +86,6 @@ const Column = ({ props, viewColumns, dashboardId }: Props) => {
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const flatpickrGenerator = () => {
-    setTimeout(() => {
-      flatpickr('.date-box', {
-        enableTime: true,
-        dateFormat: 'Y-m-d H:i',
-      });
-    }, 0);
   };
 
   const viewCards = () => {
@@ -107,8 +97,8 @@ const Column = ({ props, viewColumns, dashboardId }: Props) => {
   const handleUploadFile = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
-      if (!file.type.startsWith('image/')) {
-        alert('파일은 이미지 형식만 첨부 가능합니다.');
+      if (!file.type.startsWith('image/') || file.type === 'image/gif') {
+        alert('파일은 gif를 제외한 이미지 타입만 첨부 가능합니다.');
       } else {
         setUploadedFile(file);
         const reader = new FileReader();
@@ -143,14 +133,7 @@ const Column = ({ props, viewColumns, dashboardId }: Props) => {
       </div>
 
       <div className='column-body'>
-        <button
-          type='button'
-          className='add-card'
-          onClick={() => {
-            flatpickrGenerator();
-            handleCreateCard();
-          }}
-        >
+        <button type='button' className='add-card' onClick={() => handleCreateCard()}>
           <img src='/assets/image/icons/bannerAddIcon.svg' alt='add-icon' />
         </button>
       </div>
@@ -197,12 +180,17 @@ const Column = ({ props, viewColumns, dashboardId }: Props) => {
             </div>
             <div>
               <h3>마감일</h3>
-              <input
-                className='input-box date-box'
+              <Flatpickr
+                className='input-box'
                 placeholder='날짜를 입력해 주세요'
-                type='text'
                 value={createCardData.dueDate}
-                onChange={(e) => console.log(e)}
+                options={{
+                  enableTime: true,
+                  minDate: dateExtractor(today).slice(0, 10),
+                }}
+                onChange={(e) => {
+                  setCreateCardData({ ...createCardData, dueDate: dateExtractor(e[0]) });
+                }}
               />
             </div>
             <div>
@@ -211,7 +199,7 @@ const Column = ({ props, viewColumns, dashboardId }: Props) => {
             </div>
             <div>
               <h3>이미지</h3>
-              <div className='add-image'>
+              <div className='upload-button-box'>
                 <label htmlFor='upload-button' />
                 <input
                   type='file'
