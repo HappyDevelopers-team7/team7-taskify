@@ -4,7 +4,6 @@ const StWrapper = styled.div`
   height: 100vh;
 
   #container {
-    padding-top: 70px;
     padding-left: 300px;
     width: 100%;
   }
