@@ -1,3 +1,4 @@
+import removeDuplicates from '@/utils/removeDuplicates';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface AddDashBoard {
@@ -29,7 +30,7 @@ const dashboardSlice = createSlice({
   initialState: initialState,
   reducers: {
     setDashboardList(state, action) {
-      state.dashboardList = action.payload;
+      state.dashboardList = removeDuplicates(action.payload, 'id');
     },
     addDashboard(state, action: PayloadAction<AddDashBoard>) {
       state.dashboardList.push(action.payload);
