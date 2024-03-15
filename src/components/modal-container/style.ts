@@ -40,6 +40,11 @@ const StModalContainer = styled.div<StModalContainer>`
       font-weight: 700;
       margin-bottom: 32px;
     }
+
+    .modal-content__box {
+      max-height: 50vw;
+      overflow: auto;
+    }
   }
 
   .modal-button-group {

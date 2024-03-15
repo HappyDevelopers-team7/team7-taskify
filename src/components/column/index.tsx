@@ -15,27 +15,65 @@ interface Props {
   viewColumns: () => void;
   dashboardId: string | undefined;
 }
+
+type CreateCardData = {
+  title: string | undefined;
+  description: string | undefined;
+  dueDate: string | undefined;
+};
+
+type CardInfo = {
+  cards: unknown;
+  totalCount: number;
+  cursorId: null;
+};
 const Column = ({ props, viewColumns, dashboardId }: Props) => {
   const dispatch = useDispatch<AppDispatch>();
   const myData = useSelector(getMyInfo);
-  const [cardInfo, setCardInfo] = useState([]);
+  const [cardInfo, setCardInfo] = useState<CardInfo | undefined>();
+  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+  const [card, setCard] = useState<CreateCardData>({
+    title: undefined,
+    description: undefined,
+    dueDate: undefined,
+  });
+
   const openModalName = useSelector((state: RootState) => state.modal.openModalName);
+
   flatpickr('.date-box', {
     enableTime: true,
     dateFormat: 'Y-m-d H:i',
   });
+
   const handleCreateCard = () => {
-    dispatch(setOpenModalName('createCard'));
-    dispatch(openModal('createCard'));
+    dispatch(setOpenModalName(`createcard${props.id}`));
+    dispatch(openModal(`createcard${props.id}`));
   };
 
   const handleCloseCreateCard = () => {
     dispatch(closeModal());
+    setUploadedFile(null);
   };
 
   const handleSubmitCreateCard = () => {
     dispatch(closeModal());
-    alert('생성완료 (사실 테스트라서 생성 안됐음)');
+    axiosInstance
+      .post(API.CARDS.CARDS, {
+        assigneeUserId: myData.id,
+        dashboardId: Number(dashboardId),
+        columnId: props.id,
+        title: card.title,
+        description: card.description,
+        dueDate: card.dueDate,
+        tags: ['태그1', '태그2', '태그3'],
+        imageUrl:
+          'https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/taskify/task_image/3-7_15956_1710405778011.png',
+      })
+      .then(() => alert('카드생성 완료'))
+      .then(() => {
+        viewCards();
+      })
+      .catch(() => {});
   };
 
   const flatpickrGenerator = () => {
@@ -47,6 +85,12 @@ const Column = ({ props, viewColumns, dashboardId }: Props) => {
     }, 0);
   };
 
+  const viewCards = () => {
+    axiosInstance.get(`${API.CARDS.CARDS}?size=10&columnId=${props.id}`).then((res) => {
+      setCardInfo(res.data);
+    });
+  };
+
   const removeColumn = () => {
     // 컬럼 삭제 임시 함수
     const isConfirmed = confirm('삭제?');
@@ -55,51 +99,48 @@ const Column = ({ props, viewColumns, dashboardId }: Props) => {
     }
   };
 
-  const viewCards = () => {
-    axiosInstance.get(`${API.CARDS.CARDS}?size=10&columnId=${props.id}`).then((res) => {
-      setCardInfo(res.data);
-    });
-  };
+  // const handleUploadFile = () => {
+  //   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+  //     const files = e.target.files;
+  //     if (files && files.length > 0) setUploadedFile(files[0]);
+  //   };
 
-  // const createCard = () => {
-  //   // 카드 생성 임시 함수
+  //   const fileInput = document.createElement('input');
+  //   fileInput.type = 'file';
+  //   fileInput.style.display = 'none';
+  //   fileInput.addEventListener('change', handleFileChange);
+  //   document.body.appendChild(fileInput);
+  //   fileInput.click();
+  // };
 
-  //   axiosInstance
-  //     .post(API.CARDS.CARDS, {
-  //       assigneeUserId: myData.id,
-  //       dashboardId: Number(dashboardId),
-  //       columnId: props.id,
-  //       title: '카드1',
-  //       description: '카드 생성 테스트',
-  //       dueDate: '2024-09-12 00:00',
-  //       tags: ['태그1', '태그2', '태그3'],
-  //       imageUrl:
-  //         'https://images.unsplash.com/photo-1682686581427-7c80ab60e3f3?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-  //     })
-  //     .then(() => alert('카드생성 완료'))
-  //     .then(() => viewCards());
+  // const handleUploadFile = () => {
+  //   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+  //     const files = e.target.files;
+  //     if (files && files.length > 0) setUploadedFile(files[0]);
+  //   };
+
+  //   const fileInput = document.createElement('input');
+  //   fileInput.type = 'file';
+  //   fileInput.style.display = 'none';
+  //   fileInput.addEventListener('change', (e: ChangeEvent<HTMLInputElement>) => handleFileChange(e));
+  //   document.body.appendChild(fileInput);
+  //   fileInput.click();
   // };
 
   useEffect(() => {
     viewCards();
     dispatch(fetchMyInfo());
+    //console.log(myData);
+    console.log(cardInfo);
+    //console.log(dashboardId);
   }, [dispatch]);
-
-  const t = (e: React.KeyboardEvent) => {
-    // 린트오류때문에 커밋이 안돼서 임시로 만든 함수입니다 다음 PR때 지우겠습니다
-    if (e.eventPhase === 999) {
-      console.log(myData);
-      console.log(cardInfo);
-      console.log(dashboardId);
-    }
-  };
 
   return (
     <ColumnContainer>
-      <div className='column-header' onKeyDown={t}>
+      <div className='column-header'>
         <div className='column-color' />
         <h2>{props.title}</h2>
-        <div className='inner-cards'>3</div>
+        <div className='inner-cards'>{cardInfo?.totalCount}</div>
         <img src='/assets/image/icons/settingIcon.svg' alt='setting-icon' onClick={removeColumn} />
       </div>
 
@@ -115,7 +156,7 @@ const Column = ({ props, viewColumns, dashboardId }: Props) => {
           <img src='/assets/image/icons/bannerAddIcon.svg' alt='add-icon' />
         </button>
       </div>
-      {openModalName === 'createCard' ? (
+      {openModalName === `createcard${props.id}` ? (
         <ModalContainer
           title='할 일 생성'
           closeButtonName='취소'
@@ -127,7 +168,7 @@ const Column = ({ props, viewColumns, dashboardId }: Props) => {
           <ModalContent>
             <div>
               <h3>담당자</h3>
-              <div className='input-box'>
+              <div className='input-box asignee-box'>
                 <span className='asignee'>이름을 입력해주세요</span>
               </div>
             </div>
@@ -135,17 +176,34 @@ const Column = ({ props, viewColumns, dashboardId }: Props) => {
               <h3>
                 제목<span> *</span>
               </h3>
-              <input className='input-box' placeholder='제목을 입력해 주세요' type='text' />
+              <input
+                className='input-box'
+                placeholder='제목을 입력해 주세요'
+                type='text'
+                value={card.title}
+                onChange={(e) => setCard({ ...card, title: e.target.value })}
+              />
             </div>
             <div>
               <h3>
                 설명<span> *</span>
               </h3>
-              <textarea className='input-box' placeholder='설명을 입력해 주세요' />
+              <textarea
+                className='input-box description-box'
+                placeholder='설명을 입력해 주세요'
+                value={card.description}
+                onChange={(e) => setCard({ ...card, description: e.target.value })}
+              />
             </div>
             <div>
               <h3>마감일</h3>
-              <input className='input-box date-box' placeholder='날짜를 입력해 주세요' type='text' />
+              <input
+                className='input-box date-box'
+                placeholder='날짜를 입력해 주세요'
+                type='text'
+                value={card.dueDate}
+                onChange={(e) => console.log(e)}
+              />
             </div>
             <div>
               <h3>태그</h3>
@@ -153,9 +211,11 @@ const Column = ({ props, viewColumns, dashboardId }: Props) => {
             </div>
             <div>
               <h3>이미지</h3>
-              <button type='button' className='add-image'>
+              <div className='add-image'>
                 <img src='/assets/image/icons/modalAddIcon.svg' alt='add-icon' />
-              </button>
+                <input type='file' />
+              </div>
+              <div className='file-name'>{uploadedFile && uploadedFile.name}</div>
             </div>
           </ModalContent>
         </ModalContainer>

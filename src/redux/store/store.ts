@@ -2,10 +2,14 @@ import { configureStore } from '@reduxjs/toolkit';
 import { combineReducers } from 'redux';
 import myInfoReducer from '../myInfoSlice';
 import modalReducer from '../modalSlice';
+import dashboardListReducer from '../dashboardListSlice';
+import invitationListReducer from '../invitationSlice';
 
 const rootReducer = combineReducers({
   myInfo: myInfoReducer,
   modal: modalReducer,
+  dashboardList: dashboardListReducer,
+  invitationList: invitationListReducer,
 });
 
 const store = configureStore({
