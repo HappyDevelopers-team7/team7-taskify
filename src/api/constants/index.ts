@@ -20,6 +20,9 @@ const API = {
   CARDS: {
     CARDS: 'cards',
   },
+  MEMBERS: {
+    MEMBERS: 'members',
+  },
 } as const;
 
 export default API;

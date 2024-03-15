@@ -29,41 +29,50 @@ interface Props {
 const DashboardHeader = () => {
   const dispatch = useDispatch<AppDispatch>();
   const myInfo = useSelector(getMyInfo);
-  const [currentDashboard, setCurrentDashboard] = useState<Dashboards | undefined>(undefined);
   const { id } = useParams();
-  // console.log(id);
+  const [currentDashboard, setCurrentDashboard] = useState<Dashboards | undefined>(undefined);
+  // const [membersInfo, setMembersInfo] = useState<{
+  //   members: User[];
+  //   totalCount: number;
+  // } | null>(null);
+
   //상태를 전역으로 관리해서 로그인정보가 바뀌거나 하면 바로 다시 렌더링
   useEffect(() => {
     dispatch(fetchMyInfo());
   }, [dispatch]);
 
-  // const getDashboardInfo = async () => {
-  //   const res = await axiosInstance.get(`${API.DASHBOARDS.DASHBOARDS}/${id}}`);
-  //   const responseData = await res.data;
-  //   return responseData;
-  // };
-
   useEffect(() => {
-    // const fetchDashboard = async () => {
-    //   const dashboard = await getDashboardInfo();
-    //   setCurrentDashboard(dashboard);
-    //   };
-
-    //   fetchDashboard();
-    // }, [id]);
     const fetchDashboardInfo = async () => {
       try {
+        if (!id) return;
         const res = await axiosInstance.get(`${API.DASHBOARDS.DASHBOARDS}/${id}`);
         const responseData = await res.data;
         setCurrentDashboard(responseData);
       } catch (error) {
         console.error('Error fetching dashboard info:', error);
-        // 오류 처리 로직 추가
+        // 여기다 에러 로직 추가
       }
     };
 
     fetchDashboardInfo();
   }, [id]);
+
+  // useEffect(() => {
+  //   const fetchDashboardMemberInfo = async () => {
+  //     try {
+  //       const res = await axiosInstance.get(API.MEMBERS.MEMBERS, {
+  //         params: { dashboardId: id },
+  //       });
+  //       const resData = await res.data;
+  //       setMembersInfo(resData);
+  //     } catch (error) {
+  //       console.error('Error fetching dashboardMember info:', error);
+  //       // 여기다 에러 로직 추가
+  //     }
+  //   };
+
+  //   fetchDashboardMemberInfo();
+  // }, [id]);
 
   // console.log(myInfo);
   // console.log(myInfo.nickname);
@@ -73,7 +82,11 @@ const DashboardHeader = () => {
   return (
     <Container>
       <DashboardId currentDashboard={currentDashboard} />
-      <ProfileInfo myInfo={myInfo} />
+      <div>
+        {/* <inviteButton /> */}
+        {/* <DashboardMembers /> */}
+        <ProfileInfo myInfo={myInfo} />
+      </div>
     </Container>
   );
 };
@@ -93,6 +106,8 @@ function DashboardId({ currentDashboard }: Props) {
     </div>
   );
 }
+
+// function DashboardMembers({ dashboardMembers }) {}
 
 function ProfileInfo({ myInfo }: { myInfo: SetMyInfo | null }) {
   //todo
