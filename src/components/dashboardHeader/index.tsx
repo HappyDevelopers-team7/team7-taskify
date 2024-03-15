@@ -82,11 +82,11 @@ const DashboardHeader = () => {
   return (
     <Container>
       <DashboardId currentDashboard={currentDashboard} />
-      <div>
-        {/* <inviteButton /> */}
-        {/* <DashboardMembers /> */}
-        <ProfileInfo myInfo={myInfo} />
-      </div>
+      {/* <div> */}
+      {/* <inviteButton /> */}
+      {/* <DashboardMembers /> */}
+      <ProfileInfo myInfo={myInfo} />
+      {/* </div> */}
     </Container>
   );
 };
