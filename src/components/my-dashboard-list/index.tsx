@@ -16,6 +16,7 @@ const MyDashBoardList = ({ handleCreateDashboard }: MyDashBoardListProps) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPage, setTotalPage] = useState(0);
   const [errorMessage, setErrorMessage] = useState('');
+
   const setDashboard = async () => {
     try {
       const result = await getDashboardList(currentPage);
