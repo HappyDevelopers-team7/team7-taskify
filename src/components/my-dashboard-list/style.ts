@@ -7,12 +7,11 @@ const StDashBoardListSection = styled.section`
   ul {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     flex-wrap: wrap;
     gap: 12px;
 
     li {
-      width: calc(100% / 3 - 12px);
+      width: calc(100% / 3 - 8px);
       border-radius: 8px;
       overflow: hidden;
       border: 1px solid ${({ theme }) => theme.color.gray_d9};

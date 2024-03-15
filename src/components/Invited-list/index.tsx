@@ -1,38 +1,20 @@
 import { getInvitation } from '@/api/getInvitation';
 import InputSearch from '../input/input-search';
 import StInvitedSection from './style';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import NoInvitation from '../no-invitation';
-
-interface InvitationList {
-  id: number;
-  inviter: {
-    nickname: string;
-    email: string;
-    id: number;
-  };
-  teamId: string;
-  dashboard: {
-    title: string;
-    id: number;
-  };
-  invitee: {
-    nickname: string;
-    email: string;
-    id: number;
-  };
-  inviteAccepted: boolean;
-  createdAt: string;
-  updatedAt: string;
-}
+import { RootState, setInvitationList, updateInvitationList } from '@/redux/invitationSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 const InvitedList = () => {
-  const [invitationList, setInvitationList] = useState<InvitationList[]>([]);
+  const dispatch = useDispatch();
+  const initialInvitationList = useSelector((state: RootState) => state.invitationList.initialList);
+  const updatedInvitationList = useSelector((state: RootState) => state.invitationList.updatedList);
 
   const setInvitation = async () => {
     const result = await getInvitation();
-    console.log(result);
-    setInvitationList(result.invitations);
+    dispatch(setInvitationList(result.invitations));
+    dispatch(updateInvitationList(result.invitations));
   };
 
   useEffect(() => {
@@ -44,7 +26,7 @@ const InvitedList = () => {
         <div className='invite-wrapper'>
           <h3>초대받은 대시보드</h3>
         </div>
-        {invitationList.length > 0 ? (
+        {initialInvitationList.length > 0 ? (
           <>
             <div className='invite-wrapper'>
               <InputSearch />
@@ -64,7 +46,7 @@ const InvitedList = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {invitationList.map((item) => (
+                  {updatedInvitationList.map((item) => (
                     <tr key={item.id}>
                       <td>{item.dashboard.title}</td>
                       <td>{item.inviter.nickname}</td>
