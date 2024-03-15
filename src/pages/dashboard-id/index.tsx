@@ -6,6 +6,9 @@ import API from '@/api/constants';
 import { useEffect, useState } from 'react';
 import Column from '@/components/column';
 import LoadingSpinner from '@/components/loading-spinner';
+import ModalComponent from '../modal-test';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/redux/modalSlice';
 
 export type Columns = {
   createdAt: string;
@@ -20,20 +23,7 @@ const DashBoardId = () => {
   const { id } = useParams();
   const [columns, setColumns] = useState<Columns[]>();
   const [isLoading, setIsLoading] = useState(true);
-
-  const createColumns = () => {
-    const name = prompt('컬럼 이름');
-    if (name) {
-      axiosInstance
-        .post(API.COLUMNS.COLUMNS, {
-          title: name,
-          dashboardId: Number(id),
-        })
-        .then(() => viewColumns());
-    } else {
-      alert('이름써');
-    }
-  };
+  const openModalName = useSelector((state: RootState) => state.modal.openModalName);
 
   const viewColumns = () => {
     setIsLoading(true);
@@ -53,8 +43,9 @@ const DashBoardId = () => {
       {isLoading && <LoadingSpinner />}
       {columns && columns.map((it) => <Column key={it.id} props={it} viewColumns={viewColumns} dashboardId={id} />)}
       <div className='button-box'>
-        <AddColumnButton createColumns={createColumns}>새로운 컬럼 추가하기</AddColumnButton>
+        <AddColumnButton>새로운 컬럼 추가하기</AddColumnButton>
       </div>
+      {openModalName === 'addColumnModal' && <ModalComponent />}
     </Container>
   );
 };

@@ -1,62 +1,57 @@
 import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { StColumnModal, StModalTest } from './style';
+import { useDispatch } from 'react-redux';
+import { closeModal } from '@/redux/modalSlice';
+import axiosInstance from '@/api/instance/axiosInstance';
+import { StColumnModal } from './style';
 import ModalContainer from '@/components/modal-container';
-import { RootState, closeModal, openModal, setOpenModalName } from '@/redux/modalSlice';
-// import axiosInstance from '@/api/instance/axiosInstance';
-// import API from '@/api/constants';
+import API from '@/api/constants';
+import { useParams } from 'react-router-dom';
 
-const ModalTest = () => {
+const ModalComponent = () => {
+  const { id } = useParams();
   const dispatch = useDispatch();
-  const openModalName = useSelector((state: RootState) => state.modal.openModalName);
-
   const [newColumnName, setNewColumnName] = useState('');
 
-  const handleOpenModal = () => {
-    dispatch(setOpenModalName('addColumnModal'));
-    dispatch(openModal('addColumnModal'));
-  };
-
   const handleCloseModal = () => {
-    dispatch(closeModal());
+    dispatch(closeModal()); // 모달 닫기 외않되
     setNewColumnName('');
   };
 
   const handleSubmitModal = () => {
     console.log('새로운 컬럼 이름:', newColumnName);
-    dispatch(closeModal());
+    axiosInstance
+      .post(API.COLUMNS.COLUMNS, {
+        title: newColumnName,
+        dashboardId: Number(id),
+      })
+      .then(() => {
+        dispatch(closeModal());
+      })
+      .catch((error) => {
+        console.error('Post request error:', error);
+      });
   };
 
   return (
-    <>
-      <StModalTest>
-        <h1>모달용 테스트 페이지입니다.</h1>
-        <button type='button' onClick={handleOpenModal}>
-          컬럼 추가
-        </button>
-      </StModalTest>
-      {openModalName === 'addColumnModal' && (
-        <ModalContainer
-          title='새 컬럼 생성'
-          closeButtonName='취소'
-          submitButtonName='생성'
-          modalWidth={540}
-          handleCloseModal={handleCloseModal}
-          handleSubmitModal={handleSubmitModal}
-        >
-          <StColumnModal>
-            <h3>이름</h3>
-            <input
-              type='text'
-              placeholder='새로운 프로젝트'
-              value={newColumnName}
-              onChange={(e) => setNewColumnName(e.target.value)}
-            />
-          </StColumnModal>
-        </ModalContainer>
-      )}
-    </>
+    <ModalContainer
+      title='새 컬럼 생성'
+      closeButtonName='취소'
+      submitButtonName='생성'
+      modalWidth={540}
+      handleCloseModal={handleCloseModal}
+      handleSubmitModal={handleSubmitModal}
+    >
+      <StColumnModal>
+        <h3>이름</h3>
+        <input
+          type='text'
+          placeholder='새로운 프로젝트'
+          value={newColumnName}
+          onChange={(e) => setNewColumnName(e.target.value)}
+        />
+      </StColumnModal>
+    </ModalContainer>
   );
 };
 
-export default ModalTest;
+export default ModalComponent;
