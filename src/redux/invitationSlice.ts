@@ -1,3 +1,4 @@
+import removeDuplicates from '@/utils/removeDuplicates';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface InvitationList {
@@ -44,13 +45,13 @@ const invitationSlice = createSlice({
   initialState: initialState,
   reducers: {
     setInvitationList(state, action) {
-      state.initialList = action.payload;
+      state.initialList = removeDuplicates(action.payload, 'id');
     },
     addInvitationList(state, action: PayloadAction<InvitationList>) {
       state.initialList.push(action.payload);
     },
     updateInvitationList(state, action: PayloadAction<InvitationList[]>) {
-      state.updatedList = action.payload;
+      state.updatedList = removeDuplicates(action.payload, 'id');
     },
   },
 });
