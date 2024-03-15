@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 const Container = styled.div`
-  position: relative;
+  position: absolute;
   background-color: ${({ theme }) => theme.color.gray_fa};
   width: 100%;
   height: 100%;

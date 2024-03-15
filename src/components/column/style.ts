@@ -116,19 +116,8 @@ export const ModalContent = styled.div<{ Image: string | null }>`
     width: 50%;
   }
 
-  .input-box.date-box {
-    padding-left: 40px;
-  }
-
   .input-box.description-box {
     height: 96px;
-  }
-
-  .date-box {
-    background-image: url('/assets/image/icons/calendarIcon.svg');
-    background-repeat: no-repeat;
-    background-position: 10px;
-    background-size: 22px;
   }
 
   .upload-button-box {
