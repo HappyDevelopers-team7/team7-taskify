@@ -50,6 +50,13 @@ const StDashBoardListSection = styled.section`
     justify-content: flex-end;
     gap: 16px;
     margin-top: 12px;
+
+    p {
+      font-size: 1.4rem;
+    }
+
+    .pagination-button {
+    }
   }
 `;
 

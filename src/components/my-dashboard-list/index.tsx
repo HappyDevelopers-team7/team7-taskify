@@ -74,12 +74,12 @@ const MyDashBoardList = ({ handleCreateDashboard }: MyDashBoardListProps) => {
             <p>
               {totalPage} 페이지 중 {currentPage}
             </p>
-            <div className=''>
-              <button type='button' aria-label='이전 목록' onClick={handleClickPreview}>
-                prev
+            <div className='pagination-button'>
+              <button type='button' onClick={handleClickPreview}>
+                <img src='/assets/image/icons/arrowForwardIconGrayLeft.svg' alt='이전 목록 버튼' />
               </button>
-              <button type='button' aria-label='다음 목록' onClick={handleClickNext}>
-                next
+              <button type='button' onClick={handleClickNext}>
+                <img src='/assets/image/icons/arrowForwardIcon.svg' alt='다음 목록 버튼' />
               </button>
             </div>
           </div>

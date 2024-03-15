@@ -122,7 +122,7 @@ const SideMenu = () => {
             src={
               currentPage === 1
                 ? '/assets/image/icons/arrowForwardIcon(gray-left).svg'
-                : '/assets/image/icons/arrowForwardIcon(left).svg'
+                : '/assets/image/icons/arrowForwardIconLeft.svg'
             }
             alt='prev-icon'
           />
@@ -131,7 +131,7 @@ const SideMenu = () => {
           <img
             src={
               currentPage === maximumPages
-                ? '/assets/image/icons/arrowForwardIcon(gray).svg'
+                ? '/assets/image/icons/arrowForwardIconGrayLeft.svg'
                 : '/assets/image/icons/arrowForwardIcon.svg'
             }
             alt='next-icon'
