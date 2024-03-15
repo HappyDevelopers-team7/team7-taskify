@@ -121,7 +121,7 @@ const SideMenu = () => {
           <img
             src={
               currentPage === 1
-                ? '/assets/image/icons/arrowForwardIcon(gray-left).svg'
+                ? '/assets/image/icons/arrowForwardIconGrayLeft.svg'
                 : '/assets/image/icons/arrowForwardIconLeft.svg'
             }
             alt='prev-icon'

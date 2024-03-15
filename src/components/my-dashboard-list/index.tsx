@@ -1,4 +1,4 @@
-import { MouseEvent, useEffect, useState } from 'react';
+import { MouseEvent, useEffect, useState, useCallback } from 'react';
 import MyDashBoardListItem from '../my-dashboard-list-item';
 import StDashBoardListSection from './style';
 import { getDashboardList } from '@/api/getDashboardList';
@@ -15,8 +15,10 @@ const MyDashBoardList = ({ handleCreateDashboard }: MyDashBoardListProps) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPage, setTotalPage] = useState(0);
   const [errorMessage, setErrorMessage] = useState('');
+  const [previewDisabled, setPreviewDisabled] = useState(true);
+  const [nextDisabled, setNextDisabled] = useState(false);
 
-  const setDashboard = async () => {
+  const setDashboard = useCallback(async () => {
     try {
       const result = await getDashboardList(currentPage);
       dispatch(setDashboardList(result.dashboards));
@@ -26,23 +28,35 @@ const MyDashBoardList = ({ handleCreateDashboard }: MyDashBoardListProps) => {
         setErrorMessage(error.message);
       }
     }
-  };
+  }, [currentPage, dispatch]);
 
   const handleClickPreview = () => {
     if (currentPage > 1) {
       setCurrentPage(currentPage - 1);
+      setNextDisabled(false);
+      if (currentPage === 2) {
+        setPreviewDisabled(true);
+      }
+    } else {
+      setPreviewDisabled(true);
     }
   };
 
   const handleClickNext = () => {
     if (currentPage < totalPage) {
       setCurrentPage(currentPage + 1);
+      setPreviewDisabled(false);
+      if (currentPage === totalPage - 1) {
+        setNextDisabled(true);
+      }
+    } else {
+      setNextDisabled(true);
     }
   };
 
   useEffect(() => {
     setDashboard();
-  }, [currentPage]);
+  }, [currentPage, setDashboard]);
 
   return (
     <>
@@ -75,19 +89,25 @@ const MyDashBoardList = ({ handleCreateDashboard }: MyDashBoardListProps) => {
               {currentPage} / {totalPage}
             </p>
             <div className='pagination-button'>
-              <button className='prev-button' type='button' onClick={handleClickPreview}>
-                {currentPage <= 1 ? (
-                  <img src='/assets/image/icons/arrowForwardIconGrayLeft.svg' alt='이전 목록 버튼' />
-                ) : (
-                  <img src='/assets/image/icons/arrowForwardIconLeft.svg' alt='이전 목록 버튼' />
-                )}
+              <button className='prev-button' disabled={previewDisabled} type='button' onClick={handleClickPreview}>
+                <img
+                  src={
+                    currentPage <= 1
+                      ? '/assets/image/icons/arrowForwardIconGrayLeft.svg'
+                      : '/assets/image/icons/arrowForwardIconLeft.svg'
+                  }
+                  alt='이전 목록 버튼'
+                />
               </button>
-              <button className='next-button' type='button' onClick={handleClickNext}>
-                {currentPage === totalPage ? (
-                  <img src='/assets/image/icons/arrowForwardIconGray.svg' alt='다음 목록 버튼' />
-                ) : (
-                  <img src='/assets/image/icons/arrowForwardIcon.svg' alt='다음 목록 버튼' />
-                )}
+              <button className='next-button' disabled={nextDisabled} type='button' onClick={handleClickNext}>
+                <img
+                  src={
+                    currentPage === totalPage
+                      ? '/assets/image/icons/arrowForwardIconGray.svg'
+                      : '/assets/image/icons/arrowForwardIcon.svg'
+                  }
+                  alt='다음 목록 버튼'
+                />
               </button>
             </div>
           </div>
