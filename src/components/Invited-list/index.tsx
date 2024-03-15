@@ -3,18 +3,26 @@ import InputSearch from '../input/input-search';
 import StInvitedSection from './style';
 import { useEffect } from 'react';
 import NoInvitation from '../no-invitation';
-import { RootState, setInvitationList, updateInvitationList } from '@/redux/invitationSlice';
+import { InvitationRootState, setInvitationList, updateInvitationList } from '@/redux/invitationSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import { ModalRootState, openModal, setOpenModalName } from '@/redux/modalSlice';
+import RejectInvitation from '../modal-contents/reject-invitation';
 
 const InvitedList = () => {
   const dispatch = useDispatch();
-  const initialInvitationList = useSelector((state: RootState) => state.invitationList.initialList);
-  const updatedInvitationList = useSelector((state: RootState) => state.invitationList.updatedList);
+  const initialInvitationList = useSelector((state: InvitationRootState) => state.invitationList.initialList);
+  const updatedInvitationList = useSelector((state: InvitationRootState) => state.invitationList.updatedList);
+  const openModalName = useSelector((state: ModalRootState) => state.modal.openModalName);
 
   const setInvitation = async () => {
     const result = await getInvitation();
     dispatch(setInvitationList(result.invitations));
     dispatch(updateInvitationList(result.invitations));
+  };
+
+  const handleClickReject = () => {
+    dispatch(setOpenModalName('rejectInvitation'));
+    dispatch(openModal('rejectInvitation'));
   };
 
   useEffect(() => {
@@ -56,7 +64,7 @@ const InvitedList = () => {
                             <span>수락 완료</span>
                           ) : (
                             <>
-                              <button type='button' className='button-reject'>
+                              <button type='button' className='button-reject' onClick={handleClickReject}>
                                 거절
                               </button>
                               <button type='button' className='button-accept'>
@@ -76,6 +84,7 @@ const InvitedList = () => {
           <NoInvitation />
         )}
       </StInvitedSection>
+      {openModalName === 'rejectInvitation' ? <RejectInvitation /> : null}
     </>
   );
 };

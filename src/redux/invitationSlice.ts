@@ -22,7 +22,7 @@ export interface InvitationList {
   updatedAt: string;
 }
 
-export interface RootState {
+export interface InvitationRootState {
   invitationList: {
     initialList: InvitationList[];
     updatedList: InvitationList[];
