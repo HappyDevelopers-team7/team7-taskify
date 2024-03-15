@@ -36,7 +36,7 @@ const CreateDashboard = () => {
       setDashboardNameInputValue('');
       setDashboardColorValue('');
     } else {
-      alert(INPUT_ERROR_MESSAGES.PLEASE_ENTER_VALUE);
+      toast.error(INPUT_ERROR_MESSAGES.PLEASE_ENTER_VALUE); // 값을 입력해주세요.
     }
   };
 
