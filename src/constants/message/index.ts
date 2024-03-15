@@ -31,8 +31,8 @@ export const DASHBOARD_MESSAGES = {
 } as const;
 
 export const INVITATION_MESSAGES = {
-  REJECT_INVITATION: '대시보드 초대가 거절되었습니다.',
-  ACCEPT_INVITATION: '대시보드 초대가 수락되었습니다.',
+  REJECT_INVITATION: '거절되었습니다.',
+  ACCEPT_INVITATION: '수락되었습니다.',
   REJECT_CANCELED: '초대 거절이 취소되었습니다.',
   ACCEPT_CANCELED: '초대 수락이 취소되었습니다.',
 } as const;
