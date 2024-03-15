@@ -22,7 +22,8 @@ const InvitedList = () => {
     dispatch(updateInvitationList(result.invitations));
   };
 
-  const handleClickReject = () => {
+  const handleClickReject = (id: number) => {
+    setSelectedInvitationId(id);
     dispatch(setOpenModalName('rejectInvitation'));
     dispatch(openModal('rejectInvitation'));
   };
@@ -72,7 +73,11 @@ const InvitedList = () => {
                             <span>수락 완료</span>
                           ) : (
                             <>
-                              <button type='button' className='button-reject' onClick={handleClickReject}>
+                              <button
+                                type='button'
+                                className='button-reject'
+                                onClick={() => handleClickReject(item.id)}
+                              >
                                 거절
                               </button>
                               <button

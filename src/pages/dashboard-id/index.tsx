@@ -38,7 +38,6 @@ const DashBoardId = () => {
   const viewColumns = () => {
     setIsLoading(true);
     axiosInstance.get(`${API.COLUMNS.COLUMNS}?dashboardId=${id}`).then((res) => {
-      console.log(res.data.data);
       setColumns(res.data.data);
       setIsLoading(false);
     });
