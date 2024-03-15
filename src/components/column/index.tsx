@@ -4,9 +4,10 @@ import { ColumnContainer, ModalContent } from './style';
 import { Columns } from '@/pages/dashboard-id';
 import axiosInstance from '@/api/instance/axiosInstance';
 import API from '@/api/constants';
-import { useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { RootState, closeModal, openModal, setOpenModalName } from '@/redux/modalSlice';
 import ModalContainer from '../modal-container';
+import LoadingSpinner from '@/components/loading-spinner';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 
@@ -32,7 +33,9 @@ const Column = ({ props, viewColumns, dashboardId }: Props) => {
   const myData = useSelector(getMyInfo);
   const [cardInfo, setCardInfo] = useState<CardInfo | undefined>();
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
-  const [card, setCard] = useState<CreateCardData>({
+  const [isLoading, setIsLoading] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [createCardData, setCreateCardData] = useState<CreateCardData>({
     title: undefined,
     description: undefined,
     dueDate: undefined,
@@ -53,27 +56,37 @@ const Column = ({ props, viewColumns, dashboardId }: Props) => {
   const handleCloseCreateCard = () => {
     dispatch(closeModal());
     setUploadedFile(null);
+    setPreviewUrl(null);
   };
 
-  const handleSubmitCreateCard = () => {
-    dispatch(closeModal());
-    axiosInstance
-      .post(API.CARDS.CARDS, {
+  const handleSubmitCreateCard = async () => {
+    try {
+      setIsLoading(true);
+      const formData = new FormData();
+      formData.append('image', uploadedFile as Blob);
+      const res = await axiosInstance.post(`${API.COLUMNS.COLUMNS}/${props.id}/card-image`, formData);
+      console.log(res.data.profileImageUrl);
+
+      await axiosInstance.post(API.CARDS.CARDS, {
         assigneeUserId: myData.id,
         dashboardId: Number(dashboardId),
         columnId: props.id,
-        title: card.title,
-        description: card.description,
-        dueDate: card.dueDate,
+        title: createCardData.title,
+        description: createCardData.description,
+        dueDate: createCardData.dueDate,
         tags: ['태그1', '태그2', '태그3'],
-        imageUrl:
-          'https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/taskify/task_image/3-7_15956_1710405778011.png',
-      })
-      .then(() => alert('카드생성 완료'))
-      .then(() => {
-        viewCards();
-      })
-      .catch(() => {});
+        imageUrl: res.data.profileImageUrl,
+      });
+
+      alert('카드생성 완료');
+      setCreateCardData({ title: undefined, description: undefined, dueDate: undefined });
+      dispatch(closeModal());
+      viewCards();
+    } catch (err) {
+      alert('오류가 발생했습니다. 다시 시도해주세요.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const flatpickrGenerator = () => {
@@ -91,6 +104,22 @@ const Column = ({ props, viewColumns, dashboardId }: Props) => {
     });
   };
 
+  const handleUploadFile = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const file = e.target.files[0];
+      if (!file.type.startsWith('image/')) {
+        alert('파일은 이미지 형식만 첨부 가능합니다.');
+      } else {
+        setUploadedFile(file);
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setPreviewUrl(reader.result as string);
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+  };
+
   const removeColumn = () => {
     // 컬럼 삭제 임시 함수
     const isConfirmed = confirm('삭제?');
@@ -99,40 +128,9 @@ const Column = ({ props, viewColumns, dashboardId }: Props) => {
     }
   };
 
-  // const handleUploadFile = () => {
-  //   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-  //     const files = e.target.files;
-  //     if (files && files.length > 0) setUploadedFile(files[0]);
-  //   };
-
-  //   const fileInput = document.createElement('input');
-  //   fileInput.type = 'file';
-  //   fileInput.style.display = 'none';
-  //   fileInput.addEventListener('change', handleFileChange);
-  //   document.body.appendChild(fileInput);
-  //   fileInput.click();
-  // };
-
-  // const handleUploadFile = () => {
-  //   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-  //     const files = e.target.files;
-  //     if (files && files.length > 0) setUploadedFile(files[0]);
-  //   };
-
-  //   const fileInput = document.createElement('input');
-  //   fileInput.type = 'file';
-  //   fileInput.style.display = 'none';
-  //   fileInput.addEventListener('change', (e: ChangeEvent<HTMLInputElement>) => handleFileChange(e));
-  //   document.body.appendChild(fileInput);
-  //   fileInput.click();
-  // };
-
   useEffect(() => {
     viewCards();
     dispatch(fetchMyInfo());
-    //console.log(myData);
-    console.log(cardInfo);
-    //console.log(dashboardId);
   }, [dispatch]);
 
   return (
@@ -165,7 +163,9 @@ const Column = ({ props, viewColumns, dashboardId }: Props) => {
           handleCloseModal={handleCloseCreateCard}
           handleSubmitModal={handleSubmitCreateCard}
         >
-          <ModalContent>
+          <ModalContent Image={previewUrl}>
+            {isLoading && <LoadingSpinner />}
+
             <div>
               <h3>담당자</h3>
               <div className='input-box asignee-box'>
@@ -180,8 +180,8 @@ const Column = ({ props, viewColumns, dashboardId }: Props) => {
                 className='input-box'
                 placeholder='제목을 입력해 주세요'
                 type='text'
-                value={card.title}
-                onChange={(e) => setCard({ ...card, title: e.target.value })}
+                value={createCardData.title}
+                onChange={(e) => setCreateCardData({ ...createCardData, title: e.target.value })}
               />
             </div>
             <div>
@@ -191,8 +191,8 @@ const Column = ({ props, viewColumns, dashboardId }: Props) => {
               <textarea
                 className='input-box description-box'
                 placeholder='설명을 입력해 주세요'
-                value={card.description}
-                onChange={(e) => setCard({ ...card, description: e.target.value })}
+                value={createCardData.description}
+                onChange={(e) => setCreateCardData({ ...createCardData, description: e.target.value })}
               />
             </div>
             <div>
@@ -201,7 +201,7 @@ const Column = ({ props, viewColumns, dashboardId }: Props) => {
                 className='input-box date-box'
                 placeholder='날짜를 입력해 주세요'
                 type='text'
-                value={card.dueDate}
+                value={createCardData.dueDate}
                 onChange={(e) => console.log(e)}
               />
             </div>
@@ -212,10 +212,16 @@ const Column = ({ props, viewColumns, dashboardId }: Props) => {
             <div>
               <h3>이미지</h3>
               <div className='add-image'>
-                <img src='/assets/image/icons/modalAddIcon.svg' alt='add-icon' />
-                <input type='file' />
+                <label htmlFor='upload-button' />
+                <input
+                  type='file'
+                  accept='image/*'
+                  className='upload-button'
+                  id='upload-button'
+                  onChange={handleUploadFile}
+                />
               </div>
-              <div className='file-name'>{uploadedFile && uploadedFile.name}</div>
+              <div className='file-name'>{uploadedFile ? uploadedFile.name : '선택한 파일이 없습니다.'} </div>
             </div>
           </ModalContent>
         </ModalContainer>

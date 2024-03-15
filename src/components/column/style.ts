@@ -68,8 +68,8 @@ export const ColumnContainer = styled.div`
   }
 `;
 
-export const ModalContent = styled.div`
-  height: 630px;
+export const ModalContent = styled.div<{ Image: string | null }>`
+  height: auto;
   overflow: auto;
   &::-webkit-scrollbar {
     width: 3px;
@@ -123,7 +123,7 @@ export const ModalContent = styled.div`
   .date-box {
     background-image: url('/assets/image/icons/calendarIcon.svg');
     background-repeat: no-repeat;
-    background-position: 3%;
+    background-position: 10px;
     background-size: 22px;
   }
 
@@ -137,13 +137,33 @@ export const ModalContent = styled.div`
   }
 
   .add-image {
-    width: 76px;
-    height: 76px;
-    border-radius: 6px;
-    background-color: #f5f5f5;
+    position: relative;
+
+    label {
+      display: inline-block;
+      width: 76px;
+      height: 76px;
+      background-image: url(${(props) => (props.Image ? props.Image : '/assets/image/icons/modalAddIcon.svg')});
+      background-color: #f5f5f5;
+      background-repeat: no-repeat;
+      background-position: center;
+      ${(props) => props.Image && 'background-size: contain;'}
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .upload-button {
+      position: absolute;
+      width: 0;
+      height: 0;
+      padding: 0;
+      overflow: hidden;
+      border: 0;
+    }
   }
 
   .file-name {
     font-size: 1.4rem;
+    margin-bottom: 5px;
   }
 `;
