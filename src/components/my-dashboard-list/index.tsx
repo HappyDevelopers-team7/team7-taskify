@@ -72,14 +72,22 @@ const MyDashBoardList = ({ handleCreateDashboard }: MyDashBoardListProps) => {
         {totalPage > 1 ? (
           <div className='list-pagination'>
             <p>
-              {totalPage} 페이지 중 {currentPage}
+              {currentPage} / {totalPage}
             </p>
             <div className='pagination-button'>
-              <button type='button' onClick={handleClickPreview}>
-                <img src='/assets/image/icons/arrowForwardIconGrayLeft.svg' alt='이전 목록 버튼' />
+              <button className='prev-button' type='button' onClick={handleClickPreview}>
+                {currentPage <= 1 ? (
+                  <img src='/assets/image/icons/arrowForwardIconGrayLeft.svg' alt='이전 목록 버튼' />
+                ) : (
+                  <img src='/assets/image/icons/arrowForwardIconLeft.svg' alt='이전 목록 버튼' />
+                )}
               </button>
-              <button type='button' onClick={handleClickNext}>
-                <img src='/assets/image/icons/arrowForwardIcon.svg' alt='다음 목록 버튼' />
+              <button className='next-button' type='button' onClick={handleClickNext}>
+                {currentPage === totalPage ? (
+                  <img src='/assets/image/icons/arrowForwardIconGray.svg' alt='다음 목록 버튼' />
+                ) : (
+                  <img src='/assets/image/icons/arrowForwardIcon.svg' alt='다음 목록 버튼' />
+                )}
               </button>
             </div>
           </div>
