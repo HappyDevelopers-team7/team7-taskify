@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import StAlertModalContent from './style';
 import { putInviteAccepted } from '@/api/putInviteAccepted';
 import { toast } from 'react-toastify';
-import { INVITATION_ERROR_MESSAGES, INVITATION_MESSAGES, SIMPLE_MESSAGES } from '@/constants/message';
+import { INVITATION_ERROR_MESSAGES, INVITATION_MESSAGES } from '@/constants/message';
 import { getInvitation } from '@/api/getInvitation';
 import { setInvitationList, updateInvitationList } from '@/redux/invitationSlice';
 
@@ -16,7 +16,7 @@ const RejectInvitation = ({ invitationId }: RejectInvitationProps) => {
   const dispatch = useDispatch();
   const handleCloseReject = () => {
     dispatch(closeModal());
-    toast.success(SIMPLE_MESSAGES.CANCELED);
+    toast.success(INVITATION_MESSAGES.REJECT_CANCELED);
   };
 
   const handleSubmitReject = async () => {
