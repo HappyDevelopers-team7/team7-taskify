@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-const Container = styled.div`
+const Container = styled.header`
   padding-left: 300px;
   width: 100%;
   height: 70px;
