@@ -14,7 +14,6 @@ const RejectInvitation = () => {
   };
   return (
     <ModalContainer
-      title='대시보드 초대 거절'
       closeButtonName='취소'
       submitButtonName='거절'
       modalWidth={506}
@@ -22,7 +21,8 @@ const RejectInvitation = () => {
       handleSubmitModal={handleSubmitReject}
     >
       <StAlertModalContent>
-        <h5>거절 하시겠어요? 한번 거절된 초대는 되돌릴 수 없습니다.</h5>
+        <h5>대시보드 초대가 거절됩니다.</h5>
+        <p>한 번 거절된 초대는 되돌릴 수 없습니다.</p>
       </StAlertModalContent>
     </ModalContainer>
   );
