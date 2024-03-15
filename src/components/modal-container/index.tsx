@@ -3,7 +3,7 @@ import PortalContainer from '../portal';
 import StModalContainer from './style';
 
 interface ModalProps {
-  title: string;
+  title?: string;
   closeButtonName: string;
   submitButtonName: string;
   isDeletable?: boolean;
@@ -42,7 +42,8 @@ const ModalContainer = ({
       <StModalContainer $modalWidth={modalWidth}>
         <div className='modal-dim' onClick={handleCloseModal}></div>
         <div className='modal-content'>
-          <h2>{title}</h2>
+          {title ? <h2>{title}</h2> : null}
+
           <div className='modal-content__box'>{children}</div>
           <div className='modal-button-group'>
             <div className='delete-button-box'>

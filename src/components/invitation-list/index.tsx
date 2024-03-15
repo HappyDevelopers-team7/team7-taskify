@@ -1,20 +1,37 @@
 import { getInvitation } from '@/api/getInvitation';
 import InputSearch from '../input/input-search';
 import StInvitedSection from './style';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import NoInvitation from '../no-invitation';
-import { RootState, setInvitationList, updateInvitationList } from '@/redux/invitationSlice';
+import { InvitationRootState, setInvitationList, updateInvitationList } from '@/redux/invitationSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import { ModalRootState, openModal, setOpenModalName } from '@/redux/modalSlice';
+import RejectInvitation from '../modal-contents/reject-invitation';
+import AcceptInvitation from '../modal-contents/accept-invitation';
 
 const InvitedList = () => {
   const dispatch = useDispatch();
-  const initialInvitationList = useSelector((state: RootState) => state.invitationList.initialList);
-  const updatedInvitationList = useSelector((state: RootState) => state.invitationList.updatedList);
+  const initialInvitationList = useSelector((state: InvitationRootState) => state.invitationList.initialList);
+  const updatedInvitationList = useSelector((state: InvitationRootState) => state.invitationList.updatedList);
+  const openModalName = useSelector((state: ModalRootState) => state.modal.openModalName);
+  const [selectedInvitationId, setSelectedInvitationId] = useState(0);
 
   const setInvitation = async () => {
     const result = await getInvitation();
     dispatch(setInvitationList(result.invitations));
     dispatch(updateInvitationList(result.invitations));
+  };
+
+  const handleClickReject = (id: number) => {
+    setSelectedInvitationId(id);
+    dispatch(setOpenModalName('rejectInvitation'));
+    dispatch(openModal('rejectInvitation'));
+  };
+
+  const handleClickAccept = (id: number) => {
+    setSelectedInvitationId(id);
+    dispatch(setOpenModalName('acceptInvitation'));
+    dispatch(openModal('acceptInvitation'));
   };
 
   useEffect(() => {
@@ -40,7 +57,7 @@ const InvitedList = () => {
                 </colgroup>
                 <thead>
                   <tr>
-                    <th>이름</th>
+                    <th>대시보드 이름</th>
                     <th>초대자</th>
                     <th>수락 여부</th>
                   </tr>
@@ -56,10 +73,18 @@ const InvitedList = () => {
                             <span>수락 완료</span>
                           ) : (
                             <>
-                              <button type='button' className='button-reject'>
+                              <button
+                                type='button'
+                                className='button-reject'
+                                onClick={() => handleClickReject(item.id)}
+                              >
                                 거절
                               </button>
-                              <button type='button' className='button-accept'>
+                              <button
+                                type='button'
+                                className='button-accept'
+                                onClick={() => handleClickAccept(item.id)}
+                              >
                                 수락
                               </button>
                             </>
@@ -76,6 +101,8 @@ const InvitedList = () => {
           <NoInvitation />
         )}
       </StInvitedSection>
+      {openModalName === 'rejectInvitation' ? <RejectInvitation invitationId={selectedInvitationId} /> : null}
+      {openModalName === 'acceptInvitation' ? <AcceptInvitation invitationId={selectedInvitationId} /> : null}
     </>
   );
 };

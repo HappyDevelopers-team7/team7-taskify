@@ -50,6 +50,37 @@ const StDashBoardListSection = styled.section`
     justify-content: flex-end;
     gap: 16px;
     margin-top: 12px;
+
+    p {
+      font-size: 1.4rem;
+    }
+
+    .pagination-button {
+      display: flex;
+      align-items: center;
+
+      button {
+        width: 40px;
+        height: 40px;
+        background: ${({ theme }) => theme.color.white};
+        border: 1px solid ${({ theme }) => theme.color.gray_d9};
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        img {
+          width: 16px;
+          height: 16px;
+        }
+
+        &.prev-button {
+          border-radius: 4px 0 0 4px;
+        }
+        &.next-button {
+          border-radius: 0 4px 4px 0;
+        }
+      }
+    }
   }
 `;
 
