@@ -39,6 +39,15 @@ const Container = styled.header`
     gap: 12px;
     padding: 26px 80px 25px 0px;
 
+    .myinfo-image {
+      //임시로해놓음 나중에 잘되는지 체크해야됨.
+      display: flex;
+      width: 38px;
+      height: 38px;
+      flex-shrink: 0;
+      border-radius: 100%;
+    }
+
     .myinfo-color {
       display: flex;
       width: 38px;
@@ -57,6 +66,10 @@ const Container = styled.header`
         font-weight: 600;
         line-height: normal;
       }
+    }
+    .extracolor {
+      color: #d25b68;
+      background-color: #f4d7da;
     }
 
     .myinfo-name {
