@@ -7,7 +7,7 @@ import store from './store/store';
 export type AppDispatch = typeof store.dispatch;
 
 // 로그인된 내 정보 타입 정의
-interface SetMyInfo {
+export interface SetMyInfo {
   id: number | null;
   nickname: string;
   email: string;
