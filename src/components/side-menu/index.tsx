@@ -36,7 +36,7 @@ const SideMenu = () => {
 
   const setSideDashboardListResult = async () => {
     try {
-      const result = await getSideDashboardList(1);
+      const result = await getSideDashboardList(currentPage);
       if (result?.status === 401) {
         toast.error('액세스 토큰이 만료되었거나 유효하지 않습니다.');
         navigate('/');
@@ -68,7 +68,7 @@ const SideMenu = () => {
 
   useEffect(() => {
     setSideDashboardListResult();
-  }, [dispatch]);
+  }, [dispatch, currentPage]);
 
   return (
     <>
@@ -121,7 +121,7 @@ const SideMenu = () => {
             <img
               src={
                 currentPage === maximumPages
-                  ? '/assets/image/icons/arrowForwardIconGrayLeft.svg'
+                  ? '/assets/image/icons/arrowForwardIconGray.svg'
                   : '/assets/image/icons/arrowForwardIcon.svg'
               }
               alt='next-icon'
