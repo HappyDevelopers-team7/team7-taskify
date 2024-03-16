@@ -90,6 +90,11 @@ const StInvitedSection = styled.section`
       font-weight: 400;
     }
   }
+
+  #observer {
+    height: 10px;
+    width: 100%;
+  }
 `;
 
 export default StInvitedSection;

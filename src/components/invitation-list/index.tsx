@@ -1,7 +1,7 @@
 import { getInvitation } from '@/api/getInvitation';
 import InputSearch from '../input/input-search';
 import StInvitedSection from './style';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import NoInvitation from '../no-invitation';
 import { InvitationRootState, setInvitationList, updateInvitationList } from '@/redux/invitationSlice';
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,17 +9,58 @@ import { ModalRootState, openModal, setOpenModalName } from '@/redux/modalSlice'
 import RejectInvitation from '../modal-contents/reject-invitation';
 import AcceptInvitation from '../modal-contents/accept-invitation';
 
-const InvitedList = () => {
+const InvitationList = () => {
   const dispatch = useDispatch();
   const initialInvitationList = useSelector((state: InvitationRootState) => state.invitationList.initialList);
   const updatedInvitationList = useSelector((state: InvitationRootState) => state.invitationList.updatedList);
   const openModalName = useSelector((state: ModalRootState) => state.modal.openModalName);
   const [selectedInvitationId, setSelectedInvitationId] = useState(0);
+  const [invitationLoading, setInvitationLoading] = useState(false);
+  const [invitationLength, setInvitationLength] = useState(0);
+  const [size, setSize] = useState(10);
+  const observerTarget = useRef<HTMLDivElement>(null);
+  const preventRef = useRef(true); //옵저버 중복 실행 방지
+  const endRef = useRef(false); //모든 글 로드 확인
+
+  useEffect(() => {
+    //옵저버 생성
+    const observer = new IntersectionObserver(obsHandler, { threshold: 0.5 });
+    if (observerTarget.current) {
+      observer.observe(observerTarget.current);
+    }
+    return () => {
+      observer.disconnect();
+    };
+  });
 
   const setInvitation = async () => {
-    const result = await getInvitation();
-    dispatch(setInvitationList(result.invitations));
-    dispatch(updateInvitationList(result.invitations));
+    try {
+      setInvitationLoading(true);
+      const result = await getInvitation(size);
+      setInvitationLength(result.invitations.length);
+      dispatch(setInvitationList(result.invitations));
+      dispatch(updateInvitationList(result.invitations));
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error(error.message);
+      }
+    } finally {
+      setInvitationLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    setInvitation();
+  }, [size]);
+
+  const obsHandler = (entries: IntersectionObserverEntry[]) => {
+    //옵저버 콜백함수
+    const target = entries[0];
+    if (!endRef.current && target.isIntersecting && preventRef.current) {
+      //옵저버 중복 실행 방지
+      preventRef.current = false; //옵저버 중복 실행 방지
+      setSize((prev) => prev + 10); //페이지 값 증가
+    }
   };
 
   const handleClickReject = (id: number) => {
@@ -33,17 +74,13 @@ const InvitedList = () => {
     dispatch(setOpenModalName('acceptInvitation'));
     dispatch(openModal('acceptInvitation'));
   };
-
-  useEffect(() => {
-    setInvitation();
-  }, []);
   return (
     <>
       <StInvitedSection>
         <div className='invite-wrapper'>
           <h3>초대받은 대시보드</h3>
         </div>
-        {initialInvitationList.length > 0 ? (
+        {initialInvitationList.length > 0 && !invitationLoading ? (
           <>
             <div className='invite-wrapper'>
               <InputSearch />
@@ -95,6 +132,7 @@ const InvitedList = () => {
                   ))}
                 </tbody>
               </table>
+              {invitationLength >= 10 && <div ref={observerTarget}></div>}
             </div>
           </>
         ) : (
@@ -107,4 +145,4 @@ const InvitedList = () => {
   );
 };
 
-export default InvitedList;
+export default InvitationList;
