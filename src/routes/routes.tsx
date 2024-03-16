@@ -1,5 +1,7 @@
 import { lazy } from 'react';
 import { createBrowserRouter, createRoutesFromElements, Route } from 'react-router-dom';
+import Loading from './loading';
+import Layout from './layout';
 
 /*
 사용자가 처음 웹페이지에 진입하면, 번들링된 js파일을 다운받게 되는데,
@@ -16,14 +18,25 @@ const LandingPage = lazy(() => import('@pages/landing'));
 const SignInPage = lazy(() => import('@pages/sign-in'));
 const SignUpPage = lazy(() => import('@pages/sign-up'));
 const DashBoardPage = lazy(() => import('@pages/dashboard'));
+const DashBoardIdPage = lazy(() => import('@pages/dashboard-id'));
+const DashBoardTestPage = lazy(() => import('@pages/dashboard-test'));
+const ProtectedRoutes = lazy(() => import('@routes/protected-routes'));
 const NotFoundPage = lazy(() => import('@pages/not-found'));
 
 const PrimaryRoute = (
-  <Route path='/'>
-    <Route index element={<LandingPage />} />
-    <Route path='sign-in' element={<SignInPage />} />
-    <Route path='sign-up' element={<SignUpPage />} />
-    <Route path='dashboard' element={<DashBoardPage />} />
+  <Route path='/' element={<Loading />}>
+    <Route element={<ProtectedRoutes authentication={false} />}>
+      <Route index element={<LandingPage />} />
+      <Route path='sign-in' element={<SignInPage />} />
+      <Route path='sign-up' element={<SignUpPage />} />
+    </Route>
+    <Route element={<ProtectedRoutes authentication={true} />}>
+      <Route path='/' element={<Layout />}>
+        <Route path='dashboard' element={<DashBoardPage />} />
+        <Route path='dashboard/:id' element={<DashBoardIdPage />} />
+        <Route path='dashboard-test' element={<DashBoardTestPage />} />
+      </Route>
+    </Route>
     <Route path='*' element={<NotFoundPage />} />
   </Route>
 );

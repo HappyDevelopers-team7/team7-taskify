@@ -5,10 +5,9 @@
  */
 
 const theme = {
-  windowSize: {
-    mobile: `screen and (max-width: '375px')`,
-    tablet: `screen and (max-width: '768px')`,
-    pc: `screen and (max-width: '1025px')`,
+  deviceSize: {
+    mobile: 'screen and (max-width: 768px)',
+    tablet: 'screen and (max-width: 1025px)',
   },
   color: {
     white: '#ffffff',

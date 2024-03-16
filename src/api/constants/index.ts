@@ -8,6 +8,21 @@ const API = {
     MY_INFO: 'users/me',
     UPLOAD_IMAGE: 'users/me/image',
   },
+  DASHBOARDS: {
+    DASHBOARDS: 'dashboards',
+  },
+  INVITATIONS: {
+    INVITATIONS: 'invitations',
+  },
+  COLUMNS: {
+    COLUMNS: 'columns',
+  },
+  CARDS: {
+    CARDS: 'cards',
+  },
+  MEMBERS: {
+    MEMBERS: 'members',
+  },
 } as const;
 
 export default API;

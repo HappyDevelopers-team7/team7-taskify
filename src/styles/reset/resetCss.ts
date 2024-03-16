@@ -21,12 +21,6 @@ const resetCss = css`
     input,
     select,
     button {
-      /* 운영체제 및 브라우저에 기본적으로 설정되어 있는 테마를 기반으로 요소를 표현할 때 사용한다.
-        none 속성을 주면 기본으로 적용된 디자인을 초기화 한다. */
-      -webkit-appearance: none; /* safari / chrome */
-      -moz-appearance: none; /* Mozilla */
-      appearance: none;
-
       border: 0;
       background: transparent;
     }
@@ -41,12 +35,20 @@ const resetCss = css`
       text-decoration: none;
       color: unset;
       cursor: pointer;
+
+      &[role='button']:focus-visible {
+        border: 1px solid #007bff;
+      }
     }
 
     input,
     textarea {
       outline: none;
       resize: none;
+    }
+
+    ul {
+      list-style-type: none;
     }
   }
 `;
