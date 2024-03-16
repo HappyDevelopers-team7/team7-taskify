@@ -39,7 +39,7 @@ const ModalContainer = ({
 }: ModalProps) => {
   return (
     <PortalContainer>
-      <StModalContainer $modalWidth={modalWidth}>
+      <StModalContainer $modalWidth={modalWidth} role='dialog' aria-modal='true' tabIndex={0}>
         <div className='modal-dim' onClick={handleCloseModal}></div>
         <div className='modal-content'>
           {title ? <h2>{title}</h2> : null}

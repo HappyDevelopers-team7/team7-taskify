@@ -111,6 +111,7 @@ const InvitationList = () => {
                           ) : (
                             <>
                               <button
+                                aria-haspopup='true'
                                 type='button'
                                 className='button-reject'
                                 onClick={() => handleClickReject(item.id)}
@@ -118,6 +119,7 @@ const InvitationList = () => {
                                 거절
                               </button>
                               <button
+                                aria-haspopup='true'
                                 type='button'
                                 className='button-accept'
                                 onClick={() => handleClickAccept(item.id)}

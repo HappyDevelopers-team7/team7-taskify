@@ -63,7 +63,7 @@ const MyDashBoardList = ({ handleCreateDashboard }: MyDashBoardListProps) => {
       <StDashBoardListSection>
         <ul>
           <li>
-            <button type='button' onClick={handleCreateDashboard}>
+            <button aria-haspopup='true' type='button' onClick={handleCreateDashboard}>
               <p>새로운 대시보드 생성</p>
               <img src='assets/image/icons/bannerAddIcon.svg' alt='새로운 대시보드 생성하려면 클릭' />
             </button>
