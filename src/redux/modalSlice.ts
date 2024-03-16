@@ -2,7 +2,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import store from './store/store';
 
-export type RootState = ReturnType<typeof store.getState>;
+export type ModalRootState = ReturnType<typeof store.getState>;
 
 export interface ModalState {
   openModalName: string | number | null;

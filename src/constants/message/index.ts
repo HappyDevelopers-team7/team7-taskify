@@ -1,6 +1,8 @@
-/**
- * 로그인/ 회원가입 관련 에러 메시지 상수 모음
- */
+export const SIMPLE_MESSAGES = {
+  CANCELED: '취소 되었습니다.',
+  ACCEPTED: '수락 되었습니다.',
+} as const;
+
 export const AUTH_MESSAGES = {
   LOGIN_SUCCESS: '로그인 성공!',
   JOIN_SUCCESS: '가입이 완료되었습니다!',
@@ -27,3 +29,15 @@ export const INPUT_ERROR_MESSAGES = {
 export const DASHBOARD_MESSAGES = {
   CREATE_DASHBOARD: '대시보드가 생성되었습니다.',
 } as const;
+
+export const INVITATION_MESSAGES = {
+  REJECT_INVITATION: '거절되었습니다.',
+  ACCEPT_INVITATION: '수락되었습니다.',
+  REJECT_CANCELED: '초대 거절이 취소되었습니다.',
+  ACCEPT_CANCELED: '초대 수락이 취소되었습니다.',
+} as const;
+
+export const INVITATION_ERROR_MESSAGES = {
+  NOT_FOUND: '존재하지 않는 초대입니다.',
+  FAILED_TO_REJECT: '초대 거절에 실패하였습니다. 다시 시도해주세요.',
+};

@@ -1,3 +1,4 @@
+import removeDuplicates from '@/utils/removeDuplicates';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface AddDashBoard {
@@ -10,18 +11,21 @@ interface AddDashBoard {
   userId: number;
 }
 
-export interface RootState {
+export interface DashBoardRootState {
   dashboardList: {
     dashboardList: AddDashBoard[];
+    sideDashboardList: AddDashBoard[];
   };
 }
 
 interface DashboardState {
   dashboardList: AddDashBoard[];
+  sideDashboardList: AddDashBoard[];
 }
 
 const initialState: DashboardState = {
   dashboardList: [],
+  sideDashboardList: [],
 };
 
 const dashboardSlice = createSlice({
@@ -29,7 +33,10 @@ const dashboardSlice = createSlice({
   initialState: initialState,
   reducers: {
     setDashboardList(state, action) {
-      state.dashboardList = action.payload;
+      state.dashboardList = removeDuplicates(action.payload, 'id');
+    },
+    setSideDashboardList(state, action) {
+      state.sideDashboardList = removeDuplicates(action.payload, 'id');
     },
     addDashboard(state, action: PayloadAction<AddDashBoard>) {
       state.dashboardList.push(action.payload);
@@ -37,6 +44,6 @@ const dashboardSlice = createSlice({
   },
 });
 
-export const { setDashboardList, addDashboard } = dashboardSlice.actions;
+export const { setDashboardList, setSideDashboardList, addDashboard } = dashboardSlice.actions;
 
 export default dashboardSlice.reducer;

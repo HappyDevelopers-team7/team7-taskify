@@ -1,10 +1,9 @@
-import { MouseEvent, useEffect, useState } from 'react';
+import { MouseEvent, useEffect, useState, useCallback } from 'react';
 import MyDashBoardListItem from '../my-dashboard-list-item';
 import StDashBoardListSection from './style';
 import { getDashboardList } from '@/api/getDashboardList';
-import axiosInstance from '@/api/instance/axiosInstance';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState, setDashboardList } from '@/redux/dashboardListSlice';
+import { DashBoardRootState, setDashboardList } from '@/redux/dashboardListSlice';
 
 interface MyDashBoardListProps {
   handleCreateDashboard: (e: MouseEvent<HTMLButtonElement | HTMLDivElement>) => void;
@@ -12,11 +11,14 @@ interface MyDashBoardListProps {
 
 const MyDashBoardList = ({ handleCreateDashboard }: MyDashBoardListProps) => {
   const dispatch = useDispatch();
-  const dashboardList = useSelector((state: RootState) => state.dashboardList.dashboardList);
+  const dashboardList = useSelector((state: DashBoardRootState) => state.dashboardList.dashboardList);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPage, setTotalPage] = useState(0);
   const [errorMessage, setErrorMessage] = useState('');
-  const setDashboard = async () => {
+  const [previewDisabled, setPreviewDisabled] = useState(true);
+  const [nextDisabled, setNextDisabled] = useState(false);
+
+  const setDashboard = useCallback(async () => {
     try {
       const result = await getDashboardList(currentPage);
       dispatch(setDashboardList(result.dashboards));
@@ -26,41 +28,42 @@ const MyDashBoardList = ({ handleCreateDashboard }: MyDashBoardListProps) => {
         setErrorMessage(error.message);
       }
     }
-  };
+  }, [currentPage, dispatch]);
 
   const handleClickPreview = () => {
     if (currentPage > 1) {
       setCurrentPage(currentPage - 1);
+      setNextDisabled(false);
+      if (currentPage === 2) {
+        setPreviewDisabled(true);
+      }
+    } else {
+      setPreviewDisabled(true);
     }
   };
 
   const handleClickNext = () => {
     if (currentPage < totalPage) {
       setCurrentPage(currentPage + 1);
+      setPreviewDisabled(false);
+      if (currentPage === totalPage - 1) {
+        setNextDisabled(true);
+      }
+    } else {
+      setNextDisabled(true);
     }
-  };
-
-  const handleInviteMember = async () => {
-    const response = await axiosInstance.post(`dashboards/${4742}/invitations`, {
-      email: 'yum@naver.com',
-    });
-
-    const responseData = await response;
-    console.log(responseData);
-    return responseData;
   };
 
   useEffect(() => {
     setDashboard();
-  }, [currentPage]);
+  }, [currentPage, setDashboard]);
 
   return (
     <>
-      <button onClick={handleInviteMember}>초대하기 버튼 입니다.</button>
       <StDashBoardListSection>
         <ul>
           <li>
-            <button type='button' onClick={handleCreateDashboard}>
+            <button aria-haspopup='true' type='button' onClick={handleCreateDashboard}>
               <p>새로운 대시보드 생성</p>
               <img src='assets/image/icons/bannerAddIcon.svg' alt='새로운 대시보드 생성하려면 클릭' />
             </button>
@@ -83,14 +86,28 @@ const MyDashBoardList = ({ handleCreateDashboard }: MyDashBoardListProps) => {
         {totalPage > 1 ? (
           <div className='list-pagination'>
             <p>
-              {totalPage} 페이지 중 {currentPage}
+              {currentPage} / {totalPage}
             </p>
-            <div className=''>
-              <button type='button' aria-label='이전 목록' onClick={handleClickPreview}>
-                prev
+            <div className='pagination-button'>
+              <button className='prev-button' disabled={previewDisabled} type='button' onClick={handleClickPreview}>
+                <img
+                  src={
+                    currentPage <= 1
+                      ? '/assets/image/icons/arrowForwardIconGrayLeft.svg'
+                      : '/assets/image/icons/arrowForwardIconLeft.svg'
+                  }
+                  alt='이전 목록 버튼'
+                />
               </button>
-              <button type='button' aria-label='다음 목록' onClick={handleClickNext}>
-                next
+              <button className='next-button' disabled={nextDisabled} type='button' onClick={handleClickNext}>
+                <img
+                  src={
+                    currentPage === totalPage
+                      ? '/assets/image/icons/arrowForwardIconGray.svg'
+                      : '/assets/image/icons/arrowForwardIcon.svg'
+                  }
+                  alt='다음 목록 버튼'
+                />
               </button>
             </div>
           </div>
