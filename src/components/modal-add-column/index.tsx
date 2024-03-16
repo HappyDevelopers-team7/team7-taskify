@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { closeModal } from '@/redux/modalSlice';
 import axiosInstance from '@/api/instance/axiosInstance';
@@ -6,19 +6,29 @@ import { StColumnModal } from './style';
 import ModalContainer from '@/components/modal-container';
 import API from '@/api/constants';
 import { useParams } from 'react-router-dom';
+import { Columns } from '../../pages/dashboard-id';
 
 const ModalComponent = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const [newColumnName, setNewColumnName] = useState('');
+  const [columns, setColumns] = useState<Columns[]>();
 
   const handleCloseModal = () => {
-    dispatch(closeModal()); // 모달 닫기 외않되
+    dispatch(closeModal());
     setNewColumnName('');
   };
 
   const handleSubmitModal = () => {
     console.log('새로운 컬럼 이름:', newColumnName);
+
+    // 중복된 컬럼 이름 검사
+    const isDuplicate = columns?.some((column) => column.title === newColumnName);
+    if (isDuplicate) {
+      alert('중복된 컬럼 이름입니다.');
+      return;
+    }
+
     axiosInstance
       .post(API.COLUMNS.COLUMNS, {
         title: newColumnName,
@@ -26,11 +36,27 @@ const ModalComponent = () => {
       })
       .then(() => {
         dispatch(closeModal());
+        viewColumns();
       })
       .catch((error) => {
-        console.error('Post request error:', error);
+        console.error('post 에러! : ', error);
       });
   };
+
+  const viewColumns = () => {
+    axiosInstance
+      .get(`${API.COLUMNS.COLUMNS}?dashboardId=${id}`)
+      .then((res) => {
+        setColumns(res.data.data);
+      })
+      .catch((error) => {
+        console.error('컬럼 가져오기 실패 : ', error);
+      });
+  };
+
+  useEffect(() => {
+    viewColumns(); // 초기 렌더링 시에 컬럼 데이터를 가져옴
+  }, [id]);
 
   return (
     <ModalContainer

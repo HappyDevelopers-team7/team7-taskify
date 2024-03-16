@@ -1,19 +1,6 @@
 import { inputContainer } from '@/styles/input/style';
 import styled from 'styled-components';
 
-export const StModalTest = styled.div`
-  margin: 30px;
-
-  button {
-    width: 100px;
-    height: 50px;
-    background-color: green;
-    margin-top: 50px;
-    border-style: solid;
-    border-color: white;
-  }
-`;
-
 export const StColumnModal = styled.div`
   /* ${inputContainer} */
 

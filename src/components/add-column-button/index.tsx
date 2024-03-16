@@ -5,7 +5,6 @@ import { openModal } from '@/redux/modalSlice';
 
 interface Props {
   children: ReactNode;
-  createColumns?: () => void;
 }
 
 const AddColumnButton = ({ children }: Props) => {

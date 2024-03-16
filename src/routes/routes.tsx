@@ -22,7 +22,7 @@ const DashBoardIdPage = lazy(() => import('@pages/dashboard-id'));
 const DashBoardTestPage = lazy(() => import('@pages/dashboard-test'));
 const ProtectedRoutes = lazy(() => import('@routes/protected-routes'));
 const NotFoundPage = lazy(() => import('@pages/not-found'));
-const ModalTestPage = lazy(() => import('@pages/modal-test'));
+const ModalTestPage = lazy(() => import('@/components/modal-add-column'));
 
 const PrimaryRoute = (
   <Route path='/' element={<Loading />}>

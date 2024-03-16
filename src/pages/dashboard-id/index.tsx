@@ -6,7 +6,7 @@ import API from '@/api/constants';
 import { useEffect, useState } from 'react';
 import Column from '@/components/column';
 import LoadingSpinner from '@/components/loading-spinner';
-import ModalComponent from '../modal-test';
+import ModalComponent from '../../components/modal-add-column';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/modalSlice';
 
