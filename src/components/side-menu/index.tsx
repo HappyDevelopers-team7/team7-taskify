@@ -1,10 +1,13 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Container from './style';
-import Cookies from 'js-cookie';
-import axiosInstance from '@/api/instance/axiosInstance';
-import API from '@/api/constants';
-import randomHexCode from '@/utils/randomHexCode';
+import CreateDashboard from '../modal-contents/create-dashboard';
+import { useDispatch, useSelector } from 'react-redux';
+import { ModalRootState, openModal, setOpenModalName } from '@/redux/modalSlice';
+import { DashBoardRootState, setSideDashboardList } from '@/redux/dashboardListSlice';
+import { getSideDashboardList } from '@/api/getSideDashboardList';
+import { AxiosError } from 'axios';
+import { toast } from 'react-toastify';
 
 export type Dashboards = {
   color: string;
@@ -17,48 +20,34 @@ export type Dashboards = {
 };
 
 const SideMenu = () => {
+  const dispatch = useDispatch();
+  const openModalName = useSelector((state: ModalRootState) => state.modal.openModalName);
+  const sideDashboardList = useSelector((state: DashBoardRootState) => state.dashboardList.sideDashboardList);
   const [selected, setSelected] = useState<number | null>(null);
   const [maximumPages, setMaximumPages] = useState<number>(1);
-  const [dashboards, setDashboards] = useState<Dashboards[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [token, setToken] = useState<string>('');
   const scrollHandler = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
-  const createDashboard = () => {
-    // 대시보드 생성 임시함수
-    const name = prompt('대시보드 이름을 입력하세요');
-
-    if (name) {
-      axiosInstance
-        .post(API.DASHBOARDS.DASHBOARDS, {
-          title: name,
-          color: randomHexCode(),
-        })
-        .then(() => {
-          viewDashboard();
-        });
-    } else {
-      alert('이름을 쓰라고');
-    }
+  const handleClickCreateDashboard = () => {
+    dispatch(setOpenModalName('createDashboard'));
+    dispatch(openModal('createDashboard'));
   };
 
-  const viewDashboard = () => {
-    axiosInstance
-      .get(`${API.DASHBOARDS.DASHBOARDS}?navigationMethod=pagination&page=${currentPage}&size=18`)
-      .then((res) => {
-        setMaximumPages(Math.ceil(res.data.totalCount / 18));
-        setDashboards(res.data.dashboards);
-        if (scrollHandler.current) {
-          scrollHandler.current.scrollTop = 0;
-        }
-      })
-      .catch((err) => {
-        if (err.response && err.response.status === 401) {
-          console.error('액세스 토큰이 만료되었거나 유효하지 않습니다.');
-          navigate('/');
-        }
-      });
+  const setSideDashboardListResult = async () => {
+    try {
+      const result = await getSideDashboardList(currentPage);
+      if (result?.status === 401) {
+        toast.error('액세스 토큰이 만료되었거나 유효하지 않습니다.');
+        navigate('/');
+        return;
+      }
+      dispatch(setSideDashboardList(result.dashboards));
+      setMaximumPages(Math.ceil(result.totalCount / 18));
+    } catch (e) {
+      const error = e as AxiosError;
+      console.error(error.response);
+    }
   };
 
   const handleSelectedDashboard = (id: number) => {
@@ -78,63 +67,70 @@ const SideMenu = () => {
   };
 
   useEffect(() => {
-    setToken(Cookies.get('accessToken') as string);
-    viewDashboard();
-  }, [currentPage, token]);
+    setSideDashboardListResult();
+  }, [dispatch, currentPage]);
 
   return (
-    <Container ref={scrollHandler}>
-      <Link to={'/'}>
-        <img src='/assets/image/logos/mediumLogo.svg' className='logo' alt='logo-image' />
-      </Link>
+    <>
+      <Container ref={scrollHandler}>
+        <Link to={'/'}>
+          <img src='/assets/image/logos/mediumLogo.svg' className='logo' alt='logo-image' />
+        </Link>
 
-      <div className='sidemenu-head'>
-        <span>Dash Boards</span>
-        <img src='/assets/image/icons/addBoxIcon.svg' className='add-button' alt='add-icon' onClick={createDashboard} />
-      </div>
-
-      <div className='sidemenu-body'>
-        <ul className='list'>
-          {dashboards.map((data) => (
-            <li
-              key={data.id}
-              className={`dashboard ${selected === data.id ? 'selected' : ''}`}
-              onClick={() => {
-                handleSelectedDashboard(data.id);
-                navigate(`/dashboard/${data.id}`);
-              }}
-            >
-              <div className='dashboard-color' style={{ background: data.color }} />
-              <span>{data.title}</span>
-              {data.createdByMe && <img src='/assets/image/icons/crownIcon.svg' alt='crown-icon' />}
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      <div className='sidemenu-foot'>
-        <button type='button' className='page-button prev-page' onClick={handlePrevPage}>
+        <div className='sidemenu-head'>
+          <span>Dash Boards</span>
           <img
-            src={
-              currentPage === 1
-                ? '/assets/image/icons/arrowForwardIconGrayLeft.svg'
-                : '/assets/image/icons/arrowForwardIconLeft.svg'
-            }
-            alt='prev-icon'
+            src='/assets/image/icons/addBoxIcon.svg'
+            className='add-button'
+            alt='add-icon'
+            onClick={handleClickCreateDashboard}
           />
-        </button>
-        <button type='button' className='page-button next-page' onClick={handleNextPage}>
-          <img
-            src={
-              currentPage === maximumPages
-                ? '/assets/image/icons/arrowForwardIconGrayLeft.svg'
-                : '/assets/image/icons/arrowForwardIcon.svg'
-            }
-            alt='next-icon'
-          />
-        </button>
-      </div>
-    </Container>
+        </div>
+
+        <div className='sidemenu-body'>
+          <ul className='list'>
+            {sideDashboardList.map((data) => (
+              <li
+                key={data.id}
+                className={`dashboard ${selected === data.id ? 'selected' : ''}`}
+                onClick={() => {
+                  handleSelectedDashboard(data.id);
+                  navigate(`/dashboard/${data.id}`);
+                }}
+              >
+                <div className='dashboard-color' style={{ background: data.color }} />
+                <span>{data.title}</span>
+                {data.createdByMe && <img src='/assets/image/icons/crownIcon.svg' alt='crown-icon' />}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className='sidemenu-foot'>
+          <button type='button' className='page-button prev-page' onClick={handlePrevPage}>
+            <img
+              src={
+                currentPage === 1
+                  ? '/assets/image/icons/arrowForwardIconGrayLeft.svg'
+                  : '/assets/image/icons/arrowForwardIconLeft.svg'
+              }
+              alt='prev-icon'
+            />
+          </button>
+          <button type='button' className='page-button next-page' onClick={handleNextPage}>
+            <img
+              src={
+                currentPage === maximumPages
+                  ? '/assets/image/icons/arrowForwardIconGray.svg'
+                  : '/assets/image/icons/arrowForwardIcon.svg'
+              }
+              alt='next-icon'
+            />
+          </button>
+        </div>
+      </Container>
+      {openModalName === 'createDashboard' ? <CreateDashboard /> : null}
+    </>
   );
 };
 

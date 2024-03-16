@@ -3,7 +3,7 @@ import MyDashBoardListItem from '../my-dashboard-list-item';
 import StDashBoardListSection from './style';
 import { getDashboardList } from '@/api/getDashboardList';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState, setDashboardList } from '@/redux/dashboardListSlice';
+import { DashBoardRootState, setDashboardList } from '@/redux/dashboardListSlice';
 
 interface MyDashBoardListProps {
   handleCreateDashboard: (e: MouseEvent<HTMLButtonElement | HTMLDivElement>) => void;
@@ -11,7 +11,7 @@ interface MyDashBoardListProps {
 
 const MyDashBoardList = ({ handleCreateDashboard }: MyDashBoardListProps) => {
   const dispatch = useDispatch();
-  const dashboardList = useSelector((state: RootState) => state.dashboardList.dashboardList);
+  const dashboardList = useSelector((state: DashBoardRootState) => state.dashboardList.dashboardList);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPage, setTotalPage] = useState(0);
   const [errorMessage, setErrorMessage] = useState('');
@@ -63,7 +63,7 @@ const MyDashBoardList = ({ handleCreateDashboard }: MyDashBoardListProps) => {
       <StDashBoardListSection>
         <ul>
           <li>
-            <button type='button' onClick={handleCreateDashboard}>
+            <button aria-haspopup='true' type='button' onClick={handleCreateDashboard}>
               <p>새로운 대시보드 생성</p>
               <img src='assets/image/icons/bannerAddIcon.svg' alt='새로운 대시보드 생성하려면 클릭' />
             </button>
