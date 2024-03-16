@@ -10,7 +10,7 @@ import ModalContainer from '../modal-container';
 import LoadingSpinner from '@/components/loading-spinner';
 import Flatpickr from 'react-flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
-import dateExtractor from '@/hooks/dateExtractor';
+import dateExtractor from '@/utils/dateExtractor';
 
 interface Props {
   columnData: Columns;
