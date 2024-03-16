@@ -188,7 +188,15 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId }: Props) => 
   useEffect(() => {
     viewCards();
     dispatch(fetchMyInfo());
-  }, [dispatch]);
+    if (memberData.length > 0) {
+      // 멤버 목록을 받아왔을때 프로필이 null이면 기본값으로 변경
+      memberData.forEach((member) => {
+        member.profileImageUrl = member.profileImageUrl
+          ? member.profileImageUrl
+          : '/assets/image/icons/bannerLogoIconXL.svg';
+      });
+    }
+  }, [dispatch, memberData]);
 
   useEffect(() => {
     // 입력값이 변할때마다 검색결과 재적용
@@ -240,6 +248,7 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId }: Props) => 
                 onFocus={(e) => asigneeDropdownChecker(e)}
                 onBlur={() => setIsDropdownAsignee(false)}
               />
+              <img src='/assets/image/icons/arrowDropDownIcon.svg' alt='dropdown-icon' className='dropdown-icon' />
               {userProfile && <img src={userProfile} className='user-image in-searchbar' />}
               <div className='input-box member-list'>
                 {isDropdownAsignee &&
@@ -251,7 +260,13 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId }: Props) => 
                         handleClickedMember(member);
                       }}
                     >
-                      <img src={member.profileImageUrl} alt='profile-image' className='user-image' />
+                      <img
+                        src={
+                          member.profileImageUrl ? member.profileImageUrl : '/assets/image/icons/bannerLogoIconXL.svg'
+                        }
+                        alt='profile-image'
+                        className='user-image'
+                      />
                       <span className='user-name'>{member.nickname}</span>
                     </div>
                   ))}
