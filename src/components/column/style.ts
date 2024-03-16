@@ -71,8 +71,17 @@ export const ColumnContainer = styled.div`
     font-size: 3rem;
   }
 `;
-
-export const ModalContent = styled.div<{ $Image: string | null; $Text: boolean; $Profile: string | undefined }>`
+type Tag = {
+  name: string;
+  backgroundColor: string;
+  id: number;
+};
+export const ModalContent = styled.div<{
+  $Image: string | null;
+  $Text: boolean;
+  $Profile: string | undefined;
+  $Tag: Tag[];
+}>`
   height: auto;
 
   &::-webkit-scrollbar {
@@ -132,6 +141,10 @@ export const ModalContent = styled.div<{ $Image: string | null; $Text: boolean; 
     flex-direction: column;
   }
 
+  .input-box.tag-input {
+    margin-bottom: ${(props) => (props.$Tag.length !== 0 ? '0;' : '32px;')};
+  }
+
   .member {
     width: 90%;
     padding: 10px;
@@ -170,6 +183,13 @@ export const ModalContent = styled.div<{ $Image: string | null; $Text: boolean; 
     background-repeat: no-repeat;
     background-position: 10px;
     padding-left: 35px;
+  }
+
+  .input-box.tag-list {
+    ${(props) => (props.$Tag.length !== 0 ? 'display:flex;' : 'display:none;')}
+    gap: 6px;
+    flex-wrap: wrap;
+    border: none;
   }
 
   .upload-button-box {

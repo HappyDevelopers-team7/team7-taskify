@@ -27,6 +27,13 @@ export type Members = {
   userId: number;
 };
 
+export type Tag = {
+  id: number;
+  name: string;
+  backgroundColor: string;
+  color: string;
+};
+
 const DashBoardId = () => {
   const { id } = useParams();
   const [columns, setColumns] = useState<Columns[]>([]);
@@ -80,10 +87,10 @@ const DashBoardId = () => {
         columns.map((columnData) => (
           <Column
             key={columnData.id}
+            dashboardId={id}
             columnData={columnData}
             memberData={members}
             viewColumns={viewColumns}
-            dashboardId={id}
           />
         ))}
       <div className='button-box'>

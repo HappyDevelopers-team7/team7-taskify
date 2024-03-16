@@ -4,13 +4,15 @@ import { ColumnContainer, ModalContent } from './style';
 import { Columns, Members } from '@/pages/dashboard-id';
 import axiosInstance from '@/api/instance/axiosInstance';
 import API from '@/api/constants';
-import { ChangeEvent, useEffect, useState, useRef } from 'react';
+import { ChangeEvent, useEffect, useState, useRef, KeyboardEvent } from 'react';
 import { ModalRootState, closeModal, openModal, setOpenModalName } from '@/redux/modalSlice';
 import ModalContainer from '../modal-container';
 import LoadingSpinner from '@/components/loading-spinner';
 import Flatpickr from 'react-flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 import dateExtractor from '@/utils/dateExtractor';
+import randomHexCode from '@/utils/randomHexCode';
+import TagComponent from '../tag-component';
 
 interface Props {
   columnData: Columns;
@@ -30,6 +32,12 @@ interface Types {
     title: string;
     description: string;
     dueDate: string;
+    tag: string;
+  };
+  Tag: {
+    id: number;
+    name: string;
+    backgroundColor: string;
   };
 }
 
@@ -41,16 +49,18 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId }: Props) => 
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const [isDropdown, setIsDropdown] = useState(false);
+  const [isDropdownAsignee, setIsDropdownAsignee] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const [filterdMember, SetFilterdMember] = useState<Members[]>([]);
   const [userProfile, setUserProfile] = useState<string | undefined>('');
   const asigneeRef = useRef<number | null>(null);
+  const [tags, setTags] = useState<Types['Tag'][]>([]);
   const [createCardData, setCreateCardData] = useState<Types['CreateCardData']>({
     asignee: '',
     title: '',
     description: '',
     dueDate: '',
+    tag: '',
   });
 
   const openModalName = useSelector((state: ModalRootState) => state.modal.openModalName);
@@ -67,7 +77,8 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId }: Props) => 
     setUploadedFile(null);
     setPreviewUrl(null);
     setUserProfile(undefined);
-    setCreateCardData({ asignee: '', title: '', description: '', dueDate: '' });
+    setCreateCardData({ asignee: '', title: '', description: '', dueDate: '', tag: '' });
+    setTags([]);
     asigneeRef.current = null;
   };
 
@@ -86,15 +97,16 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId }: Props) => 
         title: createCardData.title,
         description: createCardData.description,
         dueDate: createCardData.dueDate,
-        tags: ['태그1', '태그2', '태그3'],
+        tags: tags.map((item) => item.name),
         imageUrl: res.data.profileImageUrl,
       });
 
       alert('카드생성 완료');
-      setCreateCardData({ asignee: '', title: '', description: '', dueDate: '' });
+      setCreateCardData({ asignee: '', title: '', description: '', dueDate: '', tag: '' });
       setPreviewUrl(null);
       setUploadedFile(null);
       setUserProfile(undefined);
+      setTags([]);
       dispatch(closeModal());
       viewCards();
     } catch (err) {
@@ -136,25 +148,40 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId }: Props) => 
     }
   };
 
-  const dropdownChecker = (e: ChangeEvent<HTMLInputElement>) => {
+  const asigneeDropdownChecker = (e: ChangeEvent<HTMLInputElement>) => {
     // 모달 드롭다운 온오프 함수
     if (e.target.value || document.activeElement === e.target) {
       setCreateCardData({ ...createCardData, asignee: e.target.value });
-      setIsDropdown(true);
+      setIsDropdownAsignee(true);
       setUserProfile(undefined);
     } else {
-      setIsDropdown(false);
+      setIsDropdownAsignee(false);
     }
   };
 
   const handleClickedMember = (member: Members) => {
     // 클릭된 담당자
     setCreateCardData({ ...createCardData, asignee: member.nickname });
-    setIsDropdown(false);
+    setIsDropdownAsignee(false);
     setUserProfile(member.profileImageUrl);
     asigneeRef.current = member.userId;
     if (inputRef.current) {
       inputRef.current.value = member.nickname;
+    }
+  };
+
+  const handleCreateTag = (e: KeyboardEvent<HTMLInputElement>) => {
+    // 태그 생성 함수
+    if (e.key === 'Enter') {
+      const input = createCardData.tag;
+      const tag = {
+        id: Date.now(),
+        name: input,
+        backgroundColor: randomHexCode(),
+        color: randomHexCode(),
+      };
+      setTags((prev) => [...prev, tag]);
+      setCreateCardData({ ...createCardData, tag: '' });
     }
   };
 
@@ -199,7 +226,7 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId }: Props) => 
           handleCloseModal={handleCloseCreateCard}
           handleSubmitModal={handleSubmitCreateCard}
         >
-          <ModalContent $Image={previewUrl} $Text={isDropdown} $Profile={userProfile}>
+          <ModalContent $Image={previewUrl} $Text={isDropdownAsignee} $Profile={userProfile} $Tag={tags}>
             {isLoading && <LoadingSpinner />}
 
             <div className='first-div'>
@@ -209,13 +236,13 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId }: Props) => 
                 placeholder='이름을 입력해 주세요'
                 type='text'
                 ref={inputRef}
-                onChange={(e) => dropdownChecker(e)}
-                onFocus={(e) => dropdownChecker(e)}
-                onBlur={() => setIsDropdown(false)}
+                onChange={(e) => asigneeDropdownChecker(e)}
+                onFocus={(e) => asigneeDropdownChecker(e)}
+                onBlur={() => setIsDropdownAsignee(false)}
               />
               {userProfile && <img src={userProfile} className='user-image in-searchbar' />}
               <div className='input-box member-list'>
-                {isDropdown &&
+                {isDropdownAsignee &&
                   filterdMember.map((member) => (
                     <div
                       key={member.id}
@@ -264,14 +291,25 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId }: Props) => 
                   minDate: dateExtractor(today).slice(0, 10),
                   closeOnSelect: true,
                 }}
-                onChange={(e) => {
-                  setCreateCardData({ ...createCardData, dueDate: dateExtractor(e[0]) });
-                }}
+                onChange={(e) => setCreateCardData({ ...createCardData, dueDate: dateExtractor(e[0]) })}
               />
             </div>
             <div>
               <h3>태그</h3>
-              <input className='input-box' placeholder='입력 후 Enter' type='text' />
+              <input
+                value={createCardData.tag}
+                className='input-box tag-input'
+                placeholder='입력 후 Enter'
+                type='text'
+                onKeyDown={(e) => handleCreateTag(e)}
+                onChange={(e) => setCreateCardData({ ...createCardData, tag: e.target.value })}
+              />
+              <div className='input-box tag-list'>
+                {tags &&
+                  tags.map((tag) => (
+                    <TagComponent key={tag.id} id={tag.id} name={tag.name} backgroundColor={tag.backgroundColor} />
+                  ))}
+              </div>
             </div>
             <div>
               <h3>이미지</h3>
