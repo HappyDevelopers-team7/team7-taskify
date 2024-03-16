@@ -4,6 +4,7 @@ import Container from './style';
 import Cookies from 'js-cookie';
 import axiosInstance from '@/api/instance/axiosInstance';
 import API from '@/api/constants';
+import randomHexCode from '@/utils/randomHexCode';
 
 export type Dashboards = {
   color: string;
@@ -26,18 +27,13 @@ const SideMenu = () => {
 
   const createDashboard = () => {
     // 대시보드 생성 임시함수
-    const generateRandomHexCode = () => {
-      const letters = '0123456789ABCDEF';
-      return '#' + Array.from({ length: 6 }, () => letters[Math.floor(Math.random() * 16)]).join('');
-    };
-
     const name = prompt('대시보드 이름을 입력하세요');
 
     if (name) {
       axiosInstance
         .post(API.DASHBOARDS.DASHBOARDS, {
           title: name,
-          color: generateRandomHexCode(),
+          color: randomHexCode(),
         })
         .then(() => {
           viewDashboard();
