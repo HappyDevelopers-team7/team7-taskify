@@ -1,12 +1,12 @@
 import { ChangeEvent, FormEvent, useState } from 'react';
 import StInputSearchContainer from './style';
-import { RootState, filterInvitationsByTitle, updateInvitationList } from '@/redux/invitationSlice';
+import { InvitationRootState, filterInvitationsByTitle, updateInvitationList } from '@/redux/invitationSlice';
 import { useDispatch, useSelector } from 'react-redux';
 
 const InputSearch = () => {
   const dispatch = useDispatch();
-  const initialInvitationList = useSelector((state: RootState) => state.invitationList.initialList);
-  const updatedInvitationList = useSelector((state: RootState) => state.invitationList.updatedList);
+  const initialInvitationList = useSelector((state: InvitationRootState) => state.invitationList.initialList);
+  const updatedInvitationList = useSelector((state: InvitationRootState) => state.invitationList.updatedList);
   const [searchKeyword, setSearchKeyword] = useState('');
 
   const handleChangeSearchKeyword = (e: ChangeEvent<HTMLInputElement>) => {
