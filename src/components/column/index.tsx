@@ -9,6 +9,7 @@ import { RootState, closeModal, openModal, setOpenModalName } from '@/redux/moda
 import ModalContainer from '../modal-container';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
+import EditColumnModal from '../modal-edit-column';
 
 interface Props {
   props: Columns;
@@ -44,6 +45,12 @@ const Column = ({ props, viewColumns, dashboardId }: Props) => {
     enableTime: true,
     dateFormat: 'Y-m-d H:i',
   });
+
+  const handleEditColumn = () => {
+    setOpenModalName(`editcolumn${props.id}`);
+    dispatch(openModal(`editcolumn${props.id}`));
+    viewColumns();
+  };
 
   const handleCreateCard = () => {
     dispatch(setOpenModalName(`createcard${props.id}`));
@@ -141,7 +148,7 @@ const Column = ({ props, viewColumns, dashboardId }: Props) => {
         <div className='column-color' />
         <h2>{props.title}</h2>
         <div className='inner-cards'>{cardInfo?.totalCount}</div>
-        <img src='/assets/image/icons/settingIcon.svg' alt='setting-icon' onClick={removeColumn} />
+        <img src='/assets/image/icons/settingIcon.svg' alt='setting-icon' onClick={handleEditColumn} />
       </div>
 
       <div className='column-body'>
@@ -156,6 +163,7 @@ const Column = ({ props, viewColumns, dashboardId }: Props) => {
           <img src='/assets/image/icons/bannerAddIcon.svg' alt='add-icon' />
         </button>
       </div>
+
       {openModalName === `createcard${props.id}` ? (
         <ModalContainer
           title='할 일 생성'
@@ -220,6 +228,10 @@ const Column = ({ props, viewColumns, dashboardId }: Props) => {
           </ModalContent>
         </ModalContainer>
       ) : null}
+
+      {openModalName === `editcolumn${props.id}` && (
+        <EditColumnModal columnId={props.id} columnName={props.title} handleEditColumn={handleEditColumn} />
+      )}
     </ColumnContainer>
   );
 };

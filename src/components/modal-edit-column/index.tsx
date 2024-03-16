@@ -5,16 +5,20 @@ import axiosInstance from '@/api/instance/axiosInstance';
 import { StColumnModal } from './style';
 import ModalContainer from '@/components/modal-container';
 import API from '@/api/constants';
-import { useParams } from 'react-router-dom';
 
-const EditColumnModal = ({ columnName, handleUpdateColumn }) => {
-  const { id } = useParams();
+interface Props {
+  columnId: number;
+  columnName: string | undefined;
+  handleEditColumn: (columnId: number, editedColumnName: string) => void;
+}
+
+const EditColumnModal = ({ columnId, columnName, handleEditColumn }: Props) => {
   const dispatch = useDispatch();
-  const [editedColumnName, setEditedColumnName] = useState('');
+  const [editedColumnName, setEditedColumnName] = useState(columnName); // 수정 상태 추가
 
   const handleCloseModal = () => {
     dispatch(closeModal());
-    setEditedColumnName('');
+    setEditedColumnName(''); // 수정 상태 초기화
   };
 
   const handleSubmitModal = () => {
@@ -24,12 +28,12 @@ const EditColumnModal = ({ columnName, handleUpdateColumn }) => {
     }
 
     axiosInstance
-      .put(`${API.COLUMNS.COLUMNS}/${id}`, {
+      .put(`${API.COLUMNS.COLUMNS}/${columnId}`, {
         title: editedColumnName,
       })
       .then(() => {
+        handleEditColumn(columnId, editedColumnName);
         dispatch(closeModal());
-        handleUpdateColumn(id, editedColumnName);
       })
       .catch((error) => {
         console.error('컬럼 수정 에러:', error);
@@ -42,7 +46,7 @@ const EditColumnModal = ({ columnName, handleUpdateColumn }) => {
 
   return (
     <ModalContainer
-      title='컬럼 수정'
+      title='컬럼 관리'
       closeButtonName='취소'
       submitButtonName='수정하기'
       modalWidth={540}
