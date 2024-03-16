@@ -8,7 +8,7 @@ import Column from '@/components/column';
 import LoadingSpinner from '@/components/loading-spinner';
 import AddColumnModal from '../../components/modal-add-column';
 import { useSelector } from 'react-redux';
-import { RootState } from '@reduxjs/toolkit/query';
+import { ModalRootState } from '@/redux/modalSlice';
 
 export type Columns = {
   createdAt: string;
@@ -41,7 +41,7 @@ const DashBoardId = () => {
   const { id } = useParams();
   const [columns, setColumns] = useState<Columns[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const openModalName = useSelector((state: RootState) => state.modal.openModalName);
+  const openModalName = useSelector((state: ModalRootState) => state.modal.openModalName);
   const [members, setMembers] = useState<Members[]>([]);
 
   const viewColumns = () => {

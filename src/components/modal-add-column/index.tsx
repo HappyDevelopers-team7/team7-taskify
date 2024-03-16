@@ -9,7 +9,7 @@ import { useParams } from 'react-router-dom';
 import { Columns } from '../../pages/dashboard-id';
 
 interface AddColumnModalProps {
-  setColumns: Dispatch<SetStateAction<Columns[] | undefined>>;
+  setColumns: Dispatch<SetStateAction<Columns[]>>;
 }
 
 const AddColumnModal = ({ setColumns }: AddColumnModalProps) => {
