@@ -10,9 +10,10 @@ interface Props {
   columnId: number;
   columnName: string | undefined;
   handleEditColumn: (columnId: number, editedColumnName: string) => void;
+  handleDeleteColumn: () => void;
 }
 
-const EditColumnModal = ({ columnId, columnName, handleEditColumn }: Props) => {
+const EditColumnModal = ({ columnId, columnName, handleEditColumn, handleDeleteColumn }: Props) => {
   const dispatch = useDispatch();
   const [editedColumnName, setEditedColumnName] = useState(columnName); // 수정 상태 추가
 
@@ -52,6 +53,8 @@ const EditColumnModal = ({ columnId, columnName, handleEditColumn }: Props) => {
       modalWidth={540}
       handleCloseModal={handleCloseModal}
       handleSubmitModal={handleSubmitModal}
+      isDeletable={true}
+      handleDeleteModal={handleDeleteColumn}
     >
       <StColumnModal>
         <h3>이름</h3>
