@@ -76,13 +76,14 @@ type Tag = {
   backgroundColor: string;
   id: number;
 };
+
 export const ModalContent = styled.div<{
   $Image: string | null;
   $Text: boolean;
   $Profile: string | undefined;
   $Tag: Tag[];
 }>`
-  height: auto;
+  height: 65vh;
 
   &::-webkit-scrollbar {
     width: 3px;
