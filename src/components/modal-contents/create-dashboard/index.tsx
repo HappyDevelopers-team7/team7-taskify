@@ -9,8 +9,9 @@ import StCreateDashboard from './style';
 import InputColorPicker from '@/components/input/input-color-picker';
 import { postCreateDashboard } from '@/api/postCreateDashboard';
 import { toast } from 'react-toastify';
-import { setDashboardList } from '@/redux/dashboardListSlice';
+import { setDashboardList, setSideDashboardList } from '@/redux/dashboardListSlice';
 import { getDashboardList } from '@/api/getDashboardList';
+import { getSideDashboardList } from '@/api/getSideDashboardList';
 
 const CreateDashboard = () => {
   const dispatch = useDispatch();
@@ -29,7 +30,9 @@ const CreateDashboard = () => {
       const result = await postCreateDashboard(dashboardNameInputValue, dashboardColorValue);
       if (result && result.status === 201) {
         const getDashboardListResult = await getDashboardList(1);
+        const getSideDashboardListResult = await getSideDashboardList(1);
         dispatch(setDashboardList(getDashboardListResult.dashboards));
+        dispatch(setSideDashboardList(getSideDashboardListResult.dashboards));
         toast.success(DASHBOARD_MESSAGES.CREATE_DASHBOARD); // 대시보드 생성 성공!
       }
       dispatch(closeModal());
