@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { closeModal } from '@/redux/modalSlice';
 import axiosInstance from '@/api/instance/axiosInstance';
@@ -8,11 +8,26 @@ import API from '@/api/constants';
 import { useParams } from 'react-router-dom';
 import { Columns } from '../../pages/dashboard-id';
 
-const ModalComponent = () => {
+interface AddColumnModalProps {
+  setColumns: Dispatch<SetStateAction<Columns[]>>;
+}
+
+const AddColumnModal = ({ setColumns }: AddColumnModalProps) => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const [newColumnName, setNewColumnName] = useState('');
-  const [columns, setColumns] = useState<Columns[]>();
+  const [existingColumns, setExistingColumns] = useState<string[]>([]);
+
+  useEffect(() => {
+    axiosInstance
+      .get(`${API.COLUMNS.COLUMNS}?dashboardId=${id}`)
+      .then((res) => {
+        setExistingColumns(res.data.data.map((column: { title: string }) => column.title));
+      })
+      .catch((error) => {
+        console.error('컬럼 가져오기 실패 : ', error);
+      });
+  }, [id]);
 
   const handleCloseModal = () => {
     dispatch(closeModal());
@@ -22,9 +37,7 @@ const ModalComponent = () => {
   const handleSubmitModal = () => {
     console.log('새로운 컬럼 이름:', newColumnName);
 
-    // 중복된 컬럼 이름 검사
-    const isDuplicate = columns?.some((column) => column.title === newColumnName);
-    if (isDuplicate) {
+    if (existingColumns.includes(newColumnName)) {
       alert('중복된 컬럼 이름입니다.');
       return;
     }
@@ -55,7 +68,7 @@ const ModalComponent = () => {
   };
 
   useEffect(() => {
-    viewColumns(); // 초기 렌더링 시에 컬럼 데이터를 가져옴
+    viewColumns();
   }, [id]);
 
   return (
@@ -80,4 +93,4 @@ const ModalComponent = () => {
   );
 };
 
-export default ModalComponent;
+export default AddColumnModal;
