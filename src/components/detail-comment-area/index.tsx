@@ -33,7 +33,10 @@ const DetailCommentArea = ({ idGroup }: DetailCommentAreaProps) => {
   return (
     <>
       <CommentWriteBox idGroup={idGroup} setCommentList={setCommentList} />
-      {commentList.length > 0 && commentList.map((content) => <CommentReadBox key={content?.id} content={content} />)}
+      {commentList.length > 0 &&
+        commentList.map((content) => (
+          <CommentReadBox key={content?.id} commentId={content?.id} content={content} setCommentList={setCommentList} />
+        ))}
     </>
   );
 };

@@ -32,6 +32,8 @@ export const DASHBOARD_MESSAGES = {
 
 export const DASHBOARD_ERROR_MESSAGES = {
   NOT_A_MEMBER: '대시보드의 멤버가 아닙니다.',
+  NO_VALUE: '내용을 입력해주세요.',
+  PERMISSION_DENIED: '"댓글 수정 권한이 없습니다."',
 } as const;
 
 export const INVITATION_MESSAGES = {
