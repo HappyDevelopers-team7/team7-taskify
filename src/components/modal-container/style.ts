@@ -63,7 +63,7 @@ const StModalContainer = styled.div<StModalContainer>`
       color: ${({ theme }) => theme.color.black_33};
       font-size: 2.4rem;
       font-weight: 700;
-      margin-bottom: ${(props) => (props.$type === 'default' ? '32' : '0')}px;
+      margin-bottom: ${(props) => (props.$type === 'detail' ? '0' : '32')}px;
     }
 
     .modal-content__box {
@@ -150,7 +150,7 @@ const StModalContainer = styled.div<StModalContainer>`
       padding: 28px 20px;
       h2 {
         font-size: 2rem;
-        margin-bottom: ${(props) => (props.$type === 'default' ? '24' : '0')}px;
+        margin-bottom: ${(props) => (props.$type === 'detail' ? '0' : '24')}px;
       }
     }
 
