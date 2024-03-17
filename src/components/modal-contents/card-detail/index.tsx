@@ -22,6 +22,7 @@ const CardDetail = () => {
             <div className='sub-tag-box'></div>
           </div>
           <DetailContentArea
+            imageUrl='/assets/image/images/landingMainImageDesktop.png'
             content='Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum finibus nibh arcu, quis consequat ante
         cursus eget. Cras mattis, nulla non laoreet porttitor, diam justo laoreet eros, vel aliquet diam elit at leo.'
           />

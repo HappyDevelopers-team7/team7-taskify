@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 
 const StDetailArea = styled.div`
+  margin-bottom: 24px;
+
   .text-box {
     color: #000;
     font-size: 1.4rem;
@@ -12,12 +14,18 @@ const StDetailArea = styled.div`
   .image-box {
     width: 100%;
     height: 100%;
+    border-radius: 6px;
+    overflow: hidden;
 
     img {
       width: 100%;
       height: 100%;
       object-fit: contain;
     }
+  }
+
+  @media ${({ theme }) => theme.deviceSize.mobile} {
+    margin-bottom: 19px;
   }
 `;
 
