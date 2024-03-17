@@ -5,15 +5,33 @@ import StDetailModalContainer from './style';
 import ColumnNameTag from '@/components/column-name-tag';
 import DetailContentArea from '@/components/detail-content-area';
 import DetailCommentArea from '@/components/detail-comment-area';
+import { useEffect, useState } from 'react';
+import { getCardDetail } from '@/api/getCardDetail';
+import { cardDetailType } from '@/types/cardDetailType';
+import ProfileImage from '@/components/profile-image';
 
 const CardDetail = () => {
   const dispatch = useDispatch();
+  const [detail, setDetail] = useState<cardDetailType>();
 
   const handleCloseCardDetailModal = () => {
     dispatch(closeModal());
   };
+
+  const setCardDetail = async () => {
+    try {
+      const result = await getCardDetail(3783);
+      setDetail(result);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    setCardDetail();
+  });
   return (
-    <ModalContainer type='detail' title='상세글 제목' modalWidth={730} handleCloseModal={handleCloseCardDetailModal}>
+    <ModalContainer type='detail' title={detail?.title} modalWidth={730} handleCloseModal={handleCloseCardDetailModal}>
       <StDetailModalContainer>
         <div className='content-area'>
           <div className='tag-box'>
@@ -21,14 +39,29 @@ const CardDetail = () => {
             <span className='divide-bar'></span>
             <div className='sub-tag-box'></div>
           </div>
-          <DetailContentArea
-            imageUrl='/assets/image/images/landingMainImageDesktop.png'
-            content='Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum finibus nibh arcu, quis consequat ante
-        cursus eget. Cras mattis, nulla non laoreet porttitor, diam justo laoreet eros, vel aliquet diam elit at leo.'
-          />
+          <DetailContentArea imageUrl={detail?.imageUrl} content={detail?.description} />
           <DetailCommentArea />
         </div>
-        <div className='information-area'></div>
+        <div className='information-area'>
+          <ul className='information-box'>
+            <li>
+              <p>담당자</p>
+              <div className='desc'>
+                <ProfileImage
+                  imageUrl={detail?.assignee.profileImageUrl || null}
+                  alt={`${detail?.assignee.nickname}님의 프로필 이미지`}
+                />
+                <span>{detail?.assignee.nickname}</span>
+              </div>
+            </li>
+            <li>
+              <p>마감일</p>
+              <div className='desc'>
+                <span>{detail?.dueDate}</span>
+              </div>
+            </li>
+          </ul>
+        </div>
       </StDetailModalContainer>
     </ModalContainer>
   );
