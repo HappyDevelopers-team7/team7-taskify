@@ -30,8 +30,8 @@ const SideMenu = () => {
   const navigate = useNavigate();
 
   const handleClickCreateDashboard = () => {
-    dispatch(setOpenModalName('createDashboard'));
-    dispatch(openModal('createDashboard'));
+    dispatch(setOpenModalName('createSideDashboard'));
+    dispatch(openModal('createSideDashboard'));
   };
 
   const setSideDashboardListResult = async () => {
@@ -129,7 +129,7 @@ const SideMenu = () => {
           </button>
         </div>
       </Container>
-      {openModalName === 'createDashboard' ? <CreateDashboard /> : null}
+      {openModalName === 'createSideDashboard' ? <CreateDashboard /> : null}
     </>
   );
 };
