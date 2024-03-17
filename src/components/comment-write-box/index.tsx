@@ -17,6 +17,7 @@ const CommentWriteBox = ({ setCommentList, idGroup }: CommentWriteBoxProps) => {
       const result = await postComment(commentValue, idGroup.columnId, idGroup.cardId, idGroup.dashboardId);
       if (result) {
         setCommentList((prevList) => [result, ...prevList]);
+        setCommentValue('');
       }
     } catch (error) {
       console.error(error);
@@ -27,7 +28,7 @@ const CommentWriteBox = ({ setCommentList, idGroup }: CommentWriteBoxProps) => {
     <>
       <StCommentWriteBox>
         <h4>댓글</h4>
-        <InputComment handleSubmit={handleSubmitComment} setValue={setCommentValue} />
+        <InputComment handleSubmit={handleSubmitComment} value={commentValue} setValue={setCommentValue} />
       </StCommentWriteBox>
     </>
   );

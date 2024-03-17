@@ -57,7 +57,11 @@ const CommentReadBox = ({ setCommentList, content, commentId }: CommentReadBoxPr
         </div>
         <div className='comment-body'>
           {isEditable ? (
-            <InputComment value={content.content} handleSubmit={handleSubmitEditComment} setValue={setEditValue} />
+            <InputComment
+              defaultValue={content.content}
+              handleSubmit={handleSubmitEditComment}
+              setValue={setEditValue}
+            />
           ) : (
             <p>{content.content}</p>
           )}
