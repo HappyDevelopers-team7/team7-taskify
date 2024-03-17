@@ -6,6 +6,7 @@ import { CommentListType } from '@/types/commentListType';
 import { putComment } from '@/api/putComment';
 import { toast } from 'react-toastify';
 import { DASHBOARD_ERROR_MESSAGES } from '@/constants/message';
+import dateExtractor from '@/utils/dateExtractor';
 
 interface CommentReadBoxProps {
   setCommentList: Dispatch<SetStateAction<CommentListType[]>>;
@@ -52,7 +53,7 @@ const CommentReadBox = ({ setCommentList, content, commentId }: CommentReadBoxPr
       <div className='comment-box'>
         <div className='comment-head'>
           <h5>{content.author.nickname}</h5>
-          <span>{content.updatedAt}</span>
+          <span>{dateExtractor(new Date(content.updatedAt))}</span>
         </div>
         <div className='comment-body'>
           {isEditable ? (
