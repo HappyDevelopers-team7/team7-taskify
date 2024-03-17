@@ -38,6 +38,12 @@ const StCommentReadBox = styled.div`
       font-size: 1.4rem;
       font-weight: 400;
     }
+
+    p {
+      color: ${({ theme }) => theme.color.black_33};
+      font-size: 1.4rem;
+      font-weight: 400;
+    }
   }
 
   .comment-foot {

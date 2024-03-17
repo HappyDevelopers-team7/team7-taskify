@@ -30,6 +30,10 @@ export const DASHBOARD_MESSAGES = {
   CREATE_DASHBOARD: '대시보드가 생성되었습니다.',
 } as const;
 
+export const DASHBOARD_ERROR_MESSAGES = {
+  NOT_A_MEMBER: '대시보드의 멤버가 아닙니다.',
+} as const;
+
 export const INVITATION_MESSAGES = {
   REJECT_INVITATION: '거절되었습니다.',
   ACCEPT_INVITATION: '수락되었습니다.',

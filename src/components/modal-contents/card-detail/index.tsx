@@ -10,13 +10,13 @@ import { getCardDetail } from '@/api/getCardDetail';
 import { cardDetailType } from '@/types/cardDetailType';
 import ProfileImage from '@/components/profile-image';
 import LoadingSpinner from '@/components/loading-spinner';
+import { IdGroupType } from '@/types/idGroupType';
 
 interface CardDetailProps {
-  columnTitle: string;
-  cardId: number;
+  idGroup: IdGroupType;
 }
 
-const CardDetail = ({ columnTitle = 'Todo', cardId = 3784 }: CardDetailProps) => {
+const CardDetail = ({ idGroup }: CardDetailProps) => {
   const dispatch = useDispatch();
   const [detail, setDetail] = useState<cardDetailType>();
   const [detailLoading, setDetailLoading] = useState(true);
@@ -28,8 +28,7 @@ const CardDetail = ({ columnTitle = 'Todo', cardId = 3784 }: CardDetailProps) =>
   const setCardDetail = async () => {
     try {
       setDetailLoading(true);
-      const result = await getCardDetail(cardId);
-      console.log(result);
+      const result = await getCardDetail(idGroup.cardId);
       setDetail(result);
     } catch (error) {
       setDetailLoading(false);
@@ -50,12 +49,12 @@ const CardDetail = ({ columnTitle = 'Todo', cardId = 3784 }: CardDetailProps) =>
         <StDetailModalContainer>
           <div className='content-area'>
             <div className='tag-box'>
-              <ColumnNameTag name={columnTitle} />
+              <ColumnNameTag name={idGroup.columnTitle} />
               <span className='divide-bar'></span>
               <div className='sub-tag-box'></div>
             </div>
             <DetailContentArea imageUrl={detail?.imageUrl} content={detail?.description} />
-            <DetailCommentArea />
+            <DetailCommentArea idGroup={idGroup} />
           </div>
           <div className='information-area'>
             <ul className='information-box'>

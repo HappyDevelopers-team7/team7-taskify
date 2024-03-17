@@ -6,6 +6,12 @@ const CardDetailTest = () => {
   const dispatch = useDispatch();
   const openModalName = useSelector((state: ModalRootState) => state.modal.openModalName);
 
+  const idGroup = {
+    columnTitle: 'Todo',
+    columnId: 16608,
+    cardId: 3784,
+    dashboardId: 4931,
+  };
   const handleOpenCardDetailModal = () => {
     dispatch(setOpenModalName('cardDetailModal'));
     dispatch(openModal('cardDetailModal'));
@@ -17,7 +23,7 @@ const CardDetailTest = () => {
       <button type='button' onClick={handleOpenCardDetailModal}>
         상세 모달 띄우기
       </button>
-      {openModalName === 'cardDetailModal' ? <CardDetail /> : null}
+      {openModalName === 'cardDetailModal' ? <CardDetail idGroup={idGroup} /> : null}
     </>
   );
 };

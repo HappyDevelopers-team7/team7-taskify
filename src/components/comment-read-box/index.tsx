@@ -2,8 +2,13 @@ import { useState } from 'react';
 import ProfileImage from '../profile-image';
 import StCommentReadBox from './style';
 import InputComment from '../input/input-comment';
+import { CommentListType } from '@/types/commentListType';
 
-const CommentReadBox = () => {
+interface CommentReadBoxProps {
+  content: CommentListType;
+}
+
+const CommentReadBox = ({ content }: CommentReadBoxProps) => {
   const [isEditable, setIsEditable] = useState(false);
 
   const handleClickEditComment = () => {
@@ -12,14 +17,14 @@ const CommentReadBox = () => {
 
   return (
     <StCommentReadBox>
-      <ProfileImage imageUrl='/assets/image/logos/smallLogo.svg' />
+      <ProfileImage imageUrl={content.author.profileImageUrl} alt={`${content.author.nickname}님의 프로필 사진`} />
       <div className='comment-box'>
         <div className='comment-head'>
-          <h5>권밍밍</h5>
-          <span>2022.12.27 14:00</span>
+          <h5>{content.author.nickname}</h5>
+          <span>{content.updatedAt}</span>
         </div>
         <div className='comment-body'>
-          {isEditable ? <InputComment /> : <textarea readOnly value='오늘안에 CCC 까지 만들 수 있을까요?'></textarea>}
+          {isEditable ? <InputComment readonly={false} value={content.content} /> : <p>{content.content}</p>}
         </div>
         <div className='comment-foot'>
           <button type='button'>삭제</button>
