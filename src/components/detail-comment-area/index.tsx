@@ -17,7 +17,6 @@ const DetailCommentArea = ({ idGroup }: DetailCommentAreaProps) => {
   const setCommentReadBox = useCallback(async () => {
     try {
       const result = await getComments(10, idGroup.cardId);
-      console.log(result);
       if (result.status === 404) {
         return toast.error(DASHBOARD_ERROR_MESSAGES.NOT_A_MEMBER);
       }
