@@ -23,6 +23,21 @@ export const inputContainer = css`
   }
 `;
 
+export const textAreaContainer = css`
+  width: 100%;
+  border-radius: 8px;
+  background: ${({ theme }) => theme.color.white};
+  border: 1px solid ${({ theme }) => theme.color.gray_d9};
+
+  &:focus-within {
+    border: 1px solid ${({ theme }) => theme.color.violet};
+  }
+
+  &.red {
+    border: 1px solid ${({ theme }) => theme.color.red};
+  }
+`;
+
 /**
  * - input에 import해서 넣어주고 알맞게 스타일 수정 필요
  */
@@ -47,4 +62,18 @@ export const StErrorMessage = styled.p`
   font-size: 1.4rem;
   margin-top: 8px;
   color: ${({ theme }) => theme.color.red};
+`;
+
+export const textarea = css`
+  width: 100%;
+  font-size: 1.6rem;
+  line-height: 1;
+
+  &:placeholder {
+    color: ${({ theme }) => theme.color.gray_9f};
+  }
+
+  @media ${({ theme }) => theme.deviceSize.mobile} {
+    font-size: 1.4rem;
+  }
 `;
