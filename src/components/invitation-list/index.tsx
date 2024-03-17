@@ -15,7 +15,6 @@ const InvitationList = () => {
   const updatedInvitationList = useSelector((state: InvitationRootState) => state.invitationList.updatedList);
   const openModalName = useSelector((state: ModalRootState) => state.modal.openModalName);
   const [selectedInvitationId, setSelectedInvitationId] = useState(0);
-  const [invitationLoading, setInvitationLoading] = useState(false);
   const [invitationLength, setInvitationLength] = useState(0);
   const [size, setSize] = useState(10);
   const observerTarget = useRef<HTMLDivElement>(null);
@@ -33,26 +32,6 @@ const InvitationList = () => {
     };
   });
 
-  const setInvitation = async () => {
-    try {
-      setInvitationLoading(true);
-      const result = await getInvitation(size);
-      setInvitationLength(result.invitations.length);
-      dispatch(setInvitationList(result.invitations));
-      dispatch(updateInvitationList(result.invitations));
-    } catch (error) {
-      if (error instanceof Error) {
-        console.error(error.message);
-      }
-    } finally {
-      setInvitationLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    setInvitation();
-  }, [size]);
-
   const obsHandler = (entries: IntersectionObserverEntry[]) => {
     //옵저버 콜백함수
     const target = entries[0];
@@ -62,6 +41,23 @@ const InvitationList = () => {
       setSize((prev) => prev + 10); //페이지 값 증가
     }
   };
+
+  const setInvitation = async () => {
+    try {
+      const result = await getInvitation(size);
+      setInvitationLength(result.invitations.length);
+      dispatch(setInvitationList(result.invitations));
+      dispatch(updateInvitationList(result.invitations));
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error(error.message);
+      }
+    }
+  };
+
+  useEffect(() => {
+    setInvitation();
+  }, [size]);
 
   const handleClickReject = (id: number) => {
     setSelectedInvitationId(id);
@@ -74,13 +70,14 @@ const InvitationList = () => {
     dispatch(setOpenModalName('acceptInvitation'));
     dispatch(openModal('acceptInvitation'));
   };
+
   return (
     <>
       <StInvitedSection>
         <div className='invite-wrapper'>
           <h3>초대받은 대시보드</h3>
         </div>
-        {initialInvitationList.length > 0 && !invitationLoading ? (
+        {initialInvitationList.length > 0 ? (
           <>
             <div className='invite-wrapper'>
               <InputSearch />
