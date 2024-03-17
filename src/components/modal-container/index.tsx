@@ -57,10 +57,14 @@ const ModalContainer = ({
                 <div className='detail-button-group'>
                   <DropDownMenu buttonImageUrl='/assets/image/icons/moreButtonIcon.svg'>
                     <li>
-                      <button onClick={handleDeleteModal}>삭제하기</button>
+                      <button type='button' onClick={handleDeleteModal}>
+                        삭제하기
+                      </button>
                     </li>
                     <li>
-                      <button onClick={handleEditModal}>수정하기</button>
+                      <button type='button' onClick={handleEditModal}>
+                        수정하기
+                      </button>
                     </li>
                   </DropDownMenu>
                   <button

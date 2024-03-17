@@ -15,15 +15,15 @@ const DropDownMenu = ({ buttonImageUrl, children }: DropDownMenuProps) => {
   return (
     <StDropDownMenu>
       <button className='more-button' type='button' aria-label='더보기 버튼' onClick={handleClickOpen}>
-        <img src={buttonImageUrl} />
+        <img src={buttonImageUrl} alt='더보기 버튼' />
       </button>
       {isOpen ? (
         <ul className='drop-down-menu'>
           {/* children에는 반드시 li를 넣어야함. */}
           {children}
           {/* 아래 두줄은 예시임. */}
-          {/* <li onClick={handleClick}>삭제하기</li> */}
-          {/* <li onClick={handleClick}>수정하기</li> */}
+          {/* <li><button onClick={handleClick}>삭제하기</button></li> */}
+          {/* <li><button onClick={handleClick}>수정하기</button></li> */}
         </ul>
       ) : null}
     </StDropDownMenu>
