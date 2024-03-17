@@ -11,7 +11,7 @@ export const ColumnContainer = styled.div`
     background-color: tomato;
   }
 
-  .column-header {
+  .column-head {
     position: relative;
     display: flex;
     align-items: center;
