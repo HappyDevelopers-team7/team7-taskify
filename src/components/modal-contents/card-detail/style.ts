@@ -65,6 +65,10 @@ const StDetailModalContainer = styled.article`
     flex-direction: column-reverse;
     gap: 16px;
 
+    .content-area {
+      width: 100%;
+    }
+
     .information-area {
       width: 100%;
 
