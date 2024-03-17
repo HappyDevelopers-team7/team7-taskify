@@ -35,7 +35,13 @@ const DetailCommentArea = ({ idGroup }: DetailCommentAreaProps) => {
       <CommentWriteBox idGroup={idGroup} setCommentList={setCommentList} />
       {commentList.length > 0 &&
         commentList.map((content) => (
-          <CommentReadBox key={content?.id} commentId={content?.id} content={content} setCommentList={setCommentList} />
+          <CommentReadBox
+            key={content?.id}
+            commentId={content?.id}
+            content={content}
+            commentList={commentList}
+            setCommentList={setCommentList}
+          />
         ))}
     </>
   );

@@ -5,21 +5,40 @@ import InputComment from '../input/input-comment';
 import { CommentListType } from '@/types/commentListType';
 import { putComment } from '@/api/putComment';
 import { toast } from 'react-toastify';
-import { DASHBOARD_ERROR_MESSAGES } from '@/constants/message';
+import { COMMENT_ERROR_MESSAGES, COMMENT_MESSAGES, DASHBOARD_ERROR_MESSAGES } from '@/constants/message';
 import dateExtractor from '@/utils/dateExtractor';
+import { deleteComment } from '@/api/deleteComment';
 
 interface CommentReadBoxProps {
+  commentList: CommentListType[];
   setCommentList: Dispatch<SetStateAction<CommentListType[]>>;
   content: CommentListType;
   commentId: number;
 }
 
-const CommentReadBox = ({ setCommentList, content, commentId }: CommentReadBoxProps) => {
+const CommentReadBox = ({ commentList, setCommentList, content, commentId }: CommentReadBoxProps) => {
   const [isEditable, setIsEditable] = useState(false);
   const [editValue, setEditValue] = useState('');
 
   const handleClickEditComment = () => {
     setIsEditable((prev) => !prev);
+  };
+
+  const handleClickDeleteComment = async () => {
+    try {
+      const result = await deleteComment(commentId);
+      const updatedCommentList = commentList.filter((comment) => comment.id !== commentId);
+      if (result.status === 403) {
+        return toast.error(COMMENT_ERROR_MESSAGES.DELETE_PERMISSION_DENIED);
+      }
+      if (result.status === 404) {
+        return toast.error(DASHBOARD_ERROR_MESSAGES.NOT_A_MEMBER);
+      }
+      setCommentList(updatedCommentList);
+      toast.success(COMMENT_MESSAGES.DELETE_COMMENT);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleSubmitEditComment = async () => {
@@ -29,7 +48,7 @@ const CommentReadBox = ({ setCommentList, content, commentId }: CommentReadBoxPr
         toast.error(DASHBOARD_ERROR_MESSAGES.NOT_A_MEMBER);
       }
       if (result.status === 403) {
-        toast.error(DASHBOARD_ERROR_MESSAGES.PERMISSION_DENIED);
+        toast.error(COMMENT_ERROR_MESSAGES.EDIT_PERMISSION_DENIED);
       }
 
       setCommentList((prevComments) => {
@@ -67,7 +86,9 @@ const CommentReadBox = ({ setCommentList, content, commentId }: CommentReadBoxPr
           )}
         </div>
         <div className='comment-foot'>
-          <button type='button'>삭제</button>
+          <button type='button' onClick={handleClickDeleteComment}>
+            삭제
+          </button>
           <button type='button' onClick={handleClickEditComment}>
             {isEditable ? '취소' : '수정'}
           </button>
