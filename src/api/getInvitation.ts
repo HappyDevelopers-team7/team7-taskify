@@ -10,7 +10,6 @@ export const getInvitation = async (size = 10) => {
     return responseData;
   } catch (e) {
     const error = e as AxiosError;
-    console.log;
     return error.response;
   }
 };
