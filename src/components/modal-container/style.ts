@@ -39,11 +39,6 @@ const StModalContainer = styled.div<StModalContainer>`
       .detail-close-button {
         width: 32px;
         height: 32px;
-      }
-
-      button {
-        width: 28px;
-        height: 28px;
 
         img {
           width: 100%;
@@ -146,11 +141,6 @@ const StModalContainer = styled.div<StModalContainer>`
         .detail-close-button {
           width: 24px;
           height: 24px;
-        }
-
-        button {
-          width: 20px;
-          height: 20px;
         }
       }
     }

@@ -13,6 +13,7 @@ interface ModalProps {
   children: ReactNode;
   handleCloseModal?: (e: MouseEvent<HTMLButtonElement | HTMLDivElement>) => void;
   handleDeleteModal?: (e: MouseEvent<HTMLButtonElement | HTMLDivElement>) => void;
+  handleEditModal?: (e: MouseEvent<HTMLButtonElement | HTMLDivElement>) => void;
   handleSubmitModal?: (e: FormEvent<HTMLButtonElement>) => void;
 }
 
@@ -27,6 +28,8 @@ interface ModalProps {
  * @param {ReactNode} children - 모달의 컨텐트 영역
  * @param {MouseEvent} handleCloseModal - 모달 닫을 때 함수
  * @param {MouseEvent} handleSubmitModal - 모달 submit 함수
+ * @param {MouseEvent} handleEditModal - 모달 edit 함수
+ * @param {MouseEvent} handleClickDeleteCard - 모달 submit 함수
  * @returns
  */
 const ModalContainer = ({
@@ -39,6 +42,7 @@ const ModalContainer = ({
   children,
   handleCloseModal,
   handleDeleteModal,
+  handleEditModal,
   handleSubmitModal,
 }: ModalProps) => {
   switch (type) {
@@ -51,7 +55,14 @@ const ModalContainer = ({
               <div className='detail-header'>
                 <h2>{title ? title : '카드 상세글 보기'}</h2>
                 <div className='detail-button-group'>
-                  <DropDownMenu buttonImageUrl='/assets/image/icons/moreButtonIcon.svg' />
+                  <DropDownMenu buttonImageUrl='/assets/image/icons/moreButtonIcon.svg'>
+                    <li>
+                      <button onClick={handleDeleteModal}>삭제하기</button>
+                    </li>
+                    <li>
+                      <button onClick={handleEditModal}>수정하기</button>
+                    </li>
+                  </DropDownMenu>
                   <button
                     className='detail-close-button'
                     type='button'
