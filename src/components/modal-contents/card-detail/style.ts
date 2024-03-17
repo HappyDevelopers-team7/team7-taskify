@@ -60,6 +60,36 @@ const StDetailModalContainer = styled.article`
       }
     }
   }
+
+  @media ${({ theme }) => theme.deviceSize.mobile} {
+    flex-direction: column-reverse;
+    gap: 16px;
+
+    .information-area {
+      width: 100%;
+
+      .information-box {
+        position: static;
+        top: auto;
+        flex-direction: row;
+        gap: 10px;
+        padding: 12px 16px;
+
+        li {
+          width: 50%;
+
+          p {
+            font-size: 1rem;
+          }
+
+          .desc {
+            font-size: 1.2rem;
+            height: 26px;
+          }
+        }
+      }
+    }
+  }
 `;
 
 export default StDetailModalContainer;

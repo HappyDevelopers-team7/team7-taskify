@@ -20,7 +20,8 @@ const CardDetail = () => {
 
   const setCardDetail = async () => {
     try {
-      const result = await getCardDetail(3783);
+      const result = await getCardDetail(3784);
+      console.log(result);
       setDetail(result);
     } catch (error) {
       console.error(error);
@@ -29,7 +30,7 @@ const CardDetail = () => {
 
   useEffect(() => {
     setCardDetail();
-  });
+  }, []);
   return (
     <ModalContainer type='detail' title={detail?.title} modalWidth={730} handleCloseModal={handleCloseCardDetailModal}>
       <StDetailModalContainer>
