@@ -2,7 +2,7 @@ import { getComments } from '@/api/getComments';
 import CommentReadBox from '../comment-read-box';
 import CommentWriteBox from '../comment-write-box';
 import { IdGroupType } from '@/types/idGroupType';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { DASHBOARD_ERROR_MESSAGES } from '@/constants/message';
 import { toast } from 'react-toastify';
 import { CommentListType } from '@/types/commentListType';
@@ -14,7 +14,7 @@ interface DetailCommentAreaProps {
 const DetailCommentArea = ({ idGroup }: DetailCommentAreaProps) => {
   const [commentList, setCommentList] = useState<CommentListType[]>([]);
 
-  const setCommentReadBox = async () => {
+  const setCommentReadBox = useCallback(async () => {
     try {
       const result = await getComments(10, idGroup.cardId);
       console.log(result);
@@ -25,14 +25,15 @@ const DetailCommentArea = ({ idGroup }: DetailCommentAreaProps) => {
     } catch (error) {
       console.error(error);
     }
-  };
+  }, [idGroup.cardId, setCommentList]);
 
   useEffect(() => {
     setCommentReadBox();
-  }, []);
+  }, [setCommentReadBox]);
+
   return (
     <>
-      <CommentWriteBox />
+      <CommentWriteBox idGroup={idGroup} setCommentList={setCommentList} />
       {commentList.length > 0 && commentList.map((content) => <CommentReadBox key={content?.id} content={content} />)}
     </>
   );
