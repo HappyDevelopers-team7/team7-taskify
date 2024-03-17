@@ -10,7 +10,12 @@ import { getCardDetail } from '@/api/getCardDetail';
 import { cardDetailType } from '@/types/cardDetailType';
 import ProfileImage from '@/components/profile-image';
 
-const CardDetail = () => {
+interface CardDetailProps {
+  columnTitle: string;
+  cardId: number;
+}
+
+const CardDetail = ({ columnTitle = 'Todo', cardId = 3784 }: CardDetailProps) => {
   const dispatch = useDispatch();
   const [detail, setDetail] = useState<cardDetailType>();
 
@@ -20,7 +25,7 @@ const CardDetail = () => {
 
   const setCardDetail = async () => {
     try {
-      const result = await getCardDetail(3784);
+      const result = await getCardDetail(cardId);
       console.log(result);
       setDetail(result);
     } catch (error) {
@@ -36,7 +41,7 @@ const CardDetail = () => {
       <StDetailModalContainer>
         <div className='content-area'>
           <div className='tag-box'>
-            <ColumnNameTag name='To do' />
+            <ColumnNameTag name={columnTitle} />
             <span className='divide-bar'></span>
             <div className='sub-tag-box'></div>
           </div>
