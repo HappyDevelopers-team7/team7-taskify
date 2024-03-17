@@ -23,6 +23,7 @@ const StDropDownMenu = styled.div`
     border: 1px solid ${({ theme }) => theme.color.gray_d9};
     box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.08);
     padding: 6px;
+    z-index: 10;
 
     li {
       button {
