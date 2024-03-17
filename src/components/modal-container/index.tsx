@@ -45,14 +45,19 @@ const ModalContainer = ({
     case 'detail':
       return (
         <PortalContainer>
-          <StModalContainer $modalWidth={modalWidth} role='dialog' aria-modal='true' tabIndex={0}>
+          <StModalContainer $type={type} $modalWidth={modalWidth} role='dialog' aria-modal='true' tabIndex={0}>
             <div className='modal-dim' onClick={handleCloseModal}></div>
             <div className='modal-content'>
               <div className='detail-header'>
                 <h2>{title ? title : '카드 상세글 보기'}</h2>
                 <div className='detail-button-group'>
                   <DropDownMenu buttonImageUrl='/assets/image/icons/moreButtonIcon.svg' />
-                  <button type='button' aria-label='닫기 버튼'>
+                  <button
+                    className='detail-close-button'
+                    type='button'
+                    aria-label='닫기 버튼'
+                    onClick={handleCloseModal}
+                  >
                     <img src='/assets/image/icons/closeIcon.svg' />
                   </button>
                 </div>
