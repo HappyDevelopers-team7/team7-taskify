@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react';
 import { getCardDetail } from '@/api/getCardDetail';
 import { cardDetailType } from '@/types/cardDetailType';
 import ProfileImage from '@/components/profile-image';
+import LoadingSpinner from '@/components/loading-spinner';
 
 interface CardDetailProps {
   columnTitle: string;
@@ -18,6 +19,7 @@ interface CardDetailProps {
 const CardDetail = ({ columnTitle = 'Todo', cardId = 3784 }: CardDetailProps) => {
   const dispatch = useDispatch();
   const [detail, setDetail] = useState<cardDetailType>();
+  const [detailLoading, setDetailLoading] = useState(true);
 
   const handleCloseCardDetailModal = () => {
     dispatch(closeModal());
@@ -25,11 +27,15 @@ const CardDetail = ({ columnTitle = 'Todo', cardId = 3784 }: CardDetailProps) =>
 
   const setCardDetail = async () => {
     try {
+      setDetailLoading(true);
       const result = await getCardDetail(cardId);
       console.log(result);
       setDetail(result);
     } catch (error) {
+      setDetailLoading(false);
       console.error(error);
+    } finally {
+      setDetailLoading(false);
     }
   };
 
@@ -38,37 +44,41 @@ const CardDetail = ({ columnTitle = 'Todo', cardId = 3784 }: CardDetailProps) =>
   }, []);
   return (
     <ModalContainer type='detail' title={detail?.title} modalWidth={730} handleCloseModal={handleCloseCardDetailModal}>
-      <StDetailModalContainer>
-        <div className='content-area'>
-          <div className='tag-box'>
-            <ColumnNameTag name={columnTitle} />
-            <span className='divide-bar'></span>
-            <div className='sub-tag-box'></div>
+      {detailLoading ? (
+        <LoadingSpinner />
+      ) : (
+        <StDetailModalContainer>
+          <div className='content-area'>
+            <div className='tag-box'>
+              <ColumnNameTag name={columnTitle} />
+              <span className='divide-bar'></span>
+              <div className='sub-tag-box'></div>
+            </div>
+            <DetailContentArea imageUrl={detail?.imageUrl} content={detail?.description} />
+            <DetailCommentArea />
           </div>
-          <DetailContentArea imageUrl={detail?.imageUrl} content={detail?.description} />
-          <DetailCommentArea />
-        </div>
-        <div className='information-area'>
-          <ul className='information-box'>
-            <li>
-              <p>담당자</p>
-              <div className='desc'>
-                <ProfileImage
-                  imageUrl={detail?.assignee.profileImageUrl || null}
-                  alt={`${detail?.assignee.nickname}님의 프로필 이미지`}
-                />
-                <span>{detail?.assignee.nickname}</span>
-              </div>
-            </li>
-            <li>
-              <p>마감일</p>
-              <div className='desc'>
-                <span>{detail?.dueDate}</span>
-              </div>
-            </li>
-          </ul>
-        </div>
-      </StDetailModalContainer>
+          <div className='information-area'>
+            <ul className='information-box'>
+              <li>
+                <p>담당자</p>
+                <div className='desc'>
+                  <ProfileImage
+                    imageUrl={detail?.assignee.profileImageUrl || null}
+                    alt={`${detail?.assignee.nickname}님의 프로필 이미지`}
+                  />
+                  <span>{detail?.assignee.nickname}</span>
+                </div>
+              </li>
+              <li>
+                <p>마감일</p>
+                <div className='desc'>
+                  <span>{detail?.dueDate}</span>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </StDetailModalContainer>
+      )}
     </ModalContainer>
   );
 };
