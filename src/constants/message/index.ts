@@ -36,6 +36,7 @@ export const DASHBOARD_ERROR_MESSAGES = {
 } as const;
 
 export const COMMENT_MESSAGES = {
+  EDIT_COMMENT: '댓글이 수정되었습니다.',
   DELETE_COMMENT: '댓글이 삭제되었습니다.',
 };
 

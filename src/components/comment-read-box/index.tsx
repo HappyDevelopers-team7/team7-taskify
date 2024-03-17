@@ -61,6 +61,7 @@ const CommentReadBox = ({ commentList, setCommentList, content, commentId }: Com
         return updatedComments;
       });
       setIsEditable(false);
+      toast.success(COMMENT_MESSAGES.EDIT_COMMENT);
     } catch (error) {
       console.error(error);
     }
