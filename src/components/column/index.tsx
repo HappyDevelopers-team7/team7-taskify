@@ -2,19 +2,18 @@ import { AppDispatch, fetchMyInfo /*getMyInfo*/ } from '@/redux/myInfoSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { ColumnContainer, ModalContent } from './style';
 import { Columns, Members } from '@/pages/dashboard-id';
-import axiosInstance from '@/api/instance/axiosInstance';
-import API from '@/api/constants';
 import { ChangeEvent, useEffect, useState, useRef, KeyboardEvent } from 'react';
 import { ModalRootState, closeModal, openModal, setOpenModalName } from '@/redux/modalSlice';
+import { toast } from 'react-toastify';
+import axiosInstance from '@/api/instance/axiosInstance';
+import API from '@/api/constants';
 import ModalContainer from '../modal-container';
+import Card from '../card';
 import LoadingSpinner from '@/components/loading-spinner';
+import dateExtractor from '@/utils/dateExtractor';
+import TagComponent from '../tag-component';
 import Flatpickr from 'react-flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
-import dateExtractor from '@/utils/dateExtractor';
-import randomHexCode from '@/utils/randomHexCode';
-import TagComponent from '../tag-component';
-import Card from '../card';
-import { toast } from 'react-toastify';
 
 interface Props {
   columnData: Columns;
@@ -54,7 +53,6 @@ export interface Types {
   Tag: {
     id: number;
     name: string;
-    backgroundColor: string;
   };
 }
 
@@ -203,8 +201,6 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId }: Props) => 
       const tag = {
         id: Date.now(),
         name: input,
-        backgroundColor: randomHexCode(),
-        color: randomHexCode(),
       };
       setTags((prev) => [...prev, tag]);
       setCreateCardData({ ...createCardData, tag: '' });

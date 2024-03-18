@@ -73,7 +73,6 @@ export const ColumnContainer = styled.div`
 `;
 type Tag = {
   name: string;
-  backgroundColor: string;
   id: number;
 };
 
