@@ -139,7 +139,7 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId }: Props) => 
     // 카드 조회 함수
     setIsLoading(true);
     await axiosInstance
-      .get(`${API.CARDS.CARDS}?size=3&columnId=${columnData.id}`)
+      .get(`${API.CARDS.CARDS}?size=9999&columnId=${columnData.id}`)
       .then((res) => {
         setCardInfo(res.data);
       })
