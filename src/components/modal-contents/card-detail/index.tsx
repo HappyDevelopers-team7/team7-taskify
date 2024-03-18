@@ -29,7 +29,7 @@ const CardDetail = ({ idGroup }: CardDetailProps) => {
   };
 
   const handleDeleteCardDetailModal = () => {
-    dispatch(openSecondModal('deleteAlert'));
+    dispatch(openSecondModal('deleteCardAlert'));
   };
 
   const setCardDetail = async () => {
@@ -93,7 +93,7 @@ const CardDetail = ({ idGroup }: CardDetailProps) => {
           </StDetailModalContainer>
         )}
       </ModalContainer>
-      {openSecondModalName === 'deleteAlert' ? <DeleteAlert /> : null}
+      {openSecondModalName === 'deleteCardAlert' ? <DeleteAlert /> : null}
     </>
   );
 };
