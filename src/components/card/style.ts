@@ -1,10 +1,21 @@
 import styled from 'styled-components';
 
 const CardContainer = styled.article`
+  @keyframes slideIn {
+    from {
+      transform: translateY(-20px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
   width: 314px;
   margin-top: 16px;
   padding: 20px;
   position: relative;
+  animation: slideIn 0.5s ease-in-out;
 
   border-radius: 6px;
   border: 1px solid ${({ theme }) => theme.color.gray_d9};

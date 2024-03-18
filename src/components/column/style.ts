@@ -53,6 +53,7 @@ export const ColumnContainer = styled.div`
 
   .column-body {
     padding: 0px 20px 16px;
+    transition: height 0.5s ease-in-out;
 
     .add-card {
       width: 100%;
@@ -64,6 +65,22 @@ export const ColumnContainer = styled.div`
       background-color: ${({ theme }) => theme.color.white};
       border: 1px solid ${({ theme }) => theme.color.gray_d9};
       border-radius: 6px;
+    }
+  }
+
+  .column-foot {
+    padding: 0px 20px 16px;
+
+    button {
+      width: 314px;
+      padding: 15px 0px 15px 16px;
+      margin-bottom: 32px;
+
+      border-radius: 6px;
+      border: 1px solid ${({ theme }) => theme.color.gray_d9};
+      background: ${({ theme }) => theme.color.white};
+
+      font-size: 1.6rem;
     }
   }
 
