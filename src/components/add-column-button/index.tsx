@@ -9,6 +9,7 @@ interface Props {
 
 const AddColumnButton = ({ children }: Props) => {
   const dispatch = useDispatch();
+
   const handleButtonClick = () => {
     dispatch(openModal('addColumnModal'));
   };
