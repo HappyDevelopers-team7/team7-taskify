@@ -135,11 +135,16 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId }: Props) => 
     }
   };
 
-  const viewCards = () => {
+  const viewCards = async () => {
     // 카드 조회 함수
-    axiosInstance.get(`${API.CARDS.CARDS}?size=9999&columnId=${columnData.id}`).then((res) => {
-      setCardInfo(res.data);
-    });
+    setIsLoading(true);
+    await axiosInstance
+      .get(`${API.CARDS.CARDS}?size=3&columnId=${columnData.id}`)
+      .then((res) => {
+        setCardInfo(res.data);
+      })
+      .catch(() => alert('카드 조회 실패'))
+      .finally(() => setIsLoading(false));
   };
 
   const handleUploadFile = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -235,6 +240,7 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId }: Props) => 
 
   return (
     <ColumnContainer>
+      {isLoading && <LoadingSpinner />}
       <div className='column-head'>
         <div className='column-color' />
         <h2>{columnData.title}</h2>
