@@ -31,34 +31,13 @@ const secondModalSlice = createSlice({
     },
     openSecondModal: (state, action: PayloadAction<string>) => {
       state.currentSecondScrollPosition = state.prevSecondScrollPosition;
-      document.body.style.position = 'fixed';
-      document.body.style.width = '100%';
-      document.body.style.top = `-${state.prevSecondScrollPosition}px`;
-      document.body.style.overflowY = 'scroll';
       state.openSecondModalName = action.payload;
     },
     closeSecondModal: (state) => {
-      document.body.style.position = '';
-      document.body.style.width = '';
-      document.body.style.top = '';
-      document.body.style.overflowY = '';
-      window.scrollTo(0, state.currentSecondScrollPosition);
       state.openSecondModalName = null;
-    },
-    setPrevSecondScrollPosition: (state, action: PayloadAction<number>) => {
-      state.prevSecondScrollPosition = action.payload;
-    },
-    setCurrentSecondScrollPosition: (state, action: PayloadAction<number>) => {
-      state.currentSecondScrollPosition = action.payload;
     },
   },
 });
 
-export const {
-  setOpenSecondModalName,
-  openSecondModal,
-  closeSecondModal,
-  setPrevSecondScrollPosition,
-  setCurrentSecondScrollPosition,
-} = secondModalSlice.actions;
+export const { setOpenSecondModalName, openSecondModal, closeSecondModal } = secondModalSlice.actions;
 export default secondModalSlice.reducer;
