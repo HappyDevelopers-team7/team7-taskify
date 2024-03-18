@@ -36,7 +36,11 @@ const Card = ({ card, idGroup }: Props) => {
   return (
     <>
       <CardContainer onClick={handleClickOpenDetail}>
-        {card.imageUrl !== null && <img src={card.imageUrl} className='image-box' alt='card-image' />}
+        {card.imageUrl !== null && (
+          <div className='image-box'>
+            <img src={card.imageUrl} alt='card-image' />
+          </div>
+        )}
         <h2 className='title-box'>{card.title}</h2>
         <div className='tag-box'>
           {card.tags.length > 0 &&
