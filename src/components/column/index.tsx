@@ -15,7 +15,6 @@ import 'flatpickr/dist/flatpickr.min.css';
 import EditColumnModal from '../modal-edit-column';
 import dateExtractor from '@/utils/dateExtractor';
 import TagComponent from '../tag-component';
-import Flatpickr from 'react-flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 
 interface Props {
