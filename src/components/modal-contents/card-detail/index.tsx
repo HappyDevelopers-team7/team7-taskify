@@ -13,6 +13,7 @@ import LoadingSpinner from '@/components/loading-spinner';
 import { IdGroupType } from '@/types/idGroupType';
 import { SecondModalRootState, openSecondModal } from '@/redux/secondModalSlice';
 import DeleteAlert from '../delete-alert';
+import { deleteCard } from '@/api/deleteCard';
 
 interface CardDetailProps {
   idGroup: IdGroupType;
@@ -24,6 +25,11 @@ const CardDetail = ({ idGroup, cardId }: CardDetailProps) => {
   const [detail, setDetail] = useState<cardDetailType>();
   const [detailLoading, setDetailLoading] = useState(true);
   const openSecondModalName = useSelector((state: SecondModalRootState) => state.secondModal.openSecondModalName);
+
+  const handleDeleteCard = async () => {
+    const result = await deleteCard(cardId);
+    console.log(result);
+  };
 
   const handleCloseCardDetailModal = () => {
     dispatch(closeModal());
@@ -49,6 +55,7 @@ const CardDetail = ({ idGroup, cardId }: CardDetailProps) => {
   useEffect(() => {
     setCardDetail();
   }, []);
+
   return (
     <>
       <ModalContainer
@@ -94,7 +101,7 @@ const CardDetail = ({ idGroup, cardId }: CardDetailProps) => {
           </StDetailModalContainer>
         )}
       </ModalContainer>
-      {openSecondModalName === 'deleteCardAlert' ? <DeleteAlert /> : null}
+      {openSecondModalName === 'deleteCardAlert' ? <DeleteAlert handleSubmitDelete={handleDeleteCard} /> : null}
     </>
   );
 };
