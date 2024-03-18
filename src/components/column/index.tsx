@@ -255,7 +255,6 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId }: Props) => 
                 onFocus={(e) => asigneeDropdownChecker(e)}
                 onBlur={() => setIsDropdownAsignee(false)}
               />
-              <img src='/assets/image/icons/arrowDropDownIcon.svg' alt='dropdown-icon' className='dropdown-icon' />
               {userProfile && <img src={userProfile} className='user-image in-searchbar' />}
               <div className='input-box member-list'>
                 {isDropdownAsignee &&
