@@ -8,6 +8,14 @@ import { toast } from 'react-toastify';
 import { COMMENT_ERROR_MESSAGES, COMMENT_MESSAGES, DASHBOARD_ERROR_MESSAGES } from '@/constants/message';
 import dateExtractor from '@/utils/dateExtractor';
 import { deleteComment } from '@/api/deleteComment';
+import DeleteAlert from '../modal-contents/delete-alert';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  SecondModalRootState,
+  closeSecondModal,
+  openSecondModal,
+  setOpenSecondModalName,
+} from '@/redux/secondModalSlice';
 
 interface CommentReadBoxProps {
   commentList: CommentListType[];
@@ -17,6 +25,8 @@ interface CommentReadBoxProps {
 }
 
 const CommentReadBox = ({ commentList, setCommentList, content, commentId }: CommentReadBoxProps) => {
+  const dispatch = useDispatch();
+  const openSecondModalName = useSelector((state: SecondModalRootState) => state.secondModal.openSecondModalName);
   const [isEditable, setIsEditable] = useState(false);
   const [editValue, setEditValue] = useState('');
 
@@ -25,6 +35,11 @@ const CommentReadBox = ({ commentList, setCommentList, content, commentId }: Com
   };
 
   const handleClickDeleteComment = async () => {
+    dispatch(setOpenSecondModalName('deleteCommentAlert'));
+    dispatch(openSecondModal('deleteCommentAlert'));
+  };
+
+  const handleDeleteCard = async () => {
     try {
       const result = await deleteComment(commentId);
       if (result.status === 403) {
@@ -34,6 +49,7 @@ const CommentReadBox = ({ commentList, setCommentList, content, commentId }: Com
         return toast.error(DASHBOARD_ERROR_MESSAGES.NOT_A_MEMBER);
       }
       const updatedCommentList = commentList.filter((comment) => comment.id !== commentId);
+      dispatch(closeSecondModal());
       setCommentList(updatedCommentList);
       toast.success(COMMENT_MESSAGES.DELETE_COMMENT);
     } catch (error) {
@@ -68,34 +84,37 @@ const CommentReadBox = ({ commentList, setCommentList, content, commentId }: Com
   };
 
   return (
-    <StCommentReadBox>
-      <ProfileImage imageUrl={content.author.profileImageUrl} alt={`${content.author.nickname}님의 프로필 사진`} />
-      <div className='comment-box'>
-        <div className='comment-head'>
-          <h5>{content.author.nickname}</h5>
-          <span>{dateExtractor(new Date(content.updatedAt))}</span>
+    <>
+      <StCommentReadBox>
+        <ProfileImage imageUrl={content.author.profileImageUrl} alt={`${content.author.nickname}님의 프로필 사진`} />
+        <div className='comment-box'>
+          <div className='comment-head'>
+            <h5>{content.author.nickname}</h5>
+            <span>{dateExtractor(new Date(content.updatedAt))}</span>
+          </div>
+          <div className='comment-body'>
+            {isEditable ? (
+              <InputComment
+                defaultValue={content.content}
+                handleSubmit={handleSubmitEditComment}
+                setValue={setEditValue}
+              />
+            ) : (
+              <p>{content.content}</p>
+            )}
+          </div>
+          <div className='comment-foot'>
+            <button type='button' onClick={handleClickDeleteComment}>
+              삭제
+            </button>
+            <button type='button' onClick={handleClickEditComment}>
+              {isEditable ? '취소' : '수정'}
+            </button>
+          </div>
         </div>
-        <div className='comment-body'>
-          {isEditable ? (
-            <InputComment
-              defaultValue={content.content}
-              handleSubmit={handleSubmitEditComment}
-              setValue={setEditValue}
-            />
-          ) : (
-            <p>{content.content}</p>
-          )}
-        </div>
-        <div className='comment-foot'>
-          <button type='button' onClick={handleClickDeleteComment}>
-            삭제
-          </button>
-          <button type='button' onClick={handleClickEditComment}>
-            {isEditable ? '취소' : '수정'}
-          </button>
-        </div>
-      </div>
-    </StCommentReadBox>
+      </StCommentReadBox>
+      {openSecondModalName === 'deleteCommentAlert' ? <DeleteAlert handleSubmitDelete={handleDeleteCard} /> : null}
+    </>
   );
 };
 
