@@ -1,6 +1,6 @@
 import ModalContainer from '@/components/modal-container';
 import { closeModal } from '@/redux/modalSlice';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import StDetailModalContainer from './style';
 import ColumnNameTag from '@/components/column-name-tag';
 import DetailContentArea from '@/components/detail-content-area';
@@ -11,6 +11,8 @@ import { cardDetailType } from '@/types/cardDetailType';
 import ProfileImage from '@/components/profile-image';
 import LoadingSpinner from '@/components/loading-spinner';
 import { IdGroupType } from '@/types/idGroupType';
+import { SecondModalRootState, openSecondModal } from '@/redux/secondModalSlice';
+import DeleteAlert from '../delete-alert';
 
 interface CardDetailProps {
   idGroup: IdGroupType;
@@ -20,9 +22,14 @@ const CardDetail = ({ idGroup }: CardDetailProps) => {
   const dispatch = useDispatch();
   const [detail, setDetail] = useState<cardDetailType>();
   const [detailLoading, setDetailLoading] = useState(true);
+  const openSecondModalName = useSelector((state: SecondModalRootState) => state.secondModal.openSecondModalName);
 
   const handleCloseCardDetailModal = () => {
     dispatch(closeModal());
+  };
+
+  const handleDeleteCardDetailModal = () => {
+    dispatch(openSecondModal('deleteAlert'));
   };
 
   const setCardDetail = async () => {
@@ -42,43 +49,52 @@ const CardDetail = ({ idGroup }: CardDetailProps) => {
     setCardDetail();
   }, []);
   return (
-    <ModalContainer type='detail' title={detail?.title} modalWidth={730} handleCloseModal={handleCloseCardDetailModal}>
-      {detailLoading ? (
-        <LoadingSpinner />
-      ) : (
-        <StDetailModalContainer>
-          <div className='content-area'>
-            <div className='tag-box'>
-              <ColumnNameTag name={idGroup.columnTitle} />
-              <span className='divide-bar'></span>
-              <div className='sub-tag-box'></div>
+    <>
+      <ModalContainer
+        type='detail'
+        title={detail?.title}
+        modalWidth={730}
+        handleDeleteModal={handleDeleteCardDetailModal}
+        handleCloseModal={handleCloseCardDetailModal}
+      >
+        {detailLoading ? (
+          <LoadingSpinner />
+        ) : (
+          <StDetailModalContainer>
+            <div className='content-area'>
+              <div className='tag-box'>
+                <ColumnNameTag name={idGroup.columnTitle} />
+                <span className='divide-bar'></span>
+                <div className='sub-tag-box'></div>
+              </div>
+              <DetailContentArea imageUrl={detail?.imageUrl} content={detail?.description} />
+              <DetailCommentArea idGroup={idGroup} />
             </div>
-            <DetailContentArea imageUrl={detail?.imageUrl} content={detail?.description} />
-            <DetailCommentArea idGroup={idGroup} />
-          </div>
-          <div className='information-area'>
-            <ul className='information-box'>
-              <li>
-                <p>담당자</p>
-                <div className='desc'>
-                  <ProfileImage
-                    imageUrl={detail?.assignee.profileImageUrl || null}
-                    alt={`${detail?.assignee.nickname}님의 프로필 이미지`}
-                  />
-                  <span>{detail?.assignee.nickname}</span>
-                </div>
-              </li>
-              <li>
-                <p>마감일</p>
-                <div className='desc'>
-                  <span>{detail?.dueDate}</span>
-                </div>
-              </li>
-            </ul>
-          </div>
-        </StDetailModalContainer>
-      )}
-    </ModalContainer>
+            <div className='information-area'>
+              <ul className='information-box'>
+                <li>
+                  <p>담당자</p>
+                  <div className='desc'>
+                    <ProfileImage
+                      imageUrl={detail?.assignee.profileImageUrl || null}
+                      alt={`${detail?.assignee.nickname}님의 프로필 이미지`}
+                    />
+                    <span>{detail?.assignee.nickname}</span>
+                  </div>
+                </li>
+                <li>
+                  <p>마감일</p>
+                  <div className='desc'>
+                    <span>{detail?.dueDate}</span>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </StDetailModalContainer>
+        )}
+      </ModalContainer>
+      {openSecondModalName === 'deleteAlert' ? <DeleteAlert /> : null}
+    </>
   );
 };
 
