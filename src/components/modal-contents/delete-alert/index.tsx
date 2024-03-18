@@ -13,8 +13,12 @@ interface DeleteAlertProps {
 const DeleteAlert = ({ handleSubmitDelete }: DeleteAlertProps) => {
   const dispatch = useDispatch();
   const handleCloseReject = () => {
-    dispatch(closeSecondModal());
-    toast.warning(SIMPLE_MESSAGES.CANCELED);
+    try {
+      dispatch(closeSecondModal());
+      toast.warning(SIMPLE_MESSAGES.CANCELED);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (

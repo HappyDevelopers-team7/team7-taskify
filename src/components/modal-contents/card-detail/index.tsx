@@ -1,6 +1,6 @@
 import ModalContainer from '@/components/modal-container';
 import { closeModal } from '@/redux/modalSlice';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import StDetailModalContainer from './style';
 import ColumnNameTag from '@/components/column-name-tag';
 import DetailContentArea from '@/components/detail-content-area';
@@ -11,9 +11,7 @@ import { cardDetailType } from '@/types/cardDetailType';
 import ProfileImage from '@/components/profile-image';
 import LoadingSpinner from '@/components/loading-spinner';
 import { IdGroupType } from '@/types/idGroupType';
-import { SecondModalRootState, openSecondModal } from '@/redux/secondModalSlice';
-import DeleteAlert from '../delete-alert';
-import { deleteCard } from '@/api/deleteCard';
+import { openSecondModal } from '@/redux/secondModalSlice';
 
 interface CardDetailProps {
   idGroup: IdGroupType;
@@ -24,12 +22,6 @@ const CardDetail = ({ idGroup, cardId }: CardDetailProps) => {
   const dispatch = useDispatch();
   const [detail, setDetail] = useState<cardDetailType>();
   const [detailLoading, setDetailLoading] = useState(true);
-  const openSecondModalName = useSelector((state: SecondModalRootState) => state.secondModal.openSecondModalName);
-
-  const handleDeleteCard = async () => {
-    const result = await deleteCard(cardId);
-    console.log(result);
-  };
 
   const handleCloseCardDetailModal = () => {
     dispatch(closeModal());
@@ -101,7 +93,6 @@ const CardDetail = ({ idGroup, cardId }: CardDetailProps) => {
           </StDetailModalContainer>
         )}
       </ModalContainer>
-      {openSecondModalName === 'deleteCardAlert' ? <DeleteAlert handleSubmitDelete={handleDeleteCard} /> : null}
     </>
   );
 };

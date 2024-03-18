@@ -7,7 +7,7 @@ export const deleteCard = async (cardId: number) => {
     const response = await axiosInstance.delete(`${API.CARDS.CARDS}/${cardId}`);
 
     const responseData = await response.data;
-
+    console.log(responseData);
     return responseData;
   } catch (e) {
     const error = e as AxiosError;
