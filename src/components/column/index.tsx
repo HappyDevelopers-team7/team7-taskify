@@ -156,12 +156,11 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId }: Props) => 
       .finally(() => setIsLoading(false));
   };
 
-
   const handleDeleteColumn = () => {
     removeColumn(); // 삭제하기 버튼이 클릭되었을 때 실행될 함수
   };
 
-  const handleUploadFile = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleUploadFile = async (e: ChangeEvent<HTMLInputElement>) => {
     // 카드 이미지 첨부 & 미리보기 출력 함수
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
