@@ -71,6 +71,9 @@ export const StProfileInput = styled.div`
   height: 48px;
   margin-bottom: 20px;
   margin-top: 10px;
+  padding: 15px;
+  color: var(--gray-gray_9FA6B2, #9fa6b2);
+  font-weight: 400;
 `;
 
 export const StPasswordContainer = styled.div`
@@ -88,4 +91,7 @@ export const StPasswordInputContainer = styled.div`
   height: 48px;
   margin-bottom: 20px;
   margin-top: 10px;
+  padding: 15px;
+  color: var(--gray-gray_9FA6B2, #9fa6b2);
+  font-weight: 400;
 `;
