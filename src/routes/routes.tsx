@@ -23,7 +23,7 @@ const DashBoardTestPage = lazy(() => import('@pages/dashboard-test'));
 const CardDetailTest = lazy(() => import('@pages/card-detail-test'));
 const ProtectedRoutes = lazy(() => import('@routes/protected-routes'));
 const NotFoundPage = lazy(() => import('@pages/not-found'));
-const ModalTestPage = lazy(() => import('@/components/modal-add-column'));
+const MyPage = lazy(() => import('@pages/my-page'));
 
 const PrimaryRoute = (
   <Route path='/' element={<Loading />}>
@@ -31,7 +31,6 @@ const PrimaryRoute = (
       <Route index element={<LandingPage />} />
       <Route path='sign-in' element={<SignInPage />} />
       <Route path='sign-up' element={<SignUpPage />} />
-      <Route path='modal-test' element={<ModalTestPage />} />
     </Route>
     <Route element={<ProtectedRoutes authentication={true} />}>
       <Route path='/' element={<Layout />}>
@@ -39,6 +38,7 @@ const PrimaryRoute = (
         <Route path='dashboard/:id' element={<DashBoardIdPage />} />
         <Route path='dashboard-test' element={<DashBoardTestPage />} />
         <Route path='card-detail' element={<CardDetailTest />} />
+        <Route path='my-page' element={<MyPage />} />
       </Route>
     </Route>
     <Route path='*' element={<NotFoundPage />} />
