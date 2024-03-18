@@ -11,7 +11,6 @@ import ModalContainer from '../modal-container';
 import Card from '../card';
 import LoadingSpinner from '@/components/loading-spinner';
 import Flatpickr from 'react-flatpickr';
-import 'flatpickr/dist/flatpickr.min.css';
 import EditColumnModal from '../modal-edit-column';
 import dateExtractor from '@/utils/dateExtractor';
 import TagComponent from '../tag-component';
@@ -59,23 +58,23 @@ export interface Types {
 }
 
 const Column = ({ columnData, memberData, viewColumns, dashboardId }: Props) => {
-  const today = new Date();
   const dispatch = useDispatch<AppDispatch>();
+  const colorArray = ['#ff0000', '#29c936', '#ff8c00', '#000000', '#008000', '#f122f1', '#0000ff'];
+  const today = new Date();
+  const inputRef = useRef<HTMLInputElement>(null);
+  const asigneeRef = useRef<number | null>(null);
+  const titleRef = useRef<HTMLInputElement>(null);
+  const descriptionRef = useRef<HTMLTextAreaElement>(null);
   const [cardInfo, setCardInfo] = useState<Types['CardInfo'] | undefined>();
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [isDropdownAsignee, setIsDropdownAsignee] = useState(false);
-  const inputRef = useRef<HTMLInputElement>(null);
   const [filterdMember, SetFilterdMember] = useState<Members[]>([]);
   const [userProfile, setUserProfile] = useState<string | undefined>('');
-  const asigneeRef = useRef<number | null>(null);
-  const titleRef = useRef<HTMLInputElement>(null);
-  const descriptionRef = useRef<HTMLTextAreaElement>(null);
   const [tags, setTags] = useState<Types['Tag'][]>([]);
   const [imageUrl, setImageUrl] = useState<string>('');
   const [pages, setPages] = useState<number>(3);
-  const colorArray = ['#ff0000', '#29c936', '#ff8c00', '#000000', '#008000', '#f122f1', '#0000ff'];
   const [createCardData, setCreateCardData] = useState<Types['CreateCardData']>({
     asignee: '',
     title: '',
@@ -86,14 +85,12 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId }: Props) => 
 
   const openModalName = useSelector((state: ModalRootState) => state.modal.openModalName);
 
-  const handleCreateCard = () => {
-    // 모달 여는 함수
+  const handleOpenCreateCard = () => {
     dispatch(setOpenModalName(`createcard${columnData.id}`));
     dispatch(openModal(`createcard${columnData.id}`));
   };
 
   const handleCloseCreateCard = () => {
-    // 모달 닫는 함수
     dispatch(closeModal());
     setUploadedFile(null);
     setPreviewUrl(null);
@@ -104,14 +101,12 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId }: Props) => 
   };
 
   const handleEditColumn = () => {
-    // 컬럼 관리 함수(이름변경,삭제)
     setOpenModalName(`editcolumn${columnData.id}`);
     dispatch(openModal(`editcolumn${columnData.id}`));
     viewColumns();
   };
 
   const handleDeleteColumn = () => {
-    // 컬럼 삭제 함수
     const isConfirmed = confirm('컬럼의 모든 카드가 삭제됩니다.');
     if (isConfirmed) {
       axiosInstance.delete(`${API.COLUMNS.COLUMNS}/${columnData.id}`).then(() => viewColumns());
@@ -119,7 +114,6 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId }: Props) => 
   };
 
   const handleSubmitCreateCard = async () => {
-    // 카드 생성 함수
     try {
       setIsLoading(true);
       if (!titleRef.current?.value || !descriptionRef.current?.value) {
@@ -153,7 +147,6 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId }: Props) => 
   };
 
   const viewCards = async () => {
-    // 카드 조회 함수
     setIsLoading(true);
     await axiosInstance
       .get(`${API.CARDS.CARDS}?size=${pages}&columnId=${columnData.id}`)
@@ -187,7 +180,6 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId }: Props) => 
   };
 
   const asigneeDropdownChecker = (e: ChangeEvent<HTMLInputElement>) => {
-    // 모달 드롭다운 온오프 함수
     if (e.target.value || document.activeElement === e.target) {
       setCreateCardData({ ...createCardData, asignee: e.target.value });
       setIsDropdownAsignee(true);
@@ -198,7 +190,7 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId }: Props) => 
   };
 
   const handleClickedMember = (member: Members) => {
-    // 클릭된 담당자
+    // 현재 선택되어있는 담당자 핸들링
     setCreateCardData({ ...createCardData, asignee: member.nickname });
     setIsDropdownAsignee(false);
     setUserProfile(member.profileImageUrl);
@@ -209,7 +201,6 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId }: Props) => 
   };
 
   const handleCreateTag = (e: KeyboardEvent<HTMLInputElement>) => {
-    // 태그 생성 함수
     if (e.key === 'Enter') {
       const input = createCardData.tag;
       const tag = {
@@ -257,7 +248,7 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId }: Props) => 
       </div>
 
       <div className='column-body'>
-        <button type='button' className='add-card' onClick={() => handleCreateCard()}>
+        <button type='button' className='add-card' onClick={() => handleOpenCreateCard()}>
           <img src='/assets/image/icons/bannerAddIcon.svg' alt='add-icon' />
         </button>
         {cardInfo && cardInfo.cards.map((card) => <Card key={card.id} card={card} />)}
