@@ -7,6 +7,8 @@ import { useParams } from 'react-router-dom';
 import API from '@/api/constants';
 import axiosInstance from '@/api/instance/axiosInstance';
 import { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
 interface User {
   id: number;
@@ -132,8 +134,7 @@ function DashboardMembers({ membersInfo }: { membersInfo: DashboardmembersInfo }
         return 'pink';
     }
   };
-  console.log(extraCount);
-  console.log(membersInfo.totalCount);
+
   return (
     // 멤버들 먼저가입한 순서대로 출력
     <ul className={`dashboard-info-members-container ${containerSize}`}>
@@ -166,6 +167,8 @@ function DashboardMembers({ membersInfo }: { membersInfo: DashboardmembersInfo }
 function ProfileInfo({ myInfo }: { myInfo: SetMyInfo | null }) {
   //todo
   //프로필 배경색 정해주기
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false); // 드롭다운 메뉴 상태
+  const navigate = useNavigate();
 
   if (!myInfo) {
     console.log('마이인포가 없다!');
@@ -199,21 +202,51 @@ function ProfileInfo({ myInfo }: { myInfo: SetMyInfo | null }) {
   if (myInfo && hasImg == false) {
     imageBackgroundColor = generateColor(myInfo.nickname);
   }
-  console.log(generateColor('박준용'));
+
+  // 드롭다운 나타나게함
+  const handleMouseEnter = () => {
+    setIsDropdownOpen(true);
+  };
+
+  // 드롭다운 사라지게함
+  const handleMouseLeave = () => {
+    setIsDropdownOpen(false);
+  };
+
+  // 마이페이지로 가게하는 핸들러
+  const handleMyPageClick = () => {
+    navigate('/mypage');
+  };
+
+  // 로그아웃 버튼을 클릭했을 때의 핸들러 함수
+  const handleLogout = () => {
+    Cookies.remove('accessToken');
+    navigate('/');
+  };
 
   return (
     //가져온 정보들을 가지고 여기서 프로필을 띄운다.
-    <div className='myinfo'>
+    <div className='myinfo' onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
       {hasImg == false ? (
         <div className={`myinfo-color myinfo-color-${imageBackgroundColor}`}>
           <div className='myinfo-initial'>{initial}</div>
         </div>
       ) : (
-        //myinfo.profileImageUrl이 없으면 기본img로 있다면 img를 띄우기
-        //현재 임시로 이렇게 해놓음 나중에 잘나오는지 체크해봐야함
         <div className='myinfo-image' style={{ backgroundImage: `url(${myInfo?.profileImageUrl})` }}></div>
       )}
       <div className='myinfo-name'>{myInfo?.nickname}</div>
+      {isDropdownOpen ? (
+        <ul className='drop-down-menu'>
+          <Link to={'/mypage'} className='myinfo-mypage-button'>
+            <li>
+              <button onClick={handleMyPageClick}>마이페이지</button>
+            </li>
+          </Link>
+          <li>
+            <button onClick={handleLogout}>로그아웃</button>
+          </li>
+        </ul>
+      ) : null}
     </div>
   );
 }

@@ -50,6 +50,14 @@ export const Container = styled.header`
     justify-content: center;
     gap: 12px;
     padding: 26px 80px 25px 24px;
+    cursor: pointer;
+
+    .myinfo-mypage-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
 
     .myinfo-image {
       //임시로해놓음 나중에 잘되는지 체크해야됨.
@@ -77,6 +85,43 @@ export const Container = styled.header`
         font-style: normal;
         font-weight: 600;
         line-height: normal;
+      }
+    }
+    .drop-down-menu {
+      position: absolute;
+      align-items: center;
+      justify-content: center;
+      width: 130px;
+      top: 100%;
+      background: ${({ theme }) => theme.color.white};
+      border-radius: 6px;
+      border: 1px solid ${({ theme }) => theme.color.gray_d9};
+      box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.08);
+      padding: 6px;
+      z-index: 10;
+
+      li {
+        button {
+          width: 100%;
+          color: ${({ theme }) => theme.color.black_33};
+          text-align: center;
+          padding: 8px 16px;
+          font-size: 1.4rem;
+          font-weight: 400;
+          border-radius: 4px;
+
+          &:hover {
+            background: ${({ theme }) => theme.color.violet_8};
+            color: ${({ theme }) => theme.color.violet};
+          }
+        }
+      }
+    }
+
+    @media ${({ theme }) => theme.deviceSize.mobile} {
+      .more-button {
+        width: 20px;
+        height: 20px;
       }
     }
 
@@ -190,6 +235,7 @@ export const Container = styled.header`
 
     .myinfo-initial {
       color: var(--white-white_FFFFFF, #fff);
+      padding-top: 3px; //가운데 정렬을 해서 배경가운데에 있는데 폰트때문인지 조금위쪽으로 뜬느낌이라서 패딩을 줌
       text-align: center;
       font-family: Montserrat;
       font-size: 16px;
