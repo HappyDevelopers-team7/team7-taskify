@@ -15,6 +15,8 @@ export const Container = styled.header`
 
   .dashboard-right-space {
     display: flex;
+    align-items: center;
+    justify-content: center;
   }
   .titlebox {
     width: 20%;
@@ -38,13 +40,16 @@ export const Container = styled.header`
       visibility: hidden;
     }
   }
+  /* .dashboard-info-members-container-four-members {
+    width: 130px;
+  } */
 
   .myinfo {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 12px;
-    padding: 26px 80px 25px 0px;
+    padding: 26px 80px 25px 24px;
 
     .myinfo-image {
       //임시로해놓음 나중에 잘되는지 체크해야됨.
@@ -74,10 +79,6 @@ export const Container = styled.header`
         line-height: normal;
       }
     }
-    .extracolor {
-      color: #d25b68;
-      background-color: #f4d7da;
-    }
 
     .myinfo-name {
       color: #333236;
@@ -104,18 +105,88 @@ export const Container = styled.header`
       background-color: #ff6ee0;
     }
   }
-`;
-export const MyInfoColor = styled.div`
-  .dashboard-info-members-container-four-members {
-    width: 130 px;
+  .dashboard-info-members-container {
+    /* height: 42; */
     display: flex;
-
-    /* width: 38px;
-    height: 38px; */
-    flex-shrink: 0;
-    border-radius: 100%;
     align-items: center;
     justify-content: center;
+    padding-right: 24px;
+    border-right: 1px solid ${({ theme }) => theme.color.gray_d9};
+
+    /* .dashboard-info-members-container li {
+      position: absolute; /* 각 요소를 absolute로 설정합니다. */
+    /* margin-right: -28px; 인덱스에 따라 왼쪽으로 이동하여 겹치도록 설정합니다. */
+    /* } */
+
+    /* .dashboard-info-members-container ul {
+      position: relative;
+    } */
+
+    .myinfo-image {
+      width: 38px;
+      height: 38px;
+      flex-shrink: 0;
+      border-radius: 100%;
+      border: 1px solid;
+      border-color: #ffffff;
+    }
+
+    li ~ li {
+      margin-left: -8px;
+    }
+
+    .only-one {
+      width: 40px;
+    }
+    .two-members {
+      width: 70px;
+    }
+    .three-members {
+      width: 100px;
+    }
+    .four-members {
+      width: 130px;
+    }
+    .five-members {
+      width: 160px;
+    }
+    /* 
+    .첫번째 {
+      z-index: 1;
+      position: absolute;
+      right: 356px;
+      bottom: 16px;
+    }
+    .두번째 {
+      z-index: 2;
+      position: absolute;
+      right: 326px;
+      bottom: 16px;
+    }
+    .세번째 {
+      z-index: 3;
+      position: absolute;
+      right: 296px;
+      bottom: 16px;
+    }
+    .네번째 {
+      z-index: 4;
+      position: absolute;
+      right: 266px;
+      bottom: 16px;
+    } */
+
+    .myinfo-color {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 38px; /* 필요에 따라 너비와 높이 조절 */
+      height: 38px; /* 필요에 따라 너비와 높이 조절 */
+      border-radius: 100%; /* 원으로 만듭니다 */
+      border: 1px solid;
+      border-color: #ffffff;
+      flex-shrink: 0;
+    }
 
     .myinfo-initial {
       color: var(--white-white_FFFFFF, #fff);
@@ -124,6 +195,17 @@ export const MyInfoColor = styled.div`
       font-size: 16px;
       font-style: normal;
       font-weight: 600;
+      line-height: normal;
+    }
+
+    .extracolor {
+      color: #d25b68;
+      background-color: #f4d7da;
+      font-size: 16px;
+      font-family: Pretendard;
+      text-align: center;
+      font-style: normal;
+      font-weight: 500;
       line-height: normal;
     }
 

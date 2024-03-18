@@ -1,6 +1,6 @@
 import { AppDispatch, fetchMyInfo, getMyInfo } from '@/redux/myInfoSlice';
 import { useDispatch, useSelector } from 'react-redux';
-import { Container, MyInfoColor } from './style';
+import { Container } from './style';
 import { Dashboards } from '../side-menu';
 import { SetMyInfo } from '@/redux/myInfoSlice';
 import { useParams } from 'react-router-dom';
@@ -80,11 +80,6 @@ const DashboardHeader = () => {
     fetchDashboardMemberInfo();
   }, [id]);
 
-  // console.log(myInfo);
-  // console.log(myInfo.nickname);
-  // console.log(myInfo.nickname.toUpperCase()[0]); // 됨
-  // console.log(myInfo.nickname[0]);
-  // console.log(myInfo.nickname[0].toUpperCase()); //안됨
   return (
     <Container>
       <DashboardId currentDashboard={currentDashboard} />
@@ -116,9 +111,10 @@ function DashboardId({ currentDashboard }: Props) {
 }
 
 function DashboardMembers({ membersInfo }: { membersInfo: DashboardmembersInfo }) {
-  const extraCount: number = membersInfo.totalCount > 5 ? membersInfo.totalCount - 4 : 0;
-  const silicedMembers = membersInfo.members.slice(0, 5);
-  const containerSize = CONTAINER_SIZE[silicedMembers.length - 1];
+  const extraCount: number = membersInfo.totalCount >= 5 ? membersInfo.totalCount - 4 : 0;
+  const slicedMembers = membersInfo.members.slice(0, 5);
+  const containerSize = CONTAINER_SIZE[slicedMembers.length - 1];
+  const containerInIndex = ['네번째', '세번째', '두번째', '첫번째'];
 
   const generateColor = (name: string) => {
     const key = name.toUpperCase()[0];
@@ -136,31 +132,31 @@ function DashboardMembers({ membersInfo }: { membersInfo: DashboardmembersInfo }
         return 'pink';
     }
   };
-  console.log(`extraCount값: ${extraCount}`);
-  console.log(containerSize);
+  console.log(extraCount);
+  console.log(membersInfo.totalCount);
   return (
-    <ul className={`dashboard-info-members-container-${containerSize}`} style={{ display: 'flex' }}>
-      {silicedMembers.map((member: User, index: number) => (
-        <li key={member.id} style={{ display: 'flex' }}>
+    // 멤버들 먼저가입한 순서대로 출력
+    <ul className={`dashboard-info-members-container ${containerSize}`}>
+      {slicedMembers.map((member: User, index: number) => (
+        <li key={member.id}>
           {member.profileImageUrl ? (
             <div
-              className={`myinfo-image member${silicedMembers.length - index - 1}`}
+              className={`myinfo-image ${containerInIndex[slicedMembers.length - index - 1]}`}
               style={{ backgroundImage: `url(${member?.profileImageUrl})` }}
             ></div>
           ) : (
-            <MyInfoColor
-              className={`myinfo-color myinfo-color-${generateColor(member.nickname)} member${silicedMembers.length - index - 1}`}
+            <div
+              className={`myinfo-color myinfo-color-${generateColor(member.nickname)} ${containerInIndex[slicedMembers.length - index - 1]}`}
             >
-              {/* {`member${silicedMembers.length - index - 1}`}
-              {generateColor(member.nickname)} */}
               <div className='myinfo-initial'>{member.nickname.toUpperCase()[0]}</div>
-            </MyInfoColor>
+            </div>
           )}
         </li>
       ))}
+      {/* 5명 넘어갈때 몇명더 있는지 해주는 이미지 */}
       {extraCount > 0 && (
         <li>
-          <div className={`myinfo-color myinfo-color extracolor}`}>{`+${extraCount}`}</div>
+          <div className='myinfo-color extracolor'>{`+${extraCount}`}</div>
         </li>
       )}
     </ul>
@@ -203,6 +199,7 @@ function ProfileInfo({ myInfo }: { myInfo: SetMyInfo | null }) {
   if (myInfo && hasImg == false) {
     imageBackgroundColor = generateColor(myInfo.nickname);
   }
+  console.log(generateColor('박준용'));
 
   return (
     //가져온 정보들을 가지고 여기서 프로필을 띄운다.
