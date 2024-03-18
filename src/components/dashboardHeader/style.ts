@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-const Container = styled.header`
+export const Container = styled.header`
   padding-left: 300px;
   width: 100%;
   height: 70px;
@@ -9,6 +9,9 @@ const Container = styled.header`
   display: flex;
   justify-content: space-between;
 
+  .dashboard-right-space {
+    display: flex;
+  }
   .titlebox {
     width: 20%;
     height: 30%;
@@ -98,5 +101,42 @@ const Container = styled.header`
     }
   }
 `;
+export const MyInfoColor = styled.div`
+  .dashboard-info-members-container-four-members {
+    width: 130 px;
+    display: flex;
 
-export default Container;
+    /* width: 38px;
+    height: 38px; */
+    flex-shrink: 0;
+    border-radius: 100%;
+    align-items: center;
+    justify-content: center;
+
+    .myinfo-initial {
+      color: var(--white-white_FFFFFF, #fff);
+      text-align: center;
+      font-family: Montserrat;
+      font-size: 16px;
+      font-style: normal;
+      font-weight: 600;
+      line-height: normal;
+    }
+
+    &.myinfo-color-green {
+      background-color: #5be352;
+    }
+    .myinfo-color-purple {
+      background-color: #bc57ff;
+    }
+    .myinfo-color-orange {
+      background-color: #ffc85a;
+    }
+    .myinfo-color-blue {
+      background-color: #9dd7ed;
+    }
+    .myinfo-color-pink {
+      background-color: #ff6ee0;
+    }
+  }
+`;

@@ -1,6 +1,6 @@
 import { AppDispatch, fetchMyInfo, getMyInfo } from '@/redux/myInfoSlice';
 import { useDispatch, useSelector } from 'react-redux';
-import Container from './style';
+import { Container, MyInfoColor } from './style';
 import { Dashboards } from '../side-menu';
 import { SetMyInfo } from '@/redux/myInfoSlice';
 import { useParams } from 'react-router-dom';
@@ -90,8 +90,10 @@ const DashboardHeader = () => {
       <DashboardId currentDashboard={currentDashboard} />
       {/* <div> */}
       {/* <inviteButton /> */}
-      {membersInfo && <DashboardMembers membersInfo={membersInfo} />}
-      <ProfileInfo myInfo={myInfo} />
+      <div className='dashboard-right-space'>
+        {membersInfo && <DashboardMembers membersInfo={membersInfo} />}
+        <ProfileInfo myInfo={myInfo} />
+      </div>
       {/* </div> */}
     </Container>
   );
@@ -134,22 +136,25 @@ function DashboardMembers({ membersInfo }: { membersInfo: DashboardmembersInfo }
         return 'pink';
     }
   };
-
+  console.log(`extraCount값: ${extraCount}`);
+  console.log(containerSize);
   return (
-    <ul className={`dashboard-info-members-container ${containerSize}`}>
+    <ul className={`dashboard-info-members-container-${containerSize}`} style={{ display: 'flex' }}>
       {silicedMembers.map((member: User, index: number) => (
-        <li key={member.id}>
+        <li key={member.id} style={{ display: 'flex' }}>
           {member.profileImageUrl ? (
             <div
               className={`myinfo-image member${silicedMembers.length - index - 1}`}
               style={{ backgroundImage: `url(${member?.profileImageUrl})` }}
             ></div>
           ) : (
-            <div
+            <MyInfoColor
               className={`myinfo-color myinfo-color-${generateColor(member.nickname)} member${silicedMembers.length - index - 1}`}
             >
+              {/* {`member${silicedMembers.length - index - 1}`}
+              {generateColor(member.nickname)} */}
               <div className='myinfo-initial'>{member.nickname.toUpperCase()[0]}</div>
-            </div>
+            </MyInfoColor>
           )}
         </li>
       ))}
