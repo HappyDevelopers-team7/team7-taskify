@@ -16,9 +16,10 @@ import DeleteAlert from '../delete-alert';
 
 interface CardDetailProps {
   idGroup: IdGroupType;
+  cardId: number;
 }
 
-const CardDetail = ({ idGroup }: CardDetailProps) => {
+const CardDetail = ({ idGroup, cardId }: CardDetailProps) => {
   const dispatch = useDispatch();
   const [detail, setDetail] = useState<cardDetailType>();
   const [detailLoading, setDetailLoading] = useState(true);
@@ -35,7 +36,7 @@ const CardDetail = ({ idGroup }: CardDetailProps) => {
   const setCardDetail = async () => {
     try {
       setDetailLoading(true);
-      const result = await getCardDetail(idGroup.cardId);
+      const result = await getCardDetail(cardId);
       setDetail(result);
     } catch (error) {
       setDetailLoading(false);
@@ -68,7 +69,7 @@ const CardDetail = ({ idGroup }: CardDetailProps) => {
                 <div className='sub-tag-box'></div>
               </div>
               <DetailContentArea imageUrl={detail?.imageUrl} content={detail?.description} />
-              <DetailCommentArea idGroup={idGroup} />
+              <DetailCommentArea idGroup={idGroup} cardId={cardId} />
             </div>
             <div className='information-area'>
               <ul className='information-box'>

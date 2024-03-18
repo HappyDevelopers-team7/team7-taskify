@@ -84,6 +84,12 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId }: Props) => 
     tag: '',
   });
 
+  const idGroup = {
+    columnTitle: columnData.title,
+    columnId: columnData.id,
+    dashboardId: Number(dashboardId),
+  };
+
   const openModalName = useSelector((state: ModalRootState) => state.modal.openModalName);
 
   const handleEditColumn = () => {
@@ -264,7 +270,7 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId }: Props) => 
         <button type='button' className='add-card' onClick={() => handleCreateCard()}>
           <img src='/assets/image/icons/bannerAddIcon.svg' alt='add-icon' />
         </button>
-        {cardInfo && cardInfo.cards.map((card) => <Card key={card.id} card={card} />)}
+        {cardInfo && cardInfo.cards.map((card) => <Card key={card.id} card={card} idGroup={idGroup} />)}
       </div>
 
       {openModalName === `createcard${columnData.id}` ? (

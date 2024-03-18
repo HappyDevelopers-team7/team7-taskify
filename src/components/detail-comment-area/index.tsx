@@ -9,14 +9,15 @@ import { CommentListType } from '@/types/commentListType';
 
 interface DetailCommentAreaProps {
   idGroup: IdGroupType;
+  cardId: number;
 }
 
-const DetailCommentArea = ({ idGroup }: DetailCommentAreaProps) => {
+const DetailCommentArea = ({ idGroup, cardId }: DetailCommentAreaProps) => {
   const [commentList, setCommentList] = useState<CommentListType[]>([]);
 
   const setCommentReadBox = useCallback(async () => {
     try {
-      const result = await getComments(10, idGroup.cardId);
+      const result = await getComments(10, cardId);
       if (result.status === 404) {
         return toast.error(DASHBOARD_ERROR_MESSAGES.NOT_A_MEMBER);
       }
@@ -24,7 +25,7 @@ const DetailCommentArea = ({ idGroup }: DetailCommentAreaProps) => {
     } catch (error) {
       console.error(error);
     }
-  }, [idGroup.cardId, setCommentList]);
+  }, [cardId, setCommentList]);
 
   useEffect(() => {
     setCommentReadBox();
@@ -32,7 +33,7 @@ const DetailCommentArea = ({ idGroup }: DetailCommentAreaProps) => {
 
   return (
     <>
-      <CommentWriteBox idGroup={idGroup} setCommentList={setCommentList} />
+      <CommentWriteBox idGroup={idGroup} cardId={cardId} setCommentList={setCommentList} />
       {commentList.length > 0 &&
         commentList.map((content) => (
           <CommentReadBox
