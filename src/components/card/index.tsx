@@ -1,24 +1,8 @@
 import CardContainer from './style';
 import TagComponent from '../tag-component';
+import { ColumnToCardProps } from '@/types/columnToCardProps';
 
-interface Props {
-  card: {
-    assignee: { id: number; nickname: string; profileImageUrl: string };
-    columnId: number;
-    createdAt: string;
-    dashboardId: number;
-    description: string;
-    dueDate: string | null;
-    id: number;
-    imageUrl: string | null;
-    tags: string[];
-    teamId: number;
-    title: string;
-    updatedAt: string;
-  };
-}
-
-const Card = ({ card }: Props) => {
+const Card = ({ card }: ColumnToCardProps) => {
   const colorArray = ['#ff0000', '#29c936', '#ff8c00', '#000000', '#008000', '#f122f1', '#0000ff'];
 
   return (
