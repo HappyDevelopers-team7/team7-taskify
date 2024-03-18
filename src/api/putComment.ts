@@ -2,11 +2,12 @@ import { AxiosError } from 'axios';
 import API from './constants';
 import axiosInstance from './instance/axiosInstance';
 
-export const getInvitation = async (size = 10) => {
+export const putComment = async (commentId: number, content: string) => {
   try {
-    const response = await axiosInstance.get(`${API.INVITATIONS.INVITATIONS}?size=${size}`);
+    const response = await axiosInstance.put(`${API.COMMENTS.COMMENTS}/${commentId}`, { content });
 
     const responseData = await response.data;
+
     return responseData;
   } catch (e) {
     const error = e as AxiosError;

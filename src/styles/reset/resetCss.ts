@@ -19,6 +19,7 @@ const resetCss = css`
     height: 100%;
 
     input,
+    textarea,
     select,
     button {
       border: 0;

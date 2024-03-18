@@ -20,6 +20,7 @@ const SignUpPage = lazy(() => import('@pages/sign-up'));
 const DashBoardPage = lazy(() => import('@pages/dashboard'));
 const DashBoardIdPage = lazy(() => import('@pages/dashboard-id'));
 const DashBoardTestPage = lazy(() => import('@pages/dashboard-test'));
+const CardDetailTest = lazy(() => import('@pages/card-detail-test'));
 const ProtectedRoutes = lazy(() => import('@routes/protected-routes'));
 const NotFoundPage = lazy(() => import('@pages/not-found'));
 const ModalTestPage = lazy(() => import('@/components/modal-add-column'));
@@ -37,6 +38,7 @@ const PrimaryRoute = (
         <Route path='dashboard' element={<DashBoardPage />} />
         <Route path='dashboard/:id' element={<DashBoardIdPage />} />
         <Route path='dashboard-test' element={<DashBoardTestPage />} />
+        <Route path='card-detail' element={<CardDetailTest />} />
       </Route>
     </Route>
     <Route path='*' element={<NotFoundPage />} />
