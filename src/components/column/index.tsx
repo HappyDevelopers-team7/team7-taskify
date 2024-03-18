@@ -156,7 +156,11 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId }: Props) => 
   };
 
   const handleDeleteColumn = () => {
-    removeColumn(); // 삭제하기 버튼이 클릭되었을 때 실행될 함수
+    // 컬럼 삭제 함수
+    const isConfirmed = confirm('컬럼의 모든 카드가 삭제됩니다.');
+    if (isConfirmed) {
+      axiosInstance.delete(`${API.COLUMNS.COLUMNS}/${columnData.id}`).then(() => viewColumns());
+    }
   };
 
   const handleUploadFile = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -178,14 +182,6 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId }: Props) => 
         };
         reader.readAsDataURL(file);
       }
-    }
-  };
-
-  const removeColumn = () => {
-    // 컬럼 삭제 임시 함수
-    const isConfirmed = confirm('컬럼의 모든 카드가 삭제됩니다.');
-    if (isConfirmed) {
-      axiosInstance.delete(`${API.COLUMNS.COLUMNS}/${columnData.id}`).then(() => viewColumns());
     }
   };
 
