@@ -6,6 +6,9 @@ import API from '@/api/constants';
 import { useEffect, useState } from 'react';
 import Column from '@/components/column';
 import LoadingSpinner from '@/components/loading-spinner';
+import AddColumnModal from '../../components/modal-add-column';
+import { useSelector } from 'react-redux';
+import { ModalRootState } from '@/redux/modalSlice';
 
 export type Columns = {
   createdAt: string;
@@ -16,45 +19,73 @@ export type Columns = {
   updatedAt: string;
 };
 
+export type Members = {
+  createdAt: string;
+  email: string;
+  id: number;
+  isOwner: true;
+  nickname: string;
+  profileImageUrl: string | undefined;
+  updatedAt: string;
+  userId: number;
+};
+
+export type Tag = {
+  id: number;
+  name: string;
+  backgroundColor: string;
+  color: string;
+};
+
 const DashBoardId = () => {
   const { id } = useParams();
-  const [columns, setColumns] = useState<Columns[]>();
+  const [columns, setColumns] = useState<Columns[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-
-  const createColumns = () => {
-    const name = prompt('컬럼 이름');
-    if (name) {
-      axiosInstance
-        .post(API.COLUMNS.COLUMNS, {
-          title: name,
-          dashboardId: Number(id),
-        })
-        .then(() => viewColumns());
-    } else {
-      alert('이름써');
-    }
-  };
+  const openModalName = useSelector((state: ModalRootState) => state.modal.openModalName);
+  const [members, setMembers] = useState<Members[]>([]);
 
   const viewColumns = () => {
+    // 컬럼 조회 함수
     setIsLoading(true);
-    axiosInstance.get(`${API.COLUMNS.COLUMNS}?dashboardId=${id}`).then((res) => {
-      console.log(res.data.data);
-      setColumns(res.data.data);
-      setIsLoading(false);
-    });
+    axiosInstance
+      .get(`${API.COLUMNS.COLUMNS}?dashboardId=${id}`)
+      .then((res) => {
+        setColumns(res.data.data);
+        setIsLoading(false);
+      })
+      .catch(() => alert('컬럼 조회 실패'));
+  };
+
+  const viewMembers = () => {
+    // 초대받은 멤버 조회 함수
+    axiosInstance
+      .get(`${API.MEMBERS.MEMBERS}?page=1&size=9999&dashboardId=${id}`)
+      .then((res) => setMembers(res.data.members))
+      .catch(() => alert('멤버 조회 실패'));
   };
 
   useEffect(() => {
     viewColumns();
+    viewMembers();
   }, [id]);
 
   return (
     <Container>
       {isLoading && <LoadingSpinner />}
-      {columns && columns.map((it) => <Column key={it.id} props={it} viewColumns={viewColumns} dashboardId={id} />)}
+      {columns &&
+        columns.map((columnData) => (
+          <Column
+            key={columnData.id}
+            dashboardId={id}
+            columnData={columnData}
+            memberData={members}
+            viewColumns={viewColumns}
+          />
+        ))}
       <div className='button-box'>
-        <AddColumnButton createColumns={createColumns}>새로운 컬럼 추가하기</AddColumnButton>
+        <AddColumnButton>새로운 컬럼 추가하기</AddColumnButton>
       </div>
+      {openModalName === 'addColumnModal' && <AddColumnModal setColumns={setColumns} />}
     </Container>
   );
 };
