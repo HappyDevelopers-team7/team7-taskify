@@ -12,6 +12,10 @@ const StDetailModalContainer = styled.article`
       align-items: center;
       gap: 12px;
 
+      .column-name-box {
+        min-width: 60px;
+      }
+
       .divide-bar {
         width: 1px;
         height: 20px;
@@ -21,6 +25,8 @@ const StDetailModalContainer = styled.article`
       .sub-tag-box {
         display: flex;
         align-items: center;
+        flex-wrap: wrap;
+        gap: 6px;
       }
     }
   }
