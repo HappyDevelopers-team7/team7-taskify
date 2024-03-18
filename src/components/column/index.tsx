@@ -75,6 +75,7 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId }: Props) => 
   const descriptionRef = useRef<HTMLTextAreaElement>(null);
   const [tags, setTags] = useState<Types['Tag'][]>([]);
   const [imageUrl, setImageUrl] = useState<string>('');
+  const colorArray = ['#ff0000', '#29c936', '#ff8c00', '#000000', '#008000', '#f122f1', '#0000ff'];
   const [createCardData, setCreateCardData] = useState<Types['CreateCardData']>({
     asignee: '',
     title: '',
@@ -350,8 +351,13 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId }: Props) => 
               />
               <div className='input-box tag-list'>
                 {tags &&
-                  tags.map((tag) => (
-                    <TagComponent key={tag.id} id={tag.id} name={tag.name} backgroundColor={tag.backgroundColor} />
+                  tags.map((tag, index) => (
+                    <TagComponent
+                      key={tag.id}
+                      id={tag.id}
+                      name={tag.name}
+                      backgroundColor={colorArray[index % colorArray.length]}
+                    />
                   ))}
               </div>
             </div>
