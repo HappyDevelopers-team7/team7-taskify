@@ -11,7 +11,7 @@ export const ColumnContainer = styled.div`
     background-color: tomato;
   }
 
-  .column-header {
+  .column-head {
     position: relative;
     display: flex;
     align-items: center;
@@ -33,7 +33,7 @@ export const ColumnContainer = styled.div`
     }
 
     .inner-cards {
-      width: 20px;
+      width: auto;
       height: 20px;
       padding: 3px 6px;
       border-radius: 4px;
@@ -73,7 +73,6 @@ export const ColumnContainer = styled.div`
 `;
 type Tag = {
   name: string;
-  backgroundColor: string;
   id: number;
 };
 

@@ -2,18 +2,21 @@ import { AppDispatch, fetchMyInfo /*getMyInfo*/ } from '@/redux/myInfoSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { ColumnContainer, ModalContent } from './style';
 import { Columns, Members } from '@/pages/dashboard-id';
-import axiosInstance from '@/api/instance/axiosInstance';
-import API from '@/api/constants';
 import { ChangeEvent, useEffect, useState, useRef, KeyboardEvent } from 'react';
 import { ModalRootState, closeModal, openModal, setOpenModalName } from '@/redux/modalSlice';
+import { toast } from 'react-toastify';
+import axiosInstance from '@/api/instance/axiosInstance';
+import API from '@/api/constants';
 import ModalContainer from '../modal-container';
+import Card from '../card';
 import LoadingSpinner from '@/components/loading-spinner';
 import Flatpickr from 'react-flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 import EditColumnModal from '../modal-edit-column';
 import dateExtractor from '@/utils/dateExtractor';
-import randomHexCode from '@/utils/randomHexCode';
 import TagComponent from '../tag-component';
+import Flatpickr from 'react-flatpickr';
+import 'flatpickr/dist/flatpickr.min.css';
 
 interface Props {
   columnData: Columns;
@@ -22,11 +25,26 @@ interface Props {
   dashboardId: string | undefined;
 }
 
-interface Types {
+export interface Types {
   CardInfo: {
-    card: unknown;
+    cards: [
+      {
+        assignee: { id: number; nickname: string; profileImageUrl: string };
+        columnId: number;
+        createdAt: string;
+        dashboardId: number;
+        description: string;
+        dueDate: string | null;
+        id: number;
+        imageUrl: string | null;
+        tags: string[];
+        teamId: number;
+        title: string;
+        updatedAt: string;
+      },
+    ];
     totalCount: number;
-    cursorId: null;
+    cursorId: number;
   };
   CreateCardData: {
     asignee: string;
@@ -38,7 +56,6 @@ interface Types {
   Tag: {
     id: number;
     name: string;
-    backgroundColor: string;
   };
 }
 
@@ -55,7 +72,11 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId }: Props) => 
   const [filterdMember, SetFilterdMember] = useState<Members[]>([]);
   const [userProfile, setUserProfile] = useState<string | undefined>('');
   const asigneeRef = useRef<number | null>(null);
+  const titleRef = useRef<HTMLInputElement>(null);
+  const descriptionRef = useRef<HTMLTextAreaElement>(null);
   const [tags, setTags] = useState<Types['Tag'][]>([]);
+  const [imageUrl, setImageUrl] = useState<string>('');
+  const colorArray = ['#ff0000', '#29c936', '#ff8c00', '#000000', '#008000', '#f122f1', '#0000ff'];
   const [createCardData, setCreateCardData] = useState<Types['CreateCardData']>({
     asignee: '',
     title: '',
@@ -93,19 +114,19 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId }: Props) => 
     // 카드 생성 함수
     try {
       setIsLoading(true);
-      const formData = new FormData();
-      formData.append('image', uploadedFile as Blob);
-      const res = await axiosInstance.post(`${API.COLUMNS.COLUMNS}/${columnData.id}/card-image`, formData);
-
+      if (!titleRef.current?.value || !descriptionRef.current?.value) {
+        toast.error('제목,설명은 필수입니다.');
+        return;
+      }
       await axiosInstance.post(API.CARDS.CARDS, {
-        assigneeUserId: asigneeRef.current,
+        assigneeUserId: asigneeRef.current ? asigneeRef.current : undefined,
         dashboardId: Number(dashboardId),
         columnId: columnData.id,
         title: createCardData.title,
         description: createCardData.description,
-        dueDate: createCardData.dueDate,
+        dueDate: createCardData.dueDate ? createCardData.dueDate : undefined,
         tags: tags.map((item) => item.name),
-        imageUrl: res.data.profileImageUrl,
+        imageUrl: imageUrl ? imageUrl : undefined,
       });
 
       alert('카드생성 완료');
@@ -115,20 +136,26 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId }: Props) => 
       setUserProfile(undefined);
       setTags([]);
       dispatch(closeModal());
-      viewCards();
     } catch (err) {
       alert('오류가 발생했습니다. 다시 시도해주세요.');
     } finally {
       setIsLoading(false);
+      viewCards();
     }
   };
 
-  const viewCards = () => {
+  const viewCards = async () => {
     // 카드 조회 함수
-    axiosInstance.get(`${API.CARDS.CARDS}?size=10&columnId=${columnData.id}`).then((res) => {
-      setCardInfo(res.data);
-    });
+    setIsLoading(true);
+    await axiosInstance
+      .get(`${API.CARDS.CARDS}?size=9999&columnId=${columnData.id}`)
+      .then((res) => {
+        setCardInfo(res.data);
+      })
+      .catch(() => alert('카드 조회 실패'))
+      .finally(() => setIsLoading(false));
   };
+
 
   const handleDeleteColumn = () => {
     removeColumn(); // 삭제하기 버튼이 클릭되었을 때 실행될 함수
@@ -142,6 +169,11 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId }: Props) => 
         alert('파일은 gif를 제외한 이미지 타입만 첨부 가능합니다.');
       } else {
         setUploadedFile(file);
+        const formData = new FormData();
+        formData.append('image', file as Blob);
+        await axiosInstance
+          .post(`${API.COLUMNS.COLUMNS}/${columnData.id}/card-image`, formData)
+          .then((res) => setImageUrl(res.data.imageUrl));
         const reader = new FileReader();
         reader.onloadend = () => {
           setPreviewUrl(reader.result as string);
@@ -188,8 +220,6 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId }: Props) => 
       const tag = {
         id: Date.now(),
         name: input,
-        backgroundColor: randomHexCode(),
-        color: randomHexCode(),
       };
       setTags((prev) => [...prev, tag]);
       setCreateCardData({ ...createCardData, tag: '' });
@@ -224,7 +254,8 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId }: Props) => 
 
   return (
     <ColumnContainer>
-      <div className='column-header'>
+      {isLoading && <LoadingSpinner />}
+      <div className='column-head'>
         <div className='column-color' />
         <h2>{columnData.title}</h2>
         <div className='inner-cards'>{cardInfo?.totalCount}</div>
@@ -235,6 +266,7 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId }: Props) => 
         <button type='button' className='add-card' onClick={() => handleCreateCard()}>
           <img src='/assets/image/icons/bannerAddIcon.svg' alt='add-icon' />
         </button>
+        {cardInfo && cardInfo.cards.map((card) => <Card key={card.id} card={card} />)}
       </div>
 
       {openModalName === `createcard${columnData.id}` ? (
@@ -289,6 +321,7 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId }: Props) => 
                 제목<span className='essential'> *</span>
               </h3>
               <input
+                ref={titleRef}
                 className='input-box'
                 placeholder='제목을 입력해 주세요'
                 type='text'
@@ -301,6 +334,7 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId }: Props) => 
                 설명<span className='essential'> *</span>
               </h3>
               <textarea
+                ref={descriptionRef}
                 className='input-box description-box'
                 placeholder='설명을 입력해 주세요'
                 value={createCardData.description}
@@ -333,8 +367,13 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId }: Props) => 
               />
               <div className='input-box tag-list'>
                 {tags &&
-                  tags.map((tag) => (
-                    <TagComponent key={tag.id} id={tag.id} name={tag.name} backgroundColor={tag.backgroundColor} />
+                  tags.map((tag, index) => (
+                    <TagComponent
+                      key={tag.id}
+                      id={tag.id}
+                      name={tag.name}
+                      backgroundColor={colorArray[index % colorArray.length]}
+                    />
                   ))}
               </div>
             </div>

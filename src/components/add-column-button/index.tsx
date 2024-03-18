@@ -12,8 +12,8 @@ const AddColumnButton = ({ children }: Props) => {
   const handleButtonClick = () => {
     dispatch(openModal('addColumnModal'));
   };
-
-  return (
+  
+return (
     <Button type='button' onClick={handleButtonClick}>
       {children}
       <img src='/assets/image/icons/bannerAddIcon.svg' alt='add-icon' />
