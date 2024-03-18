@@ -30,6 +30,21 @@ export const DASHBOARD_MESSAGES = {
   CREATE_DASHBOARD: '대시보드가 생성되었습니다.',
 } as const;
 
+export const DASHBOARD_ERROR_MESSAGES = {
+  NOT_A_MEMBER: '대시보드의 멤버가 아닙니다.',
+  NO_VALUE: '내용을 입력해주세요.',
+} as const;
+
+export const COMMENT_MESSAGES = {
+  EDIT_COMMENT: '댓글이 수정되었습니다.',
+  DELETE_COMMENT: '댓글이 삭제되었습니다.',
+};
+
+export const COMMENT_ERROR_MESSAGES = {
+  EDIT_PERMISSION_DENIED: '댓글 수정 권한이 없습니다.',
+  DELETE_PERMISSION_DENIED: '댓글 삭제 권한이 없습니다.',
+} as const;
+
 export const INVITATION_MESSAGES = {
   REJECT_INVITATION: '거절되었습니다.',
   ACCEPT_INVITATION: '수락되었습니다.',

@@ -6,6 +6,9 @@ import API from '@/api/constants';
 import { useEffect, useState } from 'react';
 import Column from '@/components/column';
 import LoadingSpinner from '@/components/loading-spinner';
+import AddColumnModal from '../../components/modal-add-column';
+import { useSelector } from 'react-redux';
+import { ModalRootState } from '@/redux/modalSlice';
 
 export type Columns = {
   createdAt: string;
@@ -38,6 +41,7 @@ const DashBoardId = () => {
   const { id } = useParams();
   const [columns, setColumns] = useState<Columns[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const openModalName = useSelector((state: ModalRootState) => state.modal.openModalName);
   const [members, setMembers] = useState<Members[]>([]);
 
   const viewColumns = () => {
@@ -81,6 +85,7 @@ const DashBoardId = () => {
       <div className='button-box'>
         <AddColumnButton>새로운 컬럼 추가하기</AddColumnButton>
       </div>
+      {openModalName === 'addColumnModal' && <AddColumnModal setColumns={setColumns} />}
     </Container>
   );
 };

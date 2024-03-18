@@ -2,6 +2,7 @@ import styled from 'styled-components';
 
 interface StModalContainer {
   $modalWidth?: number;
+  $type?: string;
 }
 
 const StModalContainer = styled.div<StModalContainer>`
@@ -24,6 +25,30 @@ const StModalContainer = styled.div<StModalContainer>`
     background: rgba(0, 0, 0, 0.4);
   }
 
+  .detail-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 32px;
+
+    .detail-button-group {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+
+      .detail-close-button {
+        width: 32px;
+        height: 32px;
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
+        }
+      }
+    }
+  }
+
   .modal-content {
     position: relative;
     max-height: 90vh;
@@ -38,7 +63,7 @@ const StModalContainer = styled.div<StModalContainer>`
       color: ${({ theme }) => theme.color.black_33};
       font-size: 2.4rem;
       font-weight: 700;
-      margin-bottom: 32px;
+      margin-bottom: ${(props) => (props.$type === 'detail' ? '0' : '32')}px;
     }
 
     .modal-content__box {
@@ -107,12 +132,31 @@ const StModalContainer = styled.div<StModalContainer>`
   }
 
   @media ${({ theme }) => theme.deviceSize.mobile} {
+    .detail-header {
+      margin-bottom: 24px;
+
+      .detail-button-group {
+        gap: 16px;
+
+        .detail-close-button {
+          width: 24px;
+          height: 24px;
+        }
+      }
+    }
+
     .modal-content {
       width: 96%;
+      max-height: 95vh;
       padding: 28px 20px;
       h2 {
         font-size: 2rem;
-        margin-bottom: 24px;
+        margin-bottom: ${(props) => (props.$type === 'detail' ? '0' : '24')}px;
+      }
+
+      .modal-content__box {
+        max-height: 80vh;
+        overflow: auto;
       }
     }
 

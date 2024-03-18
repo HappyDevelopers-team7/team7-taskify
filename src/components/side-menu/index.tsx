@@ -1,9 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Container from './style';
-import CreateDashboard from '../modal-contents/create-dashboard';
 import { useDispatch, useSelector } from 'react-redux';
-import { ModalRootState, openModal, setOpenModalName } from '@/redux/modalSlice';
+import { openModal, setOpenModalName } from '@/redux/modalSlice';
 import { DashBoardRootState, setSideDashboardList } from '@/redux/dashboardListSlice';
 import { getSideDashboardList } from '@/api/getSideDashboardList';
 import { AxiosError } from 'axios';
@@ -21,7 +20,6 @@ export type Dashboards = {
 
 const SideMenu = () => {
   const dispatch = useDispatch();
-  const openModalName = useSelector((state: ModalRootState) => state.modal.openModalName);
   const sideDashboardList = useSelector((state: DashBoardRootState) => state.dashboardList.sideDashboardList);
   const [selected, setSelected] = useState<number | null>(null);
   const [maximumPages, setMaximumPages] = useState<number>(1);
@@ -129,7 +127,6 @@ const SideMenu = () => {
           </button>
         </div>
       </Container>
-      {openModalName === 'createDashboard' ? <CreateDashboard /> : null}
     </>
   );
 };

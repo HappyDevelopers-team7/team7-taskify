@@ -2,9 +2,9 @@ import { AxiosError } from 'axios';
 import API from './constants';
 import axiosInstance from './instance/axiosInstance';
 
-export const getInvitation = async (size = 10) => {
+export const getCardDetail = async (cardId: number) => {
   try {
-    const response = await axiosInstance.get(`${API.INVITATIONS.INVITATIONS}?size=${size}`);
+    const response = await axiosInstance.get(`${API.CARDS.CARDS}/${cardId}`);
 
     const responseData = await response.data;
     return responseData;

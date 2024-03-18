@@ -10,6 +10,9 @@ import API from '@/api/constants';
 import ModalContainer from '../modal-container';
 import Card from '../card';
 import LoadingSpinner from '@/components/loading-spinner';
+import Flatpickr from 'react-flatpickr';
+import 'flatpickr/dist/flatpickr.min.css';
+import EditColumnModal from '../modal-edit-column';
 import dateExtractor from '@/utils/dateExtractor';
 import TagComponent from '../tag-component';
 import Flatpickr from 'react-flatpickr';
@@ -84,6 +87,12 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId }: Props) => 
 
   const openModalName = useSelector((state: ModalRootState) => state.modal.openModalName);
 
+  const handleEditColumn = () => {
+    setOpenModalName(`editcolumn${columnData.id}`);
+    dispatch(openModal(`editcolumn${columnData.id}`));
+    viewColumns();
+  };
+
   const handleCreateCard = () => {
     // 모달 여는 함수
     dispatch(setOpenModalName(`createcard${columnData.id}`));
@@ -147,7 +156,12 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId }: Props) => 
       .finally(() => setIsLoading(false));
   };
 
-  const handleUploadFile = async (e: ChangeEvent<HTMLInputElement>) => {
+
+  const handleDeleteColumn = () => {
+    removeColumn(); // 삭제하기 버튼이 클릭되었을 때 실행될 함수
+  };
+
+  const handleUploadFile = (e: ChangeEvent<HTMLInputElement>) => {
     // 카드 이미지 첨부 & 미리보기 출력 함수
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
@@ -171,7 +185,7 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId }: Props) => 
 
   const removeColumn = () => {
     // 컬럼 삭제 임시 함수
-    const isConfirmed = confirm('삭제?');
+    const isConfirmed = confirm('컬럼의 모든 카드가 삭제됩니다.');
     if (isConfirmed) {
       axiosInstance.delete(`${API.COLUMNS.COLUMNS}/${columnData.id}`).then(() => viewColumns());
     }
@@ -245,7 +259,7 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId }: Props) => 
         <div className='column-color' />
         <h2>{columnData.title}</h2>
         <div className='inner-cards'>{cardInfo?.totalCount}</div>
-        <img src='/assets/image/icons/settingIcon.svg' alt='setting-icon' onClick={removeColumn} />
+        <img src='/assets/image/icons/settingIcon.svg' alt='setting-icon' onClick={handleEditColumn} />
       </div>
 
       <div className='column-body'>
@@ -380,6 +394,15 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId }: Props) => 
           </ModalContent>
         </ModalContainer>
       ) : null}
+
+      {openModalName === `editcolumn${columnData.id}` && (
+        <EditColumnModal
+          columnId={columnData.id}
+          columnName={columnData.title}
+          handleEditColumn={handleEditColumn}
+          handleDeleteColumn={handleDeleteColumn}
+        />
+      )}
     </ColumnContainer>
   );
 };
