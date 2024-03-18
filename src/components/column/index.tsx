@@ -5,6 +5,7 @@ import { Columns, Members } from '@/pages/dashboard-id';
 import { ChangeEvent, useEffect, useState, useRef, KeyboardEvent } from 'react';
 import { ModalRootState, closeModal, openModal, setOpenModalName } from '@/redux/modalSlice';
 import { toast } from 'react-toastify';
+import { Types } from '@/types/columnDetailTypes';
 import axiosInstance from '@/api/instance/axiosInstance';
 import API from '@/api/constants';
 import ModalContainer from '../modal-container';
@@ -23,44 +24,11 @@ interface Props {
   dashboardId: string | undefined;
 }
 
-export interface Types {
-  CardInfo: {
-    cards: [
-      {
-        assignee: { id: number; nickname: string; profileImageUrl: string };
-        columnId: number;
-        createdAt: string;
-        dashboardId: number;
-        description: string;
-        dueDate: string | null;
-        id: number;
-        imageUrl: string | null;
-        tags: string[];
-        teamId: number;
-        title: string;
-        updatedAt: string;
-      },
-    ];
-    totalCount: number;
-    cursorId: number;
-  };
-  CreateCardData: {
-    asignee: string;
-    title: string;
-    description: string;
-    dueDate: string;
-    tag: string;
-  };
-  Tag: {
-    id: number;
-    name: string;
-  };
-}
-
 const Column = ({ columnData, memberData, viewColumns, dashboardId }: Props) => {
   const dispatch = useDispatch<AppDispatch>();
-  const colorArray = ['#ff0000', '#29c936', '#ff8c00', '#000000', '#008000', '#f122f1', '#0000ff'];
   const today = new Date();
+  const colorArray = ['#ff0000', '#29c936', '#ff8c00', '#000000', '#008000', '#f122f1', '#0000ff'];
+  const openModalName = useSelector((state: ModalRootState) => state.modal.openModalName);
   const inputRef = useRef<HTMLInputElement>(null);
   const asigneeRef = useRef<number | null>(null);
   const titleRef = useRef<HTMLInputElement>(null);
@@ -82,8 +50,6 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId }: Props) => 
     dueDate: '',
     tag: '',
   });
-
-  const openModalName = useSelector((state: ModalRootState) => state.modal.openModalName);
 
   const handleOpenCreateCard = () => {
     dispatch(setOpenModalName(`createcard${columnData.id}`));
