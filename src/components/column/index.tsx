@@ -1,4 +1,4 @@
-import { AppDispatch, fetchMyInfo /*getMyInfo*/ } from '@/redux/myInfoSlice';
+import { AppDispatch } from '@/redux/myInfoSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { ColumnContainer, ModalContent } from './style';
 import { Columns, Members } from '@/pages/dashboard-id';
@@ -61,7 +61,6 @@ export interface Types {
 const Column = ({ columnData, memberData, viewColumns, dashboardId }: Props) => {
   const today = new Date();
   const dispatch = useDispatch<AppDispatch>();
-  // const myData = useSelector(getMyInfo);
   const [cardInfo, setCardInfo] = useState<Types['CardInfo'] | undefined>();
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -75,6 +74,7 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId }: Props) => 
   const descriptionRef = useRef<HTMLTextAreaElement>(null);
   const [tags, setTags] = useState<Types['Tag'][]>([]);
   const [imageUrl, setImageUrl] = useState<string>('');
+  const [pages, setPages] = useState<number>(3);
   const colorArray = ['#ff0000', '#29c936', '#ff8c00', '#000000', '#008000', '#f122f1', '#0000ff'];
   const [createCardData, setCreateCardData] = useState<Types['CreateCardData']>({
     asignee: '',
@@ -85,12 +85,6 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId }: Props) => 
   });
 
   const openModalName = useSelector((state: ModalRootState) => state.modal.openModalName);
-
-  const handleEditColumn = () => {
-    setOpenModalName(`editcolumn${columnData.id}`);
-    dispatch(openModal(`editcolumn${columnData.id}`));
-    viewColumns();
-  };
 
   const handleCreateCard = () => {
     // 모달 여는 함수
@@ -107,6 +101,21 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId }: Props) => 
     setCreateCardData({ asignee: '', title: '', description: '', dueDate: '', tag: '' });
     setTags([]);
     asigneeRef.current = null;
+  };
+
+  const handleEditColumn = () => {
+    // 컬럼 관리 함수(이름변경,삭제)
+    setOpenModalName(`editcolumn${columnData.id}`);
+    dispatch(openModal(`editcolumn${columnData.id}`));
+    viewColumns();
+  };
+
+  const handleDeleteColumn = () => {
+    // 컬럼 삭제 함수
+    const isConfirmed = confirm('컬럼의 모든 카드가 삭제됩니다.');
+    if (isConfirmed) {
+      axiosInstance.delete(`${API.COLUMNS.COLUMNS}/${columnData.id}`).then(() => viewColumns());
+    }
   };
 
   const handleSubmitCreateCard = async () => {
@@ -147,20 +156,12 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId }: Props) => 
     // 카드 조회 함수
     setIsLoading(true);
     await axiosInstance
-      .get(`${API.CARDS.CARDS}?size=9999&columnId=${columnData.id}`)
+      .get(`${API.CARDS.CARDS}?size=${pages}&columnId=${columnData.id}`)
       .then((res) => {
         setCardInfo(res.data);
       })
       .catch(() => alert('카드 조회 실패'))
       .finally(() => setIsLoading(false));
-  };
-
-  const handleDeleteColumn = () => {
-    // 컬럼 삭제 함수
-    const isConfirmed = confirm('컬럼의 모든 카드가 삭제됩니다.');
-    if (isConfirmed) {
-      axiosInstance.delete(`${API.COLUMNS.COLUMNS}/${columnData.id}`).then(() => viewColumns());
-    }
   };
 
   const handleUploadFile = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -222,7 +223,6 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId }: Props) => 
 
   useEffect(() => {
     viewCards();
-    dispatch(fetchMyInfo());
     if (memberData.length > 0) {
       // 멤버 목록을 받아왔을때 프로필이 null이면 기본값으로 변경
       memberData.forEach((member) => {
@@ -231,7 +231,7 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId }: Props) => 
           : '/assets/image/icons/bannerLogoIconXL.svg';
       });
     }
-  }, [dispatch, memberData]);
+  }, [memberData, pages]);
 
   useEffect(() => {
     // 입력값이 변할때마다 검색결과 재적용
@@ -261,6 +261,18 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId }: Props) => 
           <img src='/assets/image/icons/bannerAddIcon.svg' alt='add-icon' />
         </button>
         {cardInfo && cardInfo.cards.map((card) => <Card key={card.id} card={card} />)}
+      </div>
+
+      <div className='column-foot'>
+        {cardInfo && cardInfo.totalCount > pages && (
+          <button
+            onClick={() => {
+              setPages((prev) => prev + 3);
+            }}
+          >
+            더보기
+          </button>
+        )}
       </div>
 
       {openModalName === `createcard${columnData.id}` ? (
