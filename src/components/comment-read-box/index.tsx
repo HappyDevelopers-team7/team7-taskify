@@ -27,13 +27,13 @@ const CommentReadBox = ({ commentList, setCommentList, content, commentId }: Com
   const handleClickDeleteComment = async () => {
     try {
       const result = await deleteComment(commentId);
-      const updatedCommentList = commentList.filter((comment) => comment.id !== commentId);
       if (result.status === 403) {
         return toast.error(COMMENT_ERROR_MESSAGES.DELETE_PERMISSION_DENIED);
       }
       if (result.status === 404) {
         return toast.error(DASHBOARD_ERROR_MESSAGES.NOT_A_MEMBER);
       }
+      const updatedCommentList = commentList.filter((comment) => comment.id !== commentId);
       setCommentList(updatedCommentList);
       toast.success(COMMENT_MESSAGES.DELETE_COMMENT);
     } catch (error) {
