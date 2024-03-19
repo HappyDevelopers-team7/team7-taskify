@@ -4,7 +4,7 @@ import axiosInstance from './instance/axiosInstance';
 
 export const PostProfileImage = async (profileImageFormData: FormData) => {
   try {
-    const response = await axiosInstance.post(API.USER.UPLOAD_IMAGE, { profileImageFormData });
+    const response = await axiosInstance.post(API.USER.UPLOAD_IMAGE, profileImageFormData);
 
     const responseData = await response;
     return responseData;

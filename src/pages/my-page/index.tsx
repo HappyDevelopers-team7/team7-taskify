@@ -10,16 +10,10 @@ import {
 import { PutUserInformation } from '@/api/putUserInformation';
 import { PostProfileImage } from '@/api/postProfileImage';
 
-interface UploadSuccessResponse {
-  data: {
-    imageUrl: string;
-  };
-}
-
 const MyPage = () => {
   const [nickname, setNickname] = useState('');
-  const [profileImageFile, setProfileImageFile] = useState<File | null>(null);
-  const [profileImageUrl, setProfileImageUrl] = useState('');
+  const [profileImage, setProfileImage] = useState<File | null>(null);
+  const [profileImageUrl, setProfileImageUrl] = useState<string>('');
 
   const handleNicknameChange = (e: ChangeEvent<HTMLInputElement>) => {
     setNickname(e.target.value);
@@ -28,36 +22,36 @@ const MyPage = () => {
   const handleProfileImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
-      setProfileImageFile(file);
-      const imageUrl = URL.createObjectURL(file);
-      setProfileImageUrl(imageUrl);
+      setProfileImage(file);
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (reader.readyState === 2) {
+          setProfileImageUrl(reader.result as string);
+        }
+      };
+      reader.readAsDataURL(file);
     }
   };
 
   const handleSubmitInformation = async () => {
     try {
-      if (profileImageFile) {
+      let imageUrl = profileImageUrl;
+      if (profileImage) {
         const formData = new FormData();
-        formData.append('image', profileImageFile);
-        const uploadResponse: UploadSuccessResponse | undefined = await PostProfileImage(formData);
-        if (uploadResponse) {
-          const imageUrl = uploadResponse.data.imageUrl;
-          const putInformResponse = await PutUserInformation(nickname, imageUrl);
-          if (putInformResponse) {
-            alert('프로필 정보가 업데이트 되었습니다.');
-          } else {
-            alert('프로필 정보 업데이트에 실패했습니다.');
-          }
+        formData.append('image', profileImage);
+        const uploadResponse = await PostProfileImage(formData);
+        console.log(uploadResponse);
+        if (uploadResponse && uploadResponse.data && uploadResponse.data.profileImageUrl) {
+          imageUrl = uploadResponse.data.profileImageUrl;
         } else {
-          alert('프로필 이미지 업로드에 실패했습니다.');
+          throw new Error('이미지 업로드 실패');
         }
+      }
+      const putInformResponse = await PutUserInformation(nickname, imageUrl);
+      if (putInformResponse) {
+        alert('프로필 정보가 업데이트 되었습니다.');
       } else {
-        const putInformResponse = await PutUserInformation(nickname, profileImageUrl);
-        if (putInformResponse) {
-          alert('프로필 정보가 업데이트 되었습니다.');
-        } else {
-          alert('프로필 정보 업데이트에 실패했습니다.');
-        }
+        alert('프로필 정보 업데이트에 실패했습니다.');
       }
     } catch (error) {
       console.error('API 호출 중 오류 발생:', error);

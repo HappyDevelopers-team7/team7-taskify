@@ -4,7 +4,7 @@ import axiosInstance from './instance/axiosInstance';
 
 export const PutUserInformation = async (nickname: string, profileImageUrl: string) => {
   try {
-    const response = await axiosInstance.put(`${API.USER.MY_INFO}`, {
+    const response = await axiosInstance.put(API.USER.MY_INFO, {
       nickname,
       profileImageUrl,
     });
