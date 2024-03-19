@@ -16,9 +16,10 @@ interface DetailCommentAreaProps {
 const DetailCommentArea = ({ idGroup, cardId }: DetailCommentAreaProps) => {
   const [commentList, setCommentList] = useState<CommentListType[]>([]);
   const [size, setSize] = useState(10);
+  const [cursorId, setCursorId] = useState<number | null>(null);
 
   const observerTarget = useRef<HTMLDivElement>(null);
-  const preventRef = useRef(true);
+  const preventLoadRef = useRef(true);
 
   useEffect(() => {
     const observer = new IntersectionObserver(obsHandler, { threshold: 0.5 });
@@ -32,19 +33,21 @@ const DetailCommentArea = ({ idGroup, cardId }: DetailCommentAreaProps) => {
 
   const obsHandler = (entries: IntersectionObserverEntry[]) => {
     const target = entries[0];
-    if (target.isIntersecting && preventRef.current) {
-      preventRef.current = false;
+    if (target.isIntersecting && preventLoadRef.current) {
+      preventLoadRef.current = false;
       setSize((prev) => prev + 10);
     }
   };
-
   const setCommentReadBox = useCallback(async () => {
     try {
       const result = await getComments(size, cardId);
+      console.log(result);
       if (result.status === 404) {
         return toast.error(DASHBOARD_ERROR_MESSAGES.NOT_A_MEMBER);
       }
+      preventLoadRef.current = true;
       setCommentList(result.comments);
+      setCursorId(result.cursorId);
     } catch (error) {
       console.error(error);
     }
@@ -69,7 +72,7 @@ const DetailCommentArea = ({ idGroup, cardId }: DetailCommentAreaProps) => {
             />
           ))}
 
-        {commentList.length >= 10 && <div id='comment-observer' ref={observerTarget}></div>}
+        {commentList.length >= 10 && cursorId !== null && <div id='comment-observer' ref={observerTarget}></div>}
       </StCommentArea>
     </>
   );
