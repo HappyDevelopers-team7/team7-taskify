@@ -38,6 +38,7 @@ const DetailCommentArea = ({ idGroup, cardId }: DetailCommentAreaProps) => {
       setSize((prev) => prev + 10);
     }
   };
+
   const setCommentReadBox = useCallback(async () => {
     try {
       const result = await getComments(size, cardId);
