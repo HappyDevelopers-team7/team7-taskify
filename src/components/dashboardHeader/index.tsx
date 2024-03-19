@@ -6,11 +6,11 @@ import { SetMyInfo } from '@/redux/myInfoSlice';
 import { useParams } from 'react-router-dom';
 import API from '@/api/constants';
 import axiosInstance from '@/api/instance/axiosInstance';
-// import { ModalRootState, openModal, setOpenModalName } from '@/redux/modalSlice';
+import { ModalRootState, openModal, setOpenModalName } from '@/redux/modalSlice';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
-// import InviteDashboard from '../modal-contents/invite-dashboard';
+import InviteDashboard from '../modal-contents/invite-dashboard';
 
 interface User {
   id: number;
@@ -39,17 +39,22 @@ const DashboardHeader = () => {
   const dispatch = useDispatch<AppDispatch>();
   const myInfo = useSelector(getMyInfo);
   const { id } = useParams();
-  // const openModalName = useSelector((state: ModalRootState) => state.modal.openModalName);
+  const navigate = useNavigate();
+  const openModalName = useSelector((state: ModalRootState) => state.modal.openModalName);
   const [currentDashboard, setCurrentDashboard] = useState<Dashboards | undefined>(undefined);
   const [membersInfo, setMembersInfo] = useState<{
     members: User[];
     totalCount: number;
   } | null>(null);
 
-  // const handleClickInviteDashboard = () => {
-  //   dispatch(setOpenModalName('InviteDashboard'));
-  //   dispatch(openModal('InviteDashboard'));
-  // };
+  const handleEditClick = () => {
+    navigate(`/dashboard/${id}/edit`);
+  };
+
+  const handleClickInviteDashboard = () => {
+    dispatch(setOpenModalName('InviteDashboard'));
+    dispatch(openModal('InviteDashboard'));
+  };
   //상태를 전역으로 관리해서 로그인정보가 바뀌거나 하면 바로 다시 렌더링
   useEffect(() => {
     dispatch(fetchMyInfo());
@@ -101,8 +106,9 @@ const DashboardHeader = () => {
       <DashboardId currentDashboard={currentDashboard} id={id} />
       {/* <div> */}
       <div className='dashboard-right-space'>
-        {/* <InviteButton onClick={handleClickInviteDashboard} /> */}
-        {/* {openModalName === 'InviteDashboard' ? <InviteDashboard id={id || ''} /> : null} */}
+        <EditButton onClick={handleEditClick} />
+        <InviteButton onClick={handleClickInviteDashboard} />
+        {openModalName === 'InviteDashboard' ? <InviteDashboard id={id || ''} /> : null}
         {membersInfo && <DashboardMembers membersInfo={membersInfo} />}
         <ProfileInfo myInfo={myInfo} />
       </div>
@@ -113,18 +119,30 @@ const DashboardHeader = () => {
 
 export default DashboardHeader;
 
-// interface InviteButtonProps {
-//   onClick: () => void; // onClick은 함수이며, 반환 값이 없다는 것을 명시
-// }
+interface InviteButtonProps {
+  onClick: () => void; // 온클릭이 함수 & 반환 값이 없는걸 명시해둠
+}
 
-// function InviteButton({ onClick }: InviteButtonProps) {
-//   return (
-//     <button className='invite-button' onClick={onClick}>
-//       <img src='/assets/image/icons/addBoxIcon.svg' alt='add-boxicon' />
-//       초대하기
-//     </button>
-//   );
-// }
+function InviteButton({ onClick }: InviteButtonProps) {
+  return (
+    <button className='invite-button' onClick={onClick}>
+      <img src='/assets/image/icons/addBoxIcon.svg' alt='add-boxicon' />
+      초대하기
+    </button>
+  );
+}
+interface EditButtonProps {
+  onClick: () => void; // 온클릭이 함수 & 반환 값이 없는걸 명시해둠
+}
+
+function EditButton({ onClick }: EditButtonProps) {
+  return (
+    <button className='edit-button' onClick={onClick}>
+      <img src='/assets/image/icons/settingIcon.svg' alt='setting-icon' />
+      관리
+    </button>
+  );
+}
 
 function DashboardId({ currentDashboard, id }: Props) {
   const showIconClass = 'showIcon';
