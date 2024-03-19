@@ -18,11 +18,9 @@ const DetailCommentArea = ({ idGroup, cardId }: DetailCommentAreaProps) => {
   const [size, setSize] = useState(10);
 
   const observerTarget = useRef<HTMLDivElement>(null);
-  const preventRef = useRef(true); //옵저버 중복 실행 방지
-  const endRef = useRef(false); //모든 글 로드 확인
+  const preventRef = useRef(true);
 
   useEffect(() => {
-    //옵저버 생성
     const observer = new IntersectionObserver(obsHandler, { threshold: 0.5 });
     if (observerTarget.current) {
       observer.observe(observerTarget.current);
@@ -33,12 +31,10 @@ const DetailCommentArea = ({ idGroup, cardId }: DetailCommentAreaProps) => {
   });
 
   const obsHandler = (entries: IntersectionObserverEntry[]) => {
-    //옵저버 콜백함수
     const target = entries[0];
-    if (!endRef.current && target.isIntersecting && preventRef.current) {
-      //옵저버 중복 실행 방지
-      preventRef.current = false; //옵저버 중복 실행 방지
-      setSize((prev) => prev + 10); //페이지 값 증가
+    if (target.isIntersecting && preventRef.current) {
+      preventRef.current = false;
+      setSize((prev) => prev + 10);
     }
   };
 
