@@ -17,4 +17,5 @@ export type CardObjectType = {
   };
   columns: dashboardIdTypes['Columns'][];
   thisColumn: dashboardIdTypes['Columns'];
+  memberData: dashboardIdTypes['Members'][];
 };

@@ -236,6 +236,7 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId, columns }: P
               setCardList={setCardInfo}
               thisColumn={columnData}
               columns={columns}
+              memberData={memberData}
             />
           ))}
       </div>

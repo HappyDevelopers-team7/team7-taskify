@@ -1,38 +1,60 @@
 import ModalContainer from '@/components/modal-container';
 // import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
-import { MouseEvent, useState } from 'react';
+import { ChangeEvent, MouseEvent, useEffect, useState, useRef } from 'react';
 import { closeModal } from '@/redux/modalSlice';
 import StEditCard from './style';
 import { CardObjectType } from '@/types/cardObjectType';
 import ColumnNameTag from '@/components/column-name-tag';
+import { dashboardIdTypes } from '@/types/dashboardIdTypes';
+import LoadingSpinner from '@/components/loading-spinner';
 
-const EditCard = ({ card, thisColumn, columns }: CardObjectType) => {
+const EditCard = ({ card, thisColumn, columns, memberData }: CardObjectType) => {
   const dispatch = useDispatch();
+  const asigneeRef = useRef<number | null>(card.assignee.id); // post보낼 담당자 아이디
+  const [asgineeName, setAsigneeName] = useState<string | undefined>(card.assignee.nickname);
+  const [userProfile, setUserProfile] = useState<string | undefined>(card.assignee.profileImageUrl);
   const [selectedColumnName, setSelectedColumnName] = useState<string>(thisColumn.title);
-  const [selectedColumnId, setSelectedColumnId] = useState<number>(thisColumn.id);
+  const [selectedColumnId, setSelectedColumnId] = useState<number>(thisColumn.id); // post보낼 칼럼 아이디
   const [isDropdownStatus, setIsDropdownStatus] = useState(false);
   const [isDropdownAsignee, setIsDropdownAsignee] = useState(false);
-
-  console.log(selectedColumnId, isDropdownAsignee, setIsDropdownAsignee); //린트오류 방지용 임시코드
+  const [filterdMember, SetFilterdMember] = useState<CardObjectType['memberData']>(memberData);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleCloseEditCardModal = () => {
     dispatch(closeModal());
     console.log(card);
     console.log(columns);
     console.log(thisColumn);
+    console.log(memberData);
+    console.log(selectedColumnId);
   };
 
   const handleSubmitEditCardModal = () => {
-    alert('수정완료');
-    dispatch(closeModal());
+    try {
+      setIsLoading(true);
+      alert('수정완료');
+      dispatch(closeModal());
+    } catch (err) {
+      alert(err);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleStatusDropdown = () => {
     setIsDropdownStatus((current) => !current);
   };
 
-  const event = (e: MouseEvent<HTMLElement>) => {
+  const handleAsigneeDropdown = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.value || document.activeElement === e.target) {
+      setIsDropdownAsignee(true);
+      setAsigneeName(e.target.value);
+      setUserProfile(undefined);
+    }
+  };
+
+  const handleSelectColumn = (e: MouseEvent<HTMLElement>) => {
     const target = e.target as HTMLElement;
     const newColumnName = target.innerText;
     setSelectedColumnName(newColumnName);
@@ -40,6 +62,26 @@ const EditCard = ({ card, thisColumn, columns }: CardObjectType) => {
     if (newColumnId !== undefined) setSelectedColumnId(newColumnId);
     setIsDropdownStatus(false);
   };
+
+  const handleClickedMember = (member: dashboardIdTypes['Members']) => {
+    // 현재 선택되어있는 담당자 핸들링
+    setIsDropdownAsignee(false);
+    setUserProfile(member.profileImageUrl);
+    setAsigneeName(member.nickname);
+    asigneeRef.current = member.userId;
+  };
+
+  useEffect(() => {
+    if (asgineeName !== '') {
+      const data = [...memberData];
+      const filterdData = data.filter((member) => {
+        return member.nickname.includes(asgineeName as string);
+      });
+      SetFilterdMember(filterdData);
+    } else if (asgineeName === '') {
+      SetFilterdMember(memberData);
+    }
+  }, [asgineeName]);
 
   return (
     <ModalContainer
@@ -50,9 +92,15 @@ const EditCard = ({ card, thisColumn, columns }: CardObjectType) => {
       handleCloseModal={handleCloseEditCardModal}
       handleSubmitModal={handleSubmitEditCardModal}
     >
-      <StEditCard $Image={card.imageUrl} $isStatusClicked={isDropdownStatus}>
-        <div className='first-div'>
-          <div>
+      {isLoading && <LoadingSpinner />}
+      <StEditCard
+        $Image={card.imageUrl}
+        $isStatusClicked={isDropdownStatus}
+        $isAsigneeClicked={isDropdownAsignee}
+        $Profile={userProfile}
+      >
+        <div className='auth-box'>
+          <div className='auth-box-first-div'>
             <h3>상태</h3>
             <div className='input-box status-box' onClick={handleStatusDropdown}>
               <ColumnNameTag name={selectedColumnName} />
@@ -64,14 +112,41 @@ const EditCard = ({ card, thisColumn, columns }: CardObjectType) => {
                     {selectedColumnName === column.title && (
                       <img src='/assets/image/icons/checkIcon.svg' alt='check-icon' />
                     )}
-                    <ColumnNameTag name={column.title} onClick={(e) => event(e)} />
+                    <ColumnNameTag name={column.title} onClick={(e) => handleSelectColumn(e)} />
                   </div>
                 ))}
             </div>
           </div>
-          <div>
+          <div className='auth-box-second-div'>
             <h3>담당자</h3>
-            <input className='input-box asignee-box' />
+            <input
+              value={asgineeName}
+              className='input-box asignee-box'
+              type='text'
+              onChange={(e) => handleAsigneeDropdown(e)}
+              onFocus={(e) => handleAsigneeDropdown(e)}
+              onBlur={() => setIsDropdownAsignee(false)}
+            />
+            {userProfile && <img src={userProfile} className='user-image in-searchbar' />}
+            <div className='input-box member-list'>
+              {isDropdownAsignee &&
+                filterdMember.map((member) => (
+                  <div
+                    key={member.id}
+                    className={`member ${asigneeRef.current === member.userId ? 'clicked' : ''}`}
+                    onMouseDown={() => {
+                      handleClickedMember(member);
+                    }}
+                  >
+                    <img
+                      src={member.profileImageUrl ? member.profileImageUrl : '/assets/image/icons/bannerLogoIconXL.svg'}
+                      alt='profile-image'
+                      className='user-image'
+                    />
+                    <span className='user-name'>{member.nickname}</span>
+                  </div>
+                ))}
+            </div>
           </div>
         </div>
         <div>

@@ -1,19 +1,18 @@
 import styled from 'styled-components';
 
-const StEditCard = styled.div<{ $Image: string | null; $isStatusClicked: boolean }>`
+const StEditCard = styled.div<{
+  $Image: string | null;
+  $isStatusClicked: boolean;
+  $isAsigneeClicked: boolean;
+  $Profile: string | undefined;
+}>`
   height: 65vh;
 
-  .first-div {
+  .auth-box {
     user-select: none;
     display: flex;
     gap: 16px;
     position: relative;
-
-    .status-box {
-      width: 217px;
-      padding: 13px;
-      cursor: pointer;
-    }
 
     .status-box,
     .asignee-box {
@@ -22,29 +21,75 @@ const StEditCard = styled.div<{ $Image: string | null; $isStatusClicked: boolean
       background-position: 170px;
     }
 
-    .status-list {
-      width: 50%;
-      ${(props) => (props.$isStatusClicked ? 'display:flex;' : 'display:none;')};
-      flex-direction: column;
-      gap: 13px;
-      box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.08);
-      position: absolute;
-      top: 85px;
+    .auth-box-first-div {
+      .status-box {
+        width: 217px;
+        padding: 13px;
+        cursor: pointer;
+      }
 
-      div {
-        padding-left: 28px;
-        position: relative;
-
-        img {
-          position: absolute;
-          left: 0;
-        }
+      .status-list {
+        width: 50%;
+        ${(props) => (props.$isStatusClicked ? 'display:flex;' : 'display:none;')};
+        flex-direction: column;
+        gap: 13px;
+        box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.08);
+        position: absolute;
+        top: 85px;
 
         div {
-          padding-left: 8px;
-          width: fit-content;
-          cursor: pointer;
+          padding-left: 28px;
+          position: relative;
+
+          img {
+            position: absolute;
+            left: 0;
+          }
+
+          div {
+            padding-left: 8px;
+            width: fit-content;
+            cursor: pointer;
+          }
         }
+      }
+    }
+
+    .auth-box-second-div {
+      position: relative;
+
+      .asignee-box {
+        ${(props) => props.$Profile && 'padding-left: 45px;'}
+      }
+
+      .member {
+        width: 90%;
+        padding: 10px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        border-radius: 6px;
+        cursor: pointer;
+      }
+
+      .member:hover {
+        background-color: ${({ theme }) => theme.color.violet_8};
+      }
+
+      .member.clicked {
+        background-color: #a374db;
+      }
+
+      .user-image {
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+      }
+
+      .user-image.in-searchbar {
+        position: absolute;
+        left: 13px;
+        top: 43px;
       }
     }
   }
@@ -68,6 +113,15 @@ const StEditCard = styled.div<{ $Image: string | null; $isStatusClicked: boolean
     background: ${({ theme }) => theme.color.white};
 
     font-size: 1.6rem;
+  }
+
+  .input-box.member-list {
+    ${(props) => (props.$isAsigneeClicked ? 'display:flex;' : 'display:none;')}
+    width: 100%;
+    position: absolute;
+    top: 85px;
+    box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.08);
+    flex-direction: column;
   }
 
   .upload-button-box {

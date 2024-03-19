@@ -22,9 +22,10 @@ interface CardProps {
   card: ColumnCardType;
   columns: dashboardIdTypes['Columns'][];
   thisColumn: dashboardIdTypes['Columns'];
+  memberData: dashboardIdTypes['Members'][];
 }
 
-const Card = ({ cardList, setCardList, card, idGroup, thisColumn, columns }: CardProps) => {
+const Card = ({ cardList, setCardList, card, idGroup, thisColumn, columns, memberData }: CardProps) => {
   const dispatch = useDispatch();
   const openModalName = useSelector((state: ModalRootState) => state.modal.openModalName);
   const openSecondModalName = useSelector((state: SecondModalRootState) => state.secondModal.openSecondModalName);
@@ -87,7 +88,7 @@ const Card = ({ cardList, setCardList, card, idGroup, thisColumn, columns }: Car
       ) : null}
       {openSecondModalName === 'deleteCardAlert' ? <DeleteAlert handleSubmitDelete={handleDeleteCard} /> : null}
       {openModalName === `editCard${card.id}` ? (
-        <EditCard card={card} columns={columns} thisColumn={thisColumn} />
+        <EditCard card={card} columns={columns} thisColumn={thisColumn} memberData={memberData} />
       ) : null}
     </>
   );
