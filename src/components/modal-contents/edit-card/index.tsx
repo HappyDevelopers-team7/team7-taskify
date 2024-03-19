@@ -1,21 +1,44 @@
 import ModalContainer from '@/components/modal-container';
 // import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
+import { MouseEvent, useState } from 'react';
 import { closeModal } from '@/redux/modalSlice';
 import StEditCard from './style';
 import { CardObjectType } from '@/types/cardObjectType';
+import ColumnNameTag from '@/components/column-name-tag';
 
-const EditCard = ({ card }: CardObjectType) => {
+const EditCard = ({ card, thisColumn, columns }: CardObjectType) => {
   const dispatch = useDispatch();
+  const [selectedColumnName, setSelectedColumnName] = useState<string>(thisColumn.title);
+  const [selectedColumnId, setSelectedColumnId] = useState<number>(thisColumn.id);
+  const [isDropdownStatus, setIsDropdownStatus] = useState(false);
+  const [isDropdownAsignee, setIsDropdownAsignee] = useState(false);
+
+  console.log(selectedColumnId, isDropdownAsignee, setIsDropdownAsignee); //린트오류 방지용 임시코드
 
   const handleCloseEditCardModal = () => {
     dispatch(closeModal());
     console.log(card);
+    console.log(columns);
+    console.log(thisColumn);
   };
 
   const handleSubmitEditCardModal = () => {
     alert('수정완료');
     dispatch(closeModal());
+  };
+
+  const handleStatusDropdown = () => {
+    setIsDropdownStatus((current) => !current);
+  };
+
+  const event = (e: MouseEvent<HTMLElement>) => {
+    const target = e.target as HTMLElement;
+    const newColumnName = target.innerText;
+    setSelectedColumnName(newColumnName);
+    const newColumnId = columns.find((column) => column.title === selectedColumnName)?.id;
+    if (newColumnId !== undefined) setSelectedColumnId(newColumnId);
+    setIsDropdownStatus(false);
   };
 
   return (
@@ -27,11 +50,24 @@ const EditCard = ({ card }: CardObjectType) => {
       handleCloseModal={handleCloseEditCardModal}
       handleSubmitModal={handleSubmitEditCardModal}
     >
-      <StEditCard $Image={card.imageUrl}>
+      <StEditCard $Image={card.imageUrl} $isStatusClicked={isDropdownStatus}>
         <div className='first-div'>
           <div>
             <h3>상태</h3>
-            <input className='input-box status-box' />
+            <div className='input-box status-box' onClick={handleStatusDropdown}>
+              <ColumnNameTag name={selectedColumnName} />
+            </div>
+            <div className='input-box status-list'>
+              {isDropdownStatus &&
+                columns.map((column) => (
+                  <div key={column.id}>
+                    {selectedColumnName === column.title && (
+                      <img src='/assets/image/icons/checkIcon.svg' alt='check-icon' />
+                    )}
+                    <ColumnNameTag name={column.title} onClick={(e) => event(e)} />
+                  </div>
+                ))}
+            </div>
           </div>
           <div>
             <h3>담당자</h3>

@@ -1,17 +1,51 @@
 import styled from 'styled-components';
 
-const StEditCard = styled.div<{ $Image: string | null }>`
+const StEditCard = styled.div<{ $Image: string | null; $isStatusClicked: boolean }>`
   height: 65vh;
 
   .first-div {
+    user-select: none;
     display: flex;
     gap: 16px;
+    position: relative;
+
+    .status-box {
+      width: 217px;
+      padding: 13px;
+      cursor: pointer;
+    }
 
     .status-box,
     .asignee-box {
       background-image: url('/assets/image/icons/arrowDropDownIcon.svg');
       background-repeat: no-repeat;
       background-position: 170px;
+    }
+
+    .status-list {
+      width: 50%;
+      ${(props) => (props.$isStatusClicked ? 'display:flex;' : 'display:none;')};
+      flex-direction: column;
+      gap: 13px;
+      box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.08);
+      position: absolute;
+      top: 85px;
+
+      div {
+        padding-left: 28px;
+        position: relative;
+
+        img {
+          position: absolute;
+          left: 0;
+        }
+
+        div {
+          padding-left: 8px;
+          width: fit-content;
+          cursor: pointer;
+        }
+      }
     }
   }
 

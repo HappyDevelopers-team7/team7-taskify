@@ -1,6 +1,5 @@
 import CardContainer from './style';
 import TagComponent from '../tag-component';
-import EditCard from '../modal-contents/edit-card';
 import { useDispatch, useSelector } from 'react-redux';
 import { ModalRootState, closeModal, openModal, setOpenModalName } from '@/redux/modalSlice';
 import CardDetail from '../modal-contents/card-detail';
@@ -13,15 +12,19 @@ import { toast } from 'react-toastify';
 import { Dispatch, SetStateAction } from 'react';
 import { makeRandomBackgroundColor } from '@/utils/makeRandomBackgroundColor';
 import { ColumnCardType } from '@/types/columnCardType';
+import EditCard from '../modal-contents/edit-card';
+import { dashboardIdTypes } from '@/types/dashboardIdTypes';
 
 interface CardProps {
   cardList: ColumnCardType[];
   setCardList: Dispatch<SetStateAction<ColumnCardType[] | undefined>>;
   idGroup: IdGroupType;
   card: ColumnCardType;
+  columns: dashboardIdTypes['Columns'][];
+  thisColumn: dashboardIdTypes['Columns'];
 }
 
-const Card = ({ cardList, setCardList, card, idGroup }: CardProps) => {
+const Card = ({ cardList, setCardList, card, idGroup, thisColumn, columns }: CardProps) => {
   const dispatch = useDispatch();
   const openModalName = useSelector((state: ModalRootState) => state.modal.openModalName);
   const openSecondModalName = useSelector((state: SecondModalRootState) => state.secondModal.openSecondModalName);
@@ -35,7 +38,7 @@ const Card = ({ cardList, setCardList, card, idGroup }: CardProps) => {
       setCardList(updatedCommentList);
       return toast.success(SIMPLE_MESSAGES.DELETED);
     } catch (error) {
-      console.error(error);
+      alert(error);
     }
   };
 
@@ -44,19 +47,9 @@ const Card = ({ cardList, setCardList, card, idGroup }: CardProps) => {
     dispatch(openModal(`cardDetailModal${card.id}`));
   };
 
-  const handleClickEditCard = () => {
-    dispatch(setOpenModalName(`editCard${card.id}`));
-    dispatch(openModal(`editCard${card.id}`));
-  };
-  console.log('console is', card);
   return (
     <>
       <CardContainer onClick={handleClickOpenDetail}>
-        {
-          </*임시용 꼭 지울것*/ button className='모달수정용임시버튼' onClick={handleClickEditCard}>
-            수정
-          </button>
-        }
         {card.imageUrl !== null && (
           <div className='image-box'>
             <img src={card.imageUrl} alt='card-image' />
@@ -89,9 +82,13 @@ const Card = ({ cardList, setCardList, card, idGroup }: CardProps) => {
           />
         )}
       </CardContainer>
-      {openModalName === `cardDetailModal${card.id}` ? <CardDetail idGroup={idGroup} cardId={card.id} /> : null}
+      {openModalName === `cardDetailModal${card.id}` ? (
+        <CardDetail idGroup={idGroup} cardId={card.id} card={card} />
+      ) : null}
       {openSecondModalName === 'deleteCardAlert' ? <DeleteAlert handleSubmitDelete={handleDeleteCard} /> : null}
-      {openModalName === `editCard${card.id}` ? <EditCard card={card} /> : null}
+      {openModalName === `editCard${card.id}` ? (
+        <EditCard card={card} columns={columns} thisColumn={thisColumn} />
+      ) : null}
     </>
   );
 };

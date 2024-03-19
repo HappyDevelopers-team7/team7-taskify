@@ -1,7 +1,6 @@
 import { AppDispatch } from '@/redux/myInfoSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { ColumnContainer, ModalContent } from './style';
-import { Columns, Members } from '@/pages/dashboard-id';
 import { ChangeEvent, useEffect, useState, useRef, KeyboardEvent } from 'react';
 import { ModalRootState, closeModal, openModal, setOpenModalName } from '@/redux/modalSlice';
 import { toast } from 'react-toastify';
@@ -17,15 +16,17 @@ import dateExtractor from '@/utils/dateExtractor';
 import TagComponent from '../tag-component';
 import 'flatpickr/dist/flatpickr.min.css';
 import { ColumnCardType } from '@/types/columnCardType';
+import { dashboardIdTypes } from '@/types/dashboardIdTypes';
 
 interface Props {
-  columnData: Columns;
-  memberData: Members[];
+  columnData: dashboardIdTypes['Columns'];
+  memberData: dashboardIdTypes['Members'][];
   viewColumns: () => void;
   dashboardId: string | undefined;
+  columns: dashboardIdTypes['Columns'][];
 }
 
-const Column = ({ columnData, memberData, viewColumns, dashboardId }: Props) => {
+const Column = ({ columnData, memberData, viewColumns, dashboardId, columns }: Props) => {
   const dispatch = useDispatch<AppDispatch>();
   const today = new Date();
   const colorArray = ['#ff0000', '#29c936', '#ff8c00', '#000000', '#008000', '#f122f1', '#0000ff'];
@@ -40,7 +41,7 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId }: Props) => 
   const [isLoading, setIsLoading] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [isDropdownAsignee, setIsDropdownAsignee] = useState(false);
-  const [filterdMember, SetFilterdMember] = useState<Members[]>([]);
+  const [filterdMember, SetFilterdMember] = useState<dashboardIdTypes['Members'][]>([]);
   const [userProfile, setUserProfile] = useState<string | undefined>('');
   const [tags, setTags] = useState<Types['Tag'][]>([]);
   const [imageUrl, setImageUrl] = useState<string>('');
@@ -163,7 +164,7 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId }: Props) => 
     }
   };
 
-  const handleClickedMember = (member: Members) => {
+  const handleClickedMember = (member: dashboardIdTypes['Members']) => {
     // 현재 선택되어있는 담당자 핸들링
     setCreateCardData({ ...createCardData, asignee: member.nickname });
     setIsDropdownAsignee(false);
@@ -227,7 +228,15 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId }: Props) => 
         </button>
         {cardInfo &&
           cardInfo.map((card) => (
-            <Card key={card.id} card={card} idGroup={idGroup} cardList={cardInfo} setCardList={setCardInfo} />
+            <Card
+              key={card.id}
+              card={card}
+              idGroup={idGroup}
+              cardList={cardInfo}
+              setCardList={setCardInfo}
+              thisColumn={columnData}
+              columns={columns}
+            />
           ))}
       </div>
 

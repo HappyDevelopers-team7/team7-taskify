@@ -1,5 +1,5 @@
 import ModalContainer from '@/components/modal-container';
-import { closeModal } from '@/redux/modalSlice';
+import { closeModal, openModal, setOpenModalName } from '@/redux/modalSlice';
 import { useDispatch } from 'react-redux';
 import StDetailModalContainer from './style';
 import DetailContentArea from '@/components/detail-content-area';
@@ -7,6 +7,7 @@ import DetailCommentArea from '@/components/detail-comment-area';
 import { useEffect, useState } from 'react';
 import { getCardDetail } from '@/api/getCardDetail';
 import { cardDetailType } from '@/types/cardDetailType';
+import { ColumnCardType } from '@/types/columnCardType';
 import ProfileImage from '@/components/profile-image';
 import LoadingSpinner from '@/components/loading-spinner';
 import { IdGroupType } from '@/types/idGroupType';
@@ -18,6 +19,7 @@ import ColumnNameTag from '@/components/column-name-tag';
 interface CardDetailProps {
   idGroup: IdGroupType;
   cardId: number;
+  card: ColumnCardType;
 }
 
 const CardDetail = ({ idGroup, cardId }: CardDetailProps) => {
@@ -32,6 +34,11 @@ const CardDetail = ({ idGroup, cardId }: CardDetailProps) => {
   const handleDeleteCardDetailModal = () => {
     dispatch(setOpenSecondModalName('deleteCardAlert'));
     dispatch(openSecondModal('deleteCardAlert'));
+  };
+
+  const handleClickEditCard = () => {
+    dispatch(setOpenModalName(`editCard${cardId}`));
+    dispatch(openModal(`editCard${cardId}`));
   };
 
   const setCardDetail = async () => {
@@ -59,6 +66,7 @@ const CardDetail = ({ idGroup, cardId }: CardDetailProps) => {
         modalWidth={730}
         handleDeleteModal={handleDeleteCardDetailModal}
         handleCloseModal={handleCloseCardDetailModal}
+        handleEditModal={handleClickEditCard}
       >
         {detailLoading ? (
           <LoadingSpinner />
