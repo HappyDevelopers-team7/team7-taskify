@@ -6,6 +6,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { DASHBOARD_ERROR_MESSAGES } from '@/constants/message';
 import { toast } from 'react-toastify';
 import { CommentListType } from '@/types/commentListType';
+import useInfiniteScroll from '@/hooks/useInfiniteScroll';
 
 interface DetailCommentAreaProps {
   idGroup: IdGroupType;
@@ -14,10 +15,18 @@ interface DetailCommentAreaProps {
 
 const DetailCommentArea = ({ idGroup, cardId }: DetailCommentAreaProps) => {
   const [commentList, setCommentList] = useState<CommentListType[]>([]);
+  const [size, setSize] = useState(10);
+
+  const loadMoreData = async () => {
+    const result = await getComments(size, cardId);
+    setCommentList((prevData) => [...prevData, ...result]);
+    setSize((prevPage) => prevPage + 10);
+  };
+  const [sentinelRef, isFetching] = useInfiniteScroll<HTMLDivElement>(loadMoreData);
 
   const setCommentReadBox = useCallback(async () => {
     try {
-      const result = await getComments(10, cardId);
+      const result = await getComments(size, cardId);
       if (result.status === 404) {
         return toast.error(DASHBOARD_ERROR_MESSAGES.NOT_A_MEMBER);
       }
@@ -25,7 +34,7 @@ const DetailCommentArea = ({ idGroup, cardId }: DetailCommentAreaProps) => {
     } catch (error) {
       console.error(error);
     }
-  }, [cardId, setCommentList]);
+  }, [cardId, setCommentList, size]);
 
   useEffect(() => {
     setCommentReadBox();
@@ -44,6 +53,9 @@ const DetailCommentArea = ({ idGroup, cardId }: DetailCommentAreaProps) => {
             setCommentList={setCommentList}
           />
         ))}
+
+      {commentList.length >= 10 && <div id='comment-observer' ref={sentinelRef}></div>}
+      {isFetching && <div>loading...</div>}
     </>
   );
 };

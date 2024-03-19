@@ -131,7 +131,7 @@ const InvitationList = () => {
                   ))}
                 </tbody>
               </table>
-              {invitationLength >= 10 && <div ref={observerTarget}></div>}
+              {invitationLength >= 10 && <div id='invitation-observer' ref={observerTarget}></div>}
             </div>
           </>
         ) : (

@@ -6,9 +6,7 @@ export const getComments = async (size: number, cardId: number) => {
   try {
     const response = await axiosInstance.get(`${API.COMMENTS.COMMENTS}?size=${size}&cardId=${cardId}`);
 
-    const responseData = await response.data;
-
-    return responseData;
+    return response.data;
   } catch (e) {
     const error = e as AxiosError;
     return error.response;
