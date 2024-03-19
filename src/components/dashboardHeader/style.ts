@@ -275,7 +275,6 @@ export const Container = styled.header`
     }
   }
   .invite-button {
-    margin-right: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -297,6 +296,18 @@ export const Container = styled.header`
       height: 20px;
       flex-shrink: 0;
     }
+  }
+  .one-man {
+    margin-right: 32px;
+  }
+  .two-men {
+    margin-right: 24px;
+  }
+  .three-men {
+    margin-right: 16px;
+  }
+  .four-men {
+    margin-right: 8px;
   }
 
   .edit-button {
