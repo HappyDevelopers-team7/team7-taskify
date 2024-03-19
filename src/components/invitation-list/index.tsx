@@ -43,7 +43,6 @@ const InvitationList = () => {
   const setInvitation = async () => {
     try {
       const result = await getInvitation(size);
-      console.log(result);
       setInvitationLength(result.invitations.length);
       dispatch(setInvitationList(result.invitations));
       dispatch(updateInvitationList(result.invitations));
