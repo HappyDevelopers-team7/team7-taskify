@@ -90,7 +90,9 @@ const Card = ({ cardList, setCardList, card, idGroup }: CardProps) => {
         )}
       </CardContainer>
       {openModalName === `cardDetailModal${card.id}` ? <CardDetail idGroup={idGroup} cardId={card.id} /> : null}
-      {openSecondModalName === 'deleteCardAlert' ? <DeleteAlert handleSubmitDelete={handleDeleteCard} /> : null}
+      {openSecondModalName === `deleteCardAlert${card.id}` ? (
+        <DeleteAlert handleSubmitDelete={handleDeleteCard} />
+      ) : null}
       {openModalName === `editCard${card.id}` ? <EditCard card={card} /> : null}
     </>
   );
