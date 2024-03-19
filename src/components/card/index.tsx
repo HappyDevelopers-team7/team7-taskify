@@ -48,7 +48,6 @@ const Card = ({ cardList, setCardList, card, idGroup }: CardProps) => {
     dispatch(setOpenModalName(`editCard${card.id}`));
     dispatch(openModal(`editCard${card.id}`));
   };
-  console.log('console is', card);
   return (
     <>
       <CardContainer onClick={handleClickOpenDetail}>

@@ -35,8 +35,6 @@ const AddColumnModal = ({ setColumns }: AddColumnModalProps) => {
   };
 
   const handleSubmitModal = () => {
-    console.log('새로운 컬럼 이름:', newColumnName);
-
     if (existingColumns.includes(newColumnName)) {
       alert('중복된 컬럼 이름입니다.');
       return;
