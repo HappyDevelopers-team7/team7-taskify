@@ -130,6 +130,7 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId }: Props) => 
       .catch(() => alert('카드 조회 실패'))
       .finally(() => setIsLoading(false));
   };
+
   const handleUploadFile = async (e: ChangeEvent<HTMLInputElement>) => {
     // 카드 이미지 첨부 & 미리보기 출력 함수
     if (e.target.files && e.target.files.length > 0) {

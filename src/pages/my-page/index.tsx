@@ -14,7 +14,6 @@ interface UploadSuccessResponse {
   data: {
     imageUrl: string;
   };
-  // 다른 필드들도 있을 수 있음
 }
 
 const MyPage = () => {
@@ -37,13 +36,11 @@ const MyPage = () => {
 
   const handleSubmitInformation = async () => {
     try {
-      // 프로필 이미지 업로드
       if (profileImageFile) {
         const formData = new FormData();
         formData.append('image', profileImageFile);
         const uploadResponse: UploadSuccessResponse | undefined = await PostProfileImage(formData);
         if (uploadResponse) {
-          // 업로드 성공한 경우에만 프로필 정보 업데이트
           const imageUrl = uploadResponse.data.imageUrl;
           const putInformResponse = await PutUserInformation(nickname, imageUrl);
           if (putInformResponse) {
@@ -55,7 +52,6 @@ const MyPage = () => {
           alert('프로필 이미지 업로드에 실패했습니다.');
         }
       } else {
-        // 프로필 이미지가 선택되지 않은 경우에는 닉네임만 업데이트
         const putInformResponse = await PutUserInformation(nickname, profileImageUrl);
         if (putInformResponse) {
           alert('프로필 정보가 업데이트 되었습니다.');
