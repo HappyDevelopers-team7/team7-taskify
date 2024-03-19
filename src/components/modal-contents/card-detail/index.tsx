@@ -95,7 +95,7 @@ const CardDetail = ({ idGroup, cardId }: CardDetailProps) => {
                 <li>
                   <p>마감일</p>
                   <div className='desc'>
-                    <span>{detail?.dueDate}</span>
+                    {detail?.dueDate ? <span>{detail?.dueDate}</span> : <span className='no-due-date'>미지정</span>}
                   </div>
                 </li>
               </ul>
