@@ -25,11 +25,11 @@ const CardDetail = ({ idGroup, cardId }: CardDetailProps) => {
   const [detail, setDetail] = useState<cardDetailType>();
   const [detailLoading, setDetailLoading] = useState(true);
 
-  const handleCloseCardDetailModal = () => {
+  const handleCloseCard = () => {
     dispatch(closeModal());
   };
 
-  const handleDeleteCardDetailModal = () => {
+  const handleDeleteCard = () => {
     dispatch(setOpenSecondModalName(`deleteCardAlert${cardId}`));
     dispatch(openSecondModal(`deleteCardAlert${cardId}`));
   };
@@ -57,8 +57,8 @@ const CardDetail = ({ idGroup, cardId }: CardDetailProps) => {
         type='detail'
         title={detail?.title}
         modalWidth={730}
-        handleDeleteModal={handleDeleteCardDetailModal}
-        handleCloseModal={handleCloseCardDetailModal}
+        handleDeleteModal={handleDeleteCard}
+        handleCloseModal={handleCloseCard}
       >
         {detailLoading ? (
           <LoadingSpinner />
