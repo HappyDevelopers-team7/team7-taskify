@@ -2,7 +2,6 @@ import ModalContainer from '@/components/modal-container';
 import { closeModal } from '@/redux/modalSlice';
 import { useDispatch } from 'react-redux';
 import StDetailModalContainer from './style';
-import ColumnNameTag from '@/components/column-name-tag';
 import DetailContentArea from '@/components/detail-content-area';
 import DetailCommentArea from '@/components/detail-comment-area';
 import { useEffect, useState } from 'react';
@@ -11,7 +10,10 @@ import { cardDetailType } from '@/types/cardDetailType';
 import ProfileImage from '@/components/profile-image';
 import LoadingSpinner from '@/components/loading-spinner';
 import { IdGroupType } from '@/types/idGroupType';
-import { openSecondModal } from '@/redux/secondModalSlice';
+import { openSecondModal, setOpenSecondModalName } from '@/redux/secondModalSlice';
+import TagComponent from '@/components/tag-component';
+import { makeRandomBackgroundColor } from '@/utils/makeRandomBackgroundColor';
+import ColumnNameTag from '@/components/column-name-tag';
 
 interface CardDetailProps {
   idGroup: IdGroupType;
@@ -28,6 +30,7 @@ const CardDetail = ({ idGroup, cardId }: CardDetailProps) => {
   };
 
   const handleDeleteCardDetailModal = () => {
+    dispatch(setOpenSecondModalName('deleteCardAlert'));
     dispatch(openSecondModal('deleteCardAlert'));
   };
 
@@ -63,9 +66,16 @@ const CardDetail = ({ idGroup, cardId }: CardDetailProps) => {
           <StDetailModalContainer>
             <div className='content-area'>
               <div className='tag-box'>
-                <ColumnNameTag name={idGroup.columnTitle} />
+                <div className='column-name-box'>
+                  <ColumnNameTag name={idGroup.columnTitle} />
+                </div>
                 <span className='divide-bar'></span>
-                <div className='sub-tag-box'></div>
+                <div className='sub-tag-box'>
+                  {detail?.tags &&
+                    detail?.tags.map((tag, index) => (
+                      <TagComponent key={index} name={tag} backgroundColor={makeRandomBackgroundColor(index)} />
+                    ))}
+                </div>
               </div>
               <DetailContentArea imageUrl={detail?.imageUrl} content={detail?.description} />
               <DetailCommentArea idGroup={idGroup} cardId={cardId} />

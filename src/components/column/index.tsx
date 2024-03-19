@@ -15,6 +15,7 @@ import EditColumnModal from '../modal-edit-column';
 import dateExtractor from '@/utils/dateExtractor';
 import TagComponent from '../tag-component';
 import 'flatpickr/dist/flatpickr.min.css';
+import { ColumnCardType } from '@/types/columnCardType';
 
 interface Props {
   columnData: Columns;
@@ -24,26 +25,7 @@ interface Props {
 }
 
 export interface Types {
-  CardInfo: {
-    cards: [
-      {
-        assignee: { id: number; nickname: string; profileImageUrl: string };
-        columnId: number;
-        createdAt: string;
-        dashboardId: number;
-        description: string;
-        dueDate: string | null;
-        id: number;
-        imageUrl: string | null;
-        tags: string[];
-        teamId: number;
-        title: string;
-        updatedAt: string;
-      },
-    ];
-    totalCount: number;
-    cursorId: number;
-  };
+  totalCount: number;
   CreateCardData: {
     asignee: string;
     title: string;
@@ -65,7 +47,8 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId }: Props) => 
   const asigneeRef = useRef<number | null>(null);
   const titleRef = useRef<HTMLInputElement>(null);
   const descriptionRef = useRef<HTMLTextAreaElement>(null);
-  const [cardInfo, setCardInfo] = useState<Types['CardInfo'] | undefined>();
+  const [cardInfo, setCardInfo] = useState<ColumnCardType[]>();
+  const [totalCount, setTotalCount] = useState<Types['totalCount']>(0);
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -157,7 +140,8 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId }: Props) => 
     await axiosInstance
       .get(`${API.CARDS.CARDS}?size=${pages}&columnId=${columnData.id}`)
       .then((res) => {
-        setCardInfo(res.data);
+        setCardInfo(res.data.cards);
+        setTotalCount(res.data.totalCount);
       })
       .catch(() => alert('카드 조회 실패'))
       .finally(() => setIsLoading(false));
@@ -249,7 +233,7 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId }: Props) => 
       <div className='column-head'>
         <div className='column-color' />
         <h2>{columnData.title}</h2>
-        <div className='inner-cards'>{cardInfo?.totalCount}</div>
+        <div className='inner-cards'>{totalCount}</div>
         <img src='/assets/image/icons/settingIcon.svg' alt='setting-icon' onClick={handleEditColumn} />
       </div>
 
@@ -257,11 +241,14 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId }: Props) => 
         <button type='button' className='add-card' onClick={() => handleOpenCreateCard()}>
           <img src='/assets/image/icons/bannerAddIcon.svg' alt='add-icon' />
         </button>
-        {cardInfo && cardInfo.cards.map((card) => <Card key={card.id} card={card} idGroup={idGroup} />)}
+        {cardInfo &&
+          cardInfo.map((card) => (
+            <Card key={card.id} card={card} idGroup={idGroup} cardList={cardInfo} setCardList={setCardInfo} />
+          ))}
       </div>
 
       <div className='column-foot'>
-        {cardInfo && cardInfo.totalCount > pages && (
+        {totalCount > pages && (
           <button
             onClick={() => {
               setPages((prev) => prev + 3);
@@ -373,7 +360,6 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId }: Props) => 
                   tags.map((tag, index) => (
                     <TagComponent
                       key={tag.id}
-                      id={tag.id}
                       name={tag.name}
                       backgroundColor={colorArray[index % colorArray.length]}
                     />

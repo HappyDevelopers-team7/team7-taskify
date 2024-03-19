@@ -35,8 +35,8 @@ const CommentReadBox = ({ commentList, setCommentList, content, commentId }: Com
   };
 
   const handleClickDeleteComment = async () => {
-    dispatch(setOpenSecondModalName('deleteCommentAlert'));
-    dispatch(openSecondModal('deleteCommentAlert'));
+    dispatch(setOpenSecondModalName(`deleteCommentAlert${commentId}`));
+    dispatch(openSecondModal(`deleteCommentAlert${commentId}`));
   };
 
   const handleDeleteCard = async () => {
@@ -113,7 +113,9 @@ const CommentReadBox = ({ commentList, setCommentList, content, commentId }: Com
           </div>
         </div>
       </StCommentReadBox>
-      {openSecondModalName === 'deleteCommentAlert' ? <DeleteAlert handleSubmitDelete={handleDeleteCard} /> : null}
+      {openSecondModalName === `deleteCommentAlert${commentId}` ? (
+        <DeleteAlert handleSubmitDelete={handleDeleteCard} />
+      ) : null}
     </>
   );
 };

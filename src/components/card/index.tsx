@@ -9,8 +9,13 @@ import { SecondModalRootState, closeSecondModal } from '@/redux/secondModalSlice
 import { deleteCard } from '@/api/deleteCard';
 import { SIMPLE_MESSAGES } from '@/constants/message';
 import { toast } from 'react-toastify';
+import { Dispatch, SetStateAction } from 'react';
+import { makeRandomBackgroundColor } from '@/utils/makeRandomBackgroundColor';
+import { ColumnCardType } from '@/types/columnCardType';
 
 interface Props {
+  cardList: ColumnCardType[];
+  setCardList: Dispatch<SetStateAction<ColumnCardType[] | undefined>>;
   card: {
     assignee: { id: number; nickname: string; profileImageUrl: string };
     columnId: number;
@@ -28,17 +33,18 @@ interface Props {
   idGroup: IdGroupType;
 }
 
-const Card = ({ card, idGroup }: Props) => {
+const Card = ({ cardList, setCardList, card, idGroup }: Props) => {
   const dispatch = useDispatch();
   const openModalName = useSelector((state: ModalRootState) => state.modal.openModalName);
   const openSecondModalName = useSelector((state: SecondModalRootState) => state.secondModal.openSecondModalName);
-  const colorArray = ['#ff0000', '#29c936', '#ff8c00', '#000000', '#008000', '#f122f1', '#0000ff'];
 
   const handleDeleteCard = async () => {
     try {
       await deleteCard(card.id);
       dispatch(closeSecondModal());
       dispatch(closeModal());
+      const updatedCommentList = cardList?.filter((cardItem) => cardItem.id !== card.id);
+      setCardList(updatedCommentList);
       return toast.success(SIMPLE_MESSAGES.DELETED);
     } catch (error) {
       console.error(error);
@@ -64,9 +70,8 @@ const Card = ({ card, idGroup }: Props) => {
             card.tags.map((tag, index) => (
               <TagComponent
                 key={card.tags.indexOf(tag)}
-                id={card.tags.indexOf(tag)}
                 name={tag}
-                backgroundColor={colorArray[index % colorArray.length]}
+                backgroundColor={makeRandomBackgroundColor(index)}
               />
             ))}
         </div>
