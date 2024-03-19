@@ -124,10 +124,10 @@ export const ModalContent = styled.div<{
     font-size: 1.8rem;
     font-weight: 500;
     margin-bottom: 10px;
-  }
 
-  .essential {
-    color: ${({ theme }) => theme.color.violet};
+    span {
+      color: ${({ theme }) => theme.color.violet};
+    }
   }
 
   .input-box {
@@ -153,6 +153,9 @@ export const ModalContent = styled.div<{
   .input-box.asignee-box {
     width: 50%;
     ${(props) => props.$Profile && 'padding-left: 45px;'}
+    background-image: url('/assets/image/icons/arrowDropDownIcon.svg');
+    background-repeat: no-repeat;
+    background-position: 180px;
   }
 
   .input-box.member-list {
@@ -226,7 +229,7 @@ export const ModalContent = styled.div<{
       background-color: #f5f5f5;
       background-repeat: no-repeat;
       background-position: center;
-      ${(props) => props.$Image && 'background-size: contain;'}
+      ${(props) => (props.$Image ? 'background-size: contain;' : 'background-size: 28px 28px;')}
       border-radius: 6px;
       cursor: pointer;
     }

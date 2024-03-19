@@ -16,7 +16,7 @@ const RejectInvitation = ({ invitationId }: RejectInvitationProps) => {
   const dispatch = useDispatch();
   const handleCloseReject = () => {
     dispatch(closeModal());
-    toast.success(INVITATION_MESSAGES.REJECT_CANCELED);
+    toast.warning(INVITATION_MESSAGES.REJECT_CANCELED);
   };
 
   const handleSubmitReject = async () => {

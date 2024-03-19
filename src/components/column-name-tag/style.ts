@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 const StColumnNameTag = styled.div`
-  display: flex;
+  display: inline-flex;
   align-items: center;
   padding: 4px 8px;
   border-radius: 11px;

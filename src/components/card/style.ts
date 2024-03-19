@@ -1,6 +1,15 @@
 import styled from 'styled-components';
 
 const CardContainer = styled.article`
+  .모달수정용임시버튼 {
+    /*기능 연결한 후 꼭 지울것!*/
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    background-color: red;
+    border-radius: 50%;
+  }
+
   @keyframes slideIn {
     from {
       transform: translateY(-20px);
@@ -27,6 +36,12 @@ const CardContainer = styled.article`
     width: 274px;
     height: 160px;
     margin-bottom: 12px;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
   }
 
   .title-box {
