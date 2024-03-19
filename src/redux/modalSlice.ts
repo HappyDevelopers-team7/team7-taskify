@@ -5,7 +5,7 @@ import store from './store/store';
 export type ModalRootState = ReturnType<typeof store.getState>;
 
 export interface ModalState {
-  openModalName: string | number | null;
+  openModalName: string | null;
   prevScrollPosition: number;
   currentScrollPosition: number;
 }
@@ -26,10 +26,10 @@ const modalSlice = createSlice({
   name: 'modal',
   initialState,
   reducers: {
-    setOpenModalName: (state, action: PayloadAction<string | number>) => {
+    setOpenModalName: (state, action: PayloadAction<string>) => {
       state.openModalName = action.payload;
     },
-    openModal: (state, action: PayloadAction<string | number>) => {
+    openModal: (state, action: PayloadAction<string>) => {
       state.currentScrollPosition = state.prevScrollPosition;
       document.body.style.position = 'fixed';
       document.body.style.width = '100%';

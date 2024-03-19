@@ -1,4 +1,4 @@
-export interface ColumnToCardProps {
+export type CardObjectType = {
   card: {
     assignee: { id: number; nickname: string; profileImageUrl: string };
     columnId: number;
@@ -13,4 +13,4 @@ export interface ColumnToCardProps {
     title: string;
     updatedAt: string;
   };
-}
+};

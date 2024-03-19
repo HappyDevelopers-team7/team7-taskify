@@ -30,4 +30,5 @@ export interface Types {
     id: number;
     name: string;
   };
+  totalCount: number;
 }

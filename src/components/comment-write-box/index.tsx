@@ -8,13 +8,14 @@ import { CommentListType } from '@/types/commentListType';
 interface CommentWriteBoxProps {
   setCommentList: Dispatch<SetStateAction<CommentListType[]>>;
   idGroup: IdGroupType;
+  cardId: number;
 }
 
-const CommentWriteBox = ({ setCommentList, idGroup }: CommentWriteBoxProps) => {
+const CommentWriteBox = ({ setCommentList, idGroup, cardId }: CommentWriteBoxProps) => {
   const [commentValue, setCommentValue] = useState('');
   const handleSubmitComment = async () => {
     try {
-      const result = await postComment(commentValue, idGroup.columnId, idGroup.cardId, idGroup.dashboardId);
+      const result = await postComment(commentValue, idGroup.columnId, cardId, idGroup.dashboardId);
       if (result) {
         setCommentList((prevList) => [result, ...prevList]);
         setCommentValue('');

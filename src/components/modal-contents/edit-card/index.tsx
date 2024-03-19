@@ -3,9 +3,9 @@ import ModalContainer from '@/components/modal-container';
 import { useDispatch } from 'react-redux';
 import { closeModal } from '@/redux/modalSlice';
 import StEditCard from './style';
-import { ColumnToCardProps } from '@/types/columnToCardProps';
+import { CardObjectType } from '@/types/cardObjectType';
 
-const EditCard = ({ card }: ColumnToCardProps) => {
+const EditCard = ({ card }: CardObjectType) => {
   const dispatch = useDispatch();
 
   const handleCloseEditCardModal = () => {
