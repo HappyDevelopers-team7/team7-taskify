@@ -6,6 +6,7 @@ const StEditCard = styled.div<{
   $isAsigneeClicked: boolean;
   $Profile: string | undefined;
   $Tag: string[];
+  $NewImage: string | null;
 }>`
   height: 65vh;
 
@@ -93,6 +94,15 @@ const StEditCard = styled.div<{
     .auth-box-second-div {
       position: relative;
 
+      .remove-icon {
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        left: 50px;
+        top: 1px;
+        cursor: pointer;
+      }
+
       .asignee-box {
         ${(props) => props.$Profile && 'padding-left: 45px;'}
       }
@@ -162,9 +172,11 @@ const StEditCard = styled.div<{
       width: 76px;
       height: 76px;
       background-image: ${(props) =>
-        props.$Image
-          ? 'linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ),url(' + props.$Image + ')'
-          : "url('/assets/image/icons/modalAddIcon.svg')"};
+        props.$NewImage
+          ? `url(` + props.$NewImage + ')'
+          : props.$Image
+            ? 'linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ),url(' + props.$Image + ')'
+            : "url('/assets/image/icons/modalAddIcon.svg')"};
       background-color: #f5f5f5;
       background-repeat: no-repeat;
       background-position: center;
@@ -181,6 +193,15 @@ const StEditCard = styled.div<{
       overflow: hidden;
       border: 0;
     }
+  }
+
+  .file-name {
+    font-size: 1.4rem;
+    margin-bottom: 5px;
+  }
+
+  .hidden {
+    display: none;
   }
 `;
 

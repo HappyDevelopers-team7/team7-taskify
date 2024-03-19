@@ -1,4 +1,4 @@
-// import { toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
 import { makeRandomBackgroundColor } from '@/utils/makeRandomBackgroundColor';
 import { ChangeEvent, MouseEvent, KeyboardEvent, useEffect, useState, useRef } from 'react';
@@ -11,6 +11,8 @@ import ColumnNameTag from '@/components/column-name-tag';
 import LoadingSpinner from '@/components/loading-spinner';
 import dateExtractor from '@/utils/dateExtractor';
 import TagComponent from '@/components/tag-component';
+import axiosInstance from '@/api/instance/axiosInstance';
+import API from '@/api/constants';
 import Flatpickr from 'react-flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 
@@ -21,21 +23,24 @@ type Type = {
   tag: string;
 };
 
-const EditCard = ({ card, thisColumn, columns, memberData }: CardObjectType) => {
+const EditCard = ({ card, thisColumn, columns, memberData, viewCards }: CardObjectType) => {
   const dispatch = useDispatch();
   const today = new Date();
-  const asigneeRef = useRef<number | null>(card.assignee.id); // post보낼 담당자 아이디
-  const [tags, setTags] = useState<string[]>(card.tags); //post보낼 태그
+  const asigneeRef = useRef<number | null>(card.assignee.id);
+  const imgRef = useRef<HTMLImageElement>(null!);
+  const [imageUrl, setImageUrl] = useState<string | null>(card.imageUrl);
+  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [tags, setTags] = useState<string[]>(card.tags);
   const [asgineeName, setAsigneeName] = useState<string | undefined>(card.assignee.nickname);
   const [userProfile, setUserProfile] = useState<string | undefined>(card.assignee.profileImageUrl);
   const [selectedColumnName, setSelectedColumnName] = useState<string>(thisColumn.title);
-  const [selectedColumnId, setSelectedColumnId] = useState<number>(thisColumn.id); // post보낼 칼럼 아이디
+  const [selectedColumnId, setSelectedColumnId] = useState<number>(thisColumn.id);
   const [isDropdownStatus, setIsDropdownStatus] = useState(false);
   const [isDropdownAsignee, setIsDropdownAsignee] = useState(false);
   const [filterdMember, SetFilterdMember] = useState<CardObjectType['memberData']>(memberData);
   const [isLoading, setIsLoading] = useState(false);
   const [editCardData, setEditCardData] = useState<Type>({
-    //post보낼 제목,설명,마감일
     title: card.title,
     description: card.description,
     dueDate: card.dueDate,
@@ -44,22 +49,33 @@ const EditCard = ({ card, thisColumn, columns, memberData }: CardObjectType) => 
 
   const handleCloseEditCardModal = () => {
     dispatch(closeModal());
-    console.log(card);
-    console.log(columns);
-    console.log(thisColumn);
-    console.log(memberData);
-    console.log(selectedColumnId);
   };
 
-  const handleSubmitEditCardModal = () => {
+  const handleSubmitEditCardModal = async () => {
     try {
       setIsLoading(true);
+      if (!editCardData.title || !editCardData.description) {
+        toast.error('제목,설명은 필수입니다.');
+        return;
+      }
+      await axiosInstance.put(`${API.CARDS.CARDS}/${card.id}`, {
+        columnId: selectedColumnId,
+        assigneeUserId: asigneeRef ? asigneeRef.current : undefined,
+        title: editCardData.title,
+        description: editCardData.description,
+        dueDate: editCardData.dueDate ? editCardData.dueDate : undefined,
+        tags: tags,
+        imageUrl: imageUrl ? imageUrl : undefined,
+      });
+
       alert('수정완료');
       dispatch(closeModal());
     } catch (err) {
       alert(err);
     } finally {
       setIsLoading(false);
+      viewCards();
+      window.location.reload();
     }
   };
 
@@ -79,7 +95,7 @@ const EditCard = ({ card, thisColumn, columns, memberData }: CardObjectType) => 
     const target = e.target as HTMLElement;
     const newColumnName = target.innerText;
     setSelectedColumnName(newColumnName);
-    const newColumnId = columns.find((column) => column.title === selectedColumnName)?.id;
+    const newColumnId = columns.find((column) => column.title === newColumnName)?.id;
     if (newColumnId !== undefined) setSelectedColumnId(newColumnId);
     setIsDropdownStatus(false);
   };
@@ -106,6 +122,35 @@ const EditCard = ({ card, thisColumn, columns, memberData }: CardObjectType) => 
     setTags(tags.filter((item) => item !== removeTag));
   };
 
+  const handleUploadFile = async (e: ChangeEvent<HTMLInputElement>) => {
+    // 카드 이미지 첨부 & 미리보기 출력 함수
+    if (e.target.files && e.target.files.length > 0) {
+      const file = e.target.files[0];
+      if (!file.type.startsWith('image/') || file.type === 'image/gif') {
+        alert('파일은 gif를 제외한 이미지 타입만 첨부 가능합니다.');
+      } else {
+        setUploadedFile(file);
+        const formData = new FormData();
+        formData.append('image', file as Blob);
+        await axiosInstance
+          .post(`${API.COLUMNS.COLUMNS}/${selectedColumnId}/card-image`, formData)
+          .then((res) => setImageUrl(res.data.imageUrl));
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setPreviewUrl(reader.result as string);
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+  };
+
+  const handleAssigneeClear = () => {
+    const img = imgRef.current;
+    if (img) img.classList.add('hidden');
+    asigneeRef.current = null;
+    setAsigneeName('');
+  };
+
   useEffect(() => {
     if (asgineeName !== '') {
       const data = [...memberData];
@@ -116,8 +161,7 @@ const EditCard = ({ card, thisColumn, columns, memberData }: CardObjectType) => 
     } else if (asgineeName === '') {
       SetFilterdMember(memberData);
     }
-    console.log(tags);
-  }, [asgineeName, tags]);
+  }, [asgineeName]);
 
   return (
     <ModalContainer
@@ -135,6 +179,7 @@ const EditCard = ({ card, thisColumn, columns, memberData }: CardObjectType) => 
         $isAsigneeClicked={isDropdownAsignee}
         $Profile={userProfile}
         $Tag={tags}
+        $NewImage={previewUrl}
       >
         <div className='auth-box'>
           <div className='auth-box-first-div'>
@@ -156,6 +201,12 @@ const EditCard = ({ card, thisColumn, columns, memberData }: CardObjectType) => 
           </div>
           <div className='auth-box-second-div'>
             <h3>담당자</h3>
+            <img
+              src='/assets/image/icons/removeIcon.svg'
+              className='remove-icon'
+              alt='remove-icon'
+              onClick={handleAssigneeClear}
+            />
             <input
               value={asgineeName}
               className='input-box asignee-box'
@@ -164,7 +215,7 @@ const EditCard = ({ card, thisColumn, columns, memberData }: CardObjectType) => 
               onFocus={(e) => handleAsigneeDropdown(e)}
               onBlur={() => setIsDropdownAsignee(false)}
             />
-            {userProfile && <img src={userProfile} className='user-image in-searchbar' />}
+            {userProfile && <img src={userProfile} className='user-image in-searchbar' ref={imgRef} />}
             <div className='input-box member-list'>
               {isDropdownAsignee &&
                 filterdMember.map((member) => (
@@ -247,12 +298,19 @@ const EditCard = ({ card, thisColumn, columns, memberData }: CardObjectType) => 
           <h3>이미지</h3>
           <div className='upload-button-box'>
             <label htmlFor='upload-button'>
-              {card.imageUrl && (
+              {card.imageUrl && !previewUrl ? (
                 <img className='pencil-icon' src='/assets/image/icons/pencilIcon.svg' alt='edit-icon' />
-              )}
+              ) : null}
             </label>
-            <input type='file' accept='image/*' className='upload-button' id='upload-button' />
+            <input
+              type='file'
+              accept='image/*'
+              className='upload-button'
+              id='upload-button'
+              onChange={handleUploadFile}
+            />
           </div>
+          <div className='file-name'>{uploadedFile ? uploadedFile.name : '수정할 이미지를 첨부해주세요.'} </div>
         </div>
       </StEditCard>
     </ModalContainer>
