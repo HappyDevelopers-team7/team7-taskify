@@ -2,11 +2,12 @@ import { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Container from './style';
 import { useDispatch, useSelector } from 'react-redux';
-import { openModal, setOpenModalName } from '@/redux/modalSlice';
+import { ModalRootState, openModal, setOpenModalName } from '@/redux/modalSlice';
 import { DashBoardRootState, setSideDashboardList } from '@/redux/dashboardListSlice';
 import { getSideDashboardList } from '@/api/getSideDashboardList';
 import { AxiosError } from 'axios';
 import { toast } from 'react-toastify';
+import CreateDashboard from '../modal-contents/create-dashboard';
 
 export type Dashboards = {
   color: string;
@@ -20,6 +21,7 @@ export type Dashboards = {
 
 const SideMenu = () => {
   const dispatch = useDispatch();
+  const openModalName = useSelector((state: ModalRootState) => state.modal.openModalName);
   const sideDashboardList = useSelector((state: DashBoardRootState) => state.dashboardList.sideDashboardList);
   const [selected, setSelected] = useState<number | null>(null);
   const [maximumPages, setMaximumPages] = useState<number>(1);
@@ -28,8 +30,8 @@ const SideMenu = () => {
   const navigate = useNavigate();
 
   const handleClickCreateDashboard = () => {
-    dispatch(setOpenModalName('createDashboard'));
-    dispatch(openModal('createDashboard'));
+    dispatch(setOpenModalName('createSideDashboard'));
+    dispatch(openModal('createSideDashboard'));
   };
 
   const setSideDashboardListResult = async () => {
@@ -127,6 +129,7 @@ const SideMenu = () => {
           </button>
         </div>
       </Container>
+      {openModalName === 'createSideDashboard' ? <CreateDashboard /> : null}
     </>
   );
 };

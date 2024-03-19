@@ -3,7 +3,6 @@ import StTagComponent from './style';
 type Tag = {
   name: string;
   backgroundColor: string;
-  id: number;
 };
 
 const TagComponent = ({ name, backgroundColor }: Tag) => {

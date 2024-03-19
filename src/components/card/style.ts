@@ -27,6 +27,12 @@ const CardContainer = styled.article`
     width: 274px;
     height: 160px;
     margin-bottom: 12px;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
   }
 
   .title-box {
