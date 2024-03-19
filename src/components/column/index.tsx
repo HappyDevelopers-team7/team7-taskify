@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ColumnContainer, ModalContent } from './style';
 import { ChangeEvent, useEffect, useState, useRef, KeyboardEvent } from 'react';
 import { ModalRootState, closeModal, openModal, setOpenModalName } from '@/redux/modalSlice';
+import { ColumnCardType } from '@/types/columnCardType';
+import { dashboardIdTypes } from '@/types/dashboardIdTypes';
 import { toast } from 'react-toastify';
 import { Types } from '@/types/columnDetailTypes';
 import axiosInstance from '@/api/instance/axiosInstance';
@@ -10,13 +12,11 @@ import API from '@/api/constants';
 import ModalContainer from '../modal-container';
 import Card from '../card';
 import LoadingSpinner from '@/components/loading-spinner';
-import Flatpickr from 'react-flatpickr';
 import EditColumnModal from '../modal-edit-column';
 import dateExtractor from '@/utils/dateExtractor';
 import TagComponent from '../tag-component';
+import Flatpickr from 'react-flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
-import { ColumnCardType } from '@/types/columnCardType';
-import { dashboardIdTypes } from '@/types/dashboardIdTypes';
 
 interface Props {
   columnData: dashboardIdTypes['Columns'];

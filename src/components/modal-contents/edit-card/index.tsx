@@ -8,9 +8,19 @@ import { CardObjectType } from '@/types/cardObjectType';
 import ColumnNameTag from '@/components/column-name-tag';
 import { dashboardIdTypes } from '@/types/dashboardIdTypes';
 import LoadingSpinner from '@/components/loading-spinner';
+import Flatpickr from 'react-flatpickr';
+import 'flatpickr/dist/flatpickr.min.css';
+import dateExtractor from '@/utils/dateExtractor';
+
+type Type = {
+  title: string;
+  description: string;
+  dueDate: string | null;
+};
 
 const EditCard = ({ card, thisColumn, columns, memberData }: CardObjectType) => {
   const dispatch = useDispatch();
+  const today = new Date();
   const asigneeRef = useRef<number | null>(card.assignee.id); // post보낼 담당자 아이디
   const [asgineeName, setAsigneeName] = useState<string | undefined>(card.assignee.nickname);
   const [userProfile, setUserProfile] = useState<string | undefined>(card.assignee.profileImageUrl);
@@ -20,6 +30,11 @@ const EditCard = ({ card, thisColumn, columns, memberData }: CardObjectType) => 
   const [isDropdownAsignee, setIsDropdownAsignee] = useState(false);
   const [filterdMember, SetFilterdMember] = useState<CardObjectType['memberData']>(memberData);
   const [isLoading, setIsLoading] = useState(false);
+  const [editCardData, setEditCardData] = useState<Type>({
+    title: card.title,
+    description: card.description,
+    dueDate: card.dueDate,
+  });
 
   const handleCloseEditCardModal = () => {
     dispatch(closeModal());
@@ -153,21 +168,40 @@ const EditCard = ({ card, thisColumn, columns, memberData }: CardObjectType) => 
           <h3>
             제목<span className='essential'> *</span>
           </h3>
-          <input className='input-box' />
+          <input
+            className='input-box'
+            type='text'
+            value={editCardData.title}
+            onChange={(e) => setEditCardData({ ...editCardData, title: e.target.value })}
+          />
         </div>
         <div>
           <h3>
             설명<span className='essential'> *</span>
           </h3>
-          <textarea className='input-box' />
+          <textarea
+            className='input-box'
+            value={editCardData.description}
+            onChange={(e) => setEditCardData({ ...editCardData, description: e.target.value })}
+          />
         </div>
         <div>
           <h3>마감일</h3>
-          <input className='input-box' />
+          <Flatpickr
+            className='input-box date-box'
+            placeholder='날짜를 입력해 주세요'
+            value={String(editCardData.dueDate)}
+            options={{
+              enableTime: true,
+              minDate: dateExtractor(today).slice(0, 10),
+              closeOnSelect: true,
+            }}
+            onChange={(e) => setEditCardData({ ...editCardData, dueDate: dateExtractor(e[0]) })}
+          />
         </div>
         <div>
           <h3>태그</h3>
-          <input className='input-box' />
+          <input className='input-box' type='text' />
         </div>
         <div>
           <h3>이미지</h3>
