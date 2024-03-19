@@ -13,7 +13,7 @@ interface Props {
   handleDeleteColumn: () => void;
 }
 
-const EditColumnModal = ({ columnId, columnName, handleEditColumn, handleDeleteColumn }: Props) => {
+export const EditColumnModal = ({ columnId, columnName, handleEditColumn, handleDeleteColumn }: Props) => {
   const dispatch = useDispatch();
   const [editedColumnName, setEditedColumnName] = useState(columnName); // 수정 상태 추가
 

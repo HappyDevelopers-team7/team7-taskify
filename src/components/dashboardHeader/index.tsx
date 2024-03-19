@@ -288,7 +288,7 @@ function ProfileInfo({ myInfo }: { myInfo: SetMyInfo | null }) {
 
   // 마이페이지로 가게하는 핸들러
   const handleMyPageClick = () => {
-    navigate('/mypage');
+    navigate('/my-page');
   };
 
   // 로그아웃 버튼을 클릭했을 때의 핸들러 함수
@@ -310,7 +310,7 @@ function ProfileInfo({ myInfo }: { myInfo: SetMyInfo | null }) {
       <div className='myinfo-name'>{myInfo?.nickname}</div>
       {isDropdownOpen ? (
         <ul className='drop-down-menu'>
-          <Link to={'/mypage'} className='myinfo-mypage-button'>
+          <Link to={'/my-page'} className='myinfo-mypage-button'>
             <li>
               <button onClick={handleMyPageClick}>마이페이지</button>
             </li>
