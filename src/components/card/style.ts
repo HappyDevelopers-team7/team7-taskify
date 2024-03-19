@@ -1,10 +1,30 @@
 import styled from 'styled-components';
 
 const CardContainer = styled.article`
+  .모달수정용임시버튼 {
+    /*기능 연결한 후 꼭 지울것!*/
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    background-color: red;
+    border-radius: 50%;
+  }
+
+  @keyframes slideIn {
+    from {
+      transform: translateY(-20px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
   width: 314px;
   margin-top: 16px;
   padding: 20px;
   position: relative;
+  animation: slideIn 0.5s ease-in-out;
 
   border-radius: 6px;
   border: 1px solid ${({ theme }) => theme.color.gray_d9};
@@ -16,6 +36,12 @@ const CardContainer = styled.article`
     width: 274px;
     height: 160px;
     margin-bottom: 12px;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
   }
 
   .title-box {
