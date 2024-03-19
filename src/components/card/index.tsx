@@ -1,5 +1,6 @@
 import CardContainer from './style';
 import TagComponent from '../tag-component';
+import EditCard from '../modal-contents/edit-card';
 import { useDispatch, useSelector } from 'react-redux';
 import { ModalRootState, closeModal, openModal, setOpenModalName } from '@/redux/modalSlice';
 import CardDetail from '../modal-contents/card-detail';
@@ -13,27 +14,14 @@ import { Dispatch, SetStateAction } from 'react';
 import { makeRandomBackgroundColor } from '@/utils/makeRandomBackgroundColor';
 import { ColumnCardType } from '@/types/columnCardType';
 
-interface Props {
+interface CardProps {
   cardList: ColumnCardType[];
   setCardList: Dispatch<SetStateAction<ColumnCardType[] | undefined>>;
-  card: {
-    assignee: { id: number; nickname: string; profileImageUrl: string };
-    columnId: number;
-    createdAt: string;
-    dashboardId: number;
-    description: string;
-    dueDate: string | null;
-    id: number;
-    imageUrl: string | null;
-    tags: string[];
-    teamId: number;
-    title: string;
-    updatedAt: string;
-  };
   idGroup: IdGroupType;
+  card: ColumnCardType;
 }
 
-const Card = ({ cardList, setCardList, card, idGroup }: Props) => {
+const Card = ({ cardList, setCardList, card, idGroup }: CardProps) => {
   const dispatch = useDispatch();
   const openModalName = useSelector((state: ModalRootState) => state.modal.openModalName);
   const openSecondModalName = useSelector((state: SecondModalRootState) => state.secondModal.openSecondModalName);
@@ -56,9 +44,19 @@ const Card = ({ cardList, setCardList, card, idGroup }: Props) => {
     dispatch(openModal(`cardDetailModal${card.id}`));
   };
 
+  const handleClickEditCard = () => {
+    dispatch(setOpenModalName(`editCard${card.id}`));
+    dispatch(openModal(`editCard${card.id}`));
+  };
+  console.log('console is', card);
   return (
     <>
       <CardContainer onClick={handleClickOpenDetail}>
+        {
+          </*임시용 꼭 지울것*/ button className='모달수정용임시버튼' onClick={handleClickEditCard}>
+            수정
+          </button>
+        }
         {card.imageUrl !== null && (
           <div className='image-box'>
             <img src={card.imageUrl} alt='card-image' />
@@ -93,6 +91,7 @@ const Card = ({ cardList, setCardList, card, idGroup }: Props) => {
       </CardContainer>
       {openModalName === `cardDetailModal${card.id}` ? <CardDetail idGroup={idGroup} cardId={card.id} /> : null}
       {openSecondModalName === 'deleteCardAlert' ? <DeleteAlert handleSubmitDelete={handleDeleteCard} /> : null}
+      {openModalName === `editCard${card.id}` ? <EditCard card={card} /> : null}
     </>
   );
 };
