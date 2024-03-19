@@ -2,11 +2,11 @@ import { AxiosError } from 'axios';
 import API from './constants';
 import axiosInstance from './instance/axiosInstance';
 
-export const PutUserInformation = async (email: string, nickname: string) => {
+export const PutUserInformation = async (nickname: string, profileImageUrl: string) => {
   try {
     const response = await axiosInstance.put(`${API.USER.MY_INFO}`, {
-      email,
       nickname,
+      profileImageUrl,
     });
 
     const responseData = await response.data;

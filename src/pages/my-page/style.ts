@@ -47,6 +47,10 @@ export const StProfileContainer = styled.div`
   padding: 32px 28px;
   margin: 0 20px 20px;
 
+  img {
+    cursor: pointer;
+  }
+
   .profile-container {
     display: flex;
   }

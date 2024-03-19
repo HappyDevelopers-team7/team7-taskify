@@ -8,28 +8,64 @@ import {
   StPasswordContainer,
 } from './style';
 import { PutUserInformation } from '@/api/putUserInformation';
+import { PostProfileImage } from '@/api/postProfileImage';
+
+interface UploadSuccessResponse {
+  data: {
+    imageUrl: string;
+  };
+  // 다른 필드들도 있을 수 있음
+}
 
 const MyPage = () => {
-  const [email, setEmail] = useState('');
   const [nickname, setNickname] = useState('');
-
-  const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
-  };
+  const [profileImageFile, setProfileImageFile] = useState<File | null>(null);
+  const [profileImageUrl, setProfileImageUrl] = useState('');
 
   const handleNicknameChange = (e: ChangeEvent<HTMLInputElement>) => {
     setNickname(e.target.value);
   };
 
+  const handleProfileImageChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const file = e.target.files[0];
+      setProfileImageFile(file);
+      const imageUrl = URL.createObjectURL(file);
+      setProfileImageUrl(imageUrl);
+    }
+  };
+
   const handleSubmitInformation = async () => {
     try {
-      // PUT 요청으로 개인정보 업데이트
-      const response = await PutUserInformation(email, nickname);
-      console.log(response); // 성공한 경우 응답 데이터를 출력하거나 다른 작업 수행
-      alert('개인정보가 업데이트되었습니다.');
+      // 프로필 이미지 업로드
+      if (profileImageFile) {
+        const formData = new FormData();
+        formData.append('image', profileImageFile);
+        const uploadResponse: UploadSuccessResponse | undefined = await PostProfileImage(formData);
+        if (uploadResponse) {
+          // 업로드 성공한 경우에만 프로필 정보 업데이트
+          const imageUrl = uploadResponse.data.imageUrl;
+          const putInformResponse = await PutUserInformation(nickname, imageUrl);
+          if (putInformResponse) {
+            alert('프로필 정보가 업데이트 되었습니다.');
+          } else {
+            alert('프로필 정보 업데이트에 실패했습니다.');
+          }
+        } else {
+          alert('프로필 이미지 업로드에 실패했습니다.');
+        }
+      } else {
+        // 프로필 이미지가 선택되지 않은 경우에는 닉네임만 업데이트
+        const putInformResponse = await PutUserInformation(nickname, profileImageUrl);
+        if (putInformResponse) {
+          alert('프로필 정보가 업데이트 되었습니다.');
+        } else {
+          alert('프로필 정보 업데이트에 실패했습니다.');
+        }
+      }
     } catch (error) {
       console.error('API 호출 중 오류 발생:', error);
-      alert('개인정보 업데이트 중 오류가 발생했습니다.');
+      alert('프로필 정보 업데이트 중 오류가 발생했습니다.');
     }
   };
 
@@ -42,11 +78,16 @@ const MyPage = () => {
       <StProfileContainer>
         <h1>프로필</h1>
         <div className='profile-container'>
-          <img src='assets\image\icons\addIconPurple.svg' alt='이미지 추가 + 버튼 이미지' />
+          <img
+            src={profileImageUrl || 'assets/image/icons/addIconPurple.svg'}
+            alt='프로필 이미지'
+            onClick={() => document.getElementById('profileImageInput')?.click()}
+          />
+          <input id='profileImageInput' type='file' accept='image/*' onChange={handleProfileImageChange} />
           <div className='profile-input-container'>
             <div className='profile-small-title'>이메일</div>
             <StProfileInput>
-              <input placeholder='johndoe@gmail.com' value={email} onChange={handleEmailChange} />
+              <input placeholder='이메일 정보 받아오기@@@@@@@@' />
             </StProfileInput>
             <div className='profile-small-title'>닉네임</div>
             <StProfileInput>
