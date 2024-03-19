@@ -85,17 +85,23 @@ const CardDetail = ({ idGroup, cardId }: CardDetailProps) => {
                 <li>
                   <p>담당자</p>
                   <div className='desc'>
-                    <ProfileImage
-                      imageUrl={detail?.assignee.profileImageUrl || null}
-                      alt={`${detail?.assignee.nickname}님의 프로필 이미지`}
-                    />
-                    <span>{detail?.assignee.nickname}</span>
+                    {detail?.assignee ? (
+                      <>
+                        <ProfileImage
+                          imageUrl={detail?.assignee.profileImageUrl || null}
+                          alt={`${detail?.assignee.nickname}님의 프로필 이미지`}
+                        />
+                        <span>{detail?.assignee.nickname}</span>
+                      </>
+                    ) : (
+                      <span className='no-data'>미지정</span>
+                    )}
                   </div>
                 </li>
                 <li>
                   <p>마감일</p>
                   <div className='desc'>
-                    {detail?.dueDate ? <span>{detail?.dueDate}</span> : <span className='no-due-date'>미지정</span>}
+                    {detail?.dueDate ? <span>{detail?.dueDate}</span> : <span className='no-data'>미지정</span>}
                   </div>
                 </li>
               </ul>

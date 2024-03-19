@@ -64,7 +64,7 @@ const StDetailModalContainer = styled.article`
             color: ${({ theme }) => theme.color.black_33};
             font-size: 1.4rem;
             font-weight: 400;
-            &.no-due-date {
+            &.no-data {
               color: ${({ theme }) => theme.color.gray_78};
             }
           }
