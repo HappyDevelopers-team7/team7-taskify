@@ -114,7 +114,6 @@ function ProfileInfo({ myInfo }: { myInfo: SetMyInfo | null }) {
   //프로필 배경색 정해주기
 
   if (!myInfo) {
-    console.log('마이인포가 없다!');
     return null; // myInfo가 없을 경우 렌더링하지 않음
   }
 
