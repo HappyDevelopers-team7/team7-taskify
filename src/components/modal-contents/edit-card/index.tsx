@@ -1,27 +1,31 @@
-import ModalContainer from '@/components/modal-container';
 // import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
-import { ChangeEvent, MouseEvent, useEffect, useState, useRef } from 'react';
+import { makeRandomBackgroundColor } from '@/utils/makeRandomBackgroundColor';
+import { ChangeEvent, MouseEvent, KeyboardEvent, useEffect, useState, useRef } from 'react';
 import { closeModal } from '@/redux/modalSlice';
-import StEditCard from './style';
 import { CardObjectType } from '@/types/cardObjectType';
-import ColumnNameTag from '@/components/column-name-tag';
 import { dashboardIdTypes } from '@/types/dashboardIdTypes';
+import StEditCard from './style';
+import ModalContainer from '@/components/modal-container';
+import ColumnNameTag from '@/components/column-name-tag';
 import LoadingSpinner from '@/components/loading-spinner';
+import dateExtractor from '@/utils/dateExtractor';
+import TagComponent from '@/components/tag-component';
 import Flatpickr from 'react-flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
-import dateExtractor from '@/utils/dateExtractor';
 
 type Type = {
   title: string;
   description: string;
   dueDate: string | null;
+  tag: string;
 };
 
 const EditCard = ({ card, thisColumn, columns, memberData }: CardObjectType) => {
   const dispatch = useDispatch();
   const today = new Date();
   const asigneeRef = useRef<number | null>(card.assignee.id); // post보낼 담당자 아이디
+  const [tags, setTags] = useState<string[]>(card.tags); //post보낼 태그
   const [asgineeName, setAsigneeName] = useState<string | undefined>(card.assignee.nickname);
   const [userProfile, setUserProfile] = useState<string | undefined>(card.assignee.profileImageUrl);
   const [selectedColumnName, setSelectedColumnName] = useState<string>(thisColumn.title);
@@ -31,9 +35,11 @@ const EditCard = ({ card, thisColumn, columns, memberData }: CardObjectType) => 
   const [filterdMember, SetFilterdMember] = useState<CardObjectType['memberData']>(memberData);
   const [isLoading, setIsLoading] = useState(false);
   const [editCardData, setEditCardData] = useState<Type>({
+    //post보낼 제목,설명,마감일
     title: card.title,
     description: card.description,
     dueDate: card.dueDate,
+    tag: '',
   });
 
   const handleCloseEditCardModal = () => {
@@ -86,6 +92,20 @@ const EditCard = ({ card, thisColumn, columns, memberData }: CardObjectType) => 
     asigneeRef.current = member.userId;
   };
 
+  const handleCreateTag = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      const input = editCardData.tag;
+      setTags((prev) => [...prev, input]);
+      setEditCardData({ ...editCardData, tag: '' });
+    }
+  };
+
+  const handleRemoveTag = (e: MouseEvent<HTMLElement>) => {
+    const target = e.target as HTMLElement;
+    const removeTag = target.innerText;
+    setTags(tags.filter((item) => item !== removeTag));
+  };
+
   useEffect(() => {
     if (asgineeName !== '') {
       const data = [...memberData];
@@ -96,7 +116,8 @@ const EditCard = ({ card, thisColumn, columns, memberData }: CardObjectType) => 
     } else if (asgineeName === '') {
       SetFilterdMember(memberData);
     }
-  }, [asgineeName]);
+    console.log(tags);
+  }, [asgineeName, tags]);
 
   return (
     <ModalContainer
@@ -113,6 +134,7 @@ const EditCard = ({ card, thisColumn, columns, memberData }: CardObjectType) => 
         $isStatusClicked={isDropdownStatus}
         $isAsigneeClicked={isDropdownAsignee}
         $Profile={userProfile}
+        $Tag={tags}
       >
         <div className='auth-box'>
           <div className='auth-box-first-div'>
@@ -201,7 +223,25 @@ const EditCard = ({ card, thisColumn, columns, memberData }: CardObjectType) => 
         </div>
         <div>
           <h3>태그</h3>
-          <input className='input-box' type='text' />
+          <input
+            className='input-box tag-input'
+            placeholder='입력 후 Enter'
+            type='text'
+            value={editCardData.tag}
+            onChange={(e) => setEditCardData({ ...editCardData, tag: e.target.value })}
+            onKeyDown={(e) => handleCreateTag(e)}
+          />
+          <div className='input-box tag-list'>
+            {tags &&
+              tags.map((tag, index) => (
+                <TagComponent
+                  key={index}
+                  name={tag}
+                  backgroundColor={makeRandomBackgroundColor(index)}
+                  onClick={(e) => handleRemoveTag(e)}
+                />
+              ))}
+          </div>
         </div>
         <div>
           <h3>이미지</h3>

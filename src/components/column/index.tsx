@@ -7,6 +7,7 @@ import { ColumnCardType } from '@/types/columnCardType';
 import { dashboardIdTypes } from '@/types/dashboardIdTypes';
 import { toast } from 'react-toastify';
 import { Types } from '@/types/columnDetailTypes';
+import { makeRandomBackgroundColor } from '@/utils/makeRandomBackgroundColor';
 import axiosInstance from '@/api/instance/axiosInstance';
 import API from '@/api/constants';
 import ModalContainer from '../modal-container';
@@ -29,7 +30,6 @@ interface Props {
 const Column = ({ columnData, memberData, viewColumns, dashboardId, columns }: Props) => {
   const dispatch = useDispatch<AppDispatch>();
   const today = new Date();
-  const colorArray = ['#ff0000', '#29c936', '#ff8c00', '#000000', '#008000', '#f122f1', '#0000ff'];
   const openModalName = useSelector((state: ModalRootState) => state.modal.openModalName);
   const inputRef = useRef<HTMLInputElement>(null);
   const asigneeRef = useRef<number | null>(null);
@@ -351,11 +351,7 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId, columns }: P
               <div className='input-box tag-list'>
                 {tags &&
                   tags.map((tag, index) => (
-                    <TagComponent
-                      key={tag.id}
-                      name={tag.name}
-                      backgroundColor={colorArray[index % colorArray.length]}
-                    />
+                    <TagComponent key={tag.id} name={tag.name} backgroundColor={makeRandomBackgroundColor(index)} />
                   ))}
               </div>
             </div>

@@ -5,8 +5,43 @@ const StEditCard = styled.div<{
   $isStatusClicked: boolean;
   $isAsigneeClicked: boolean;
   $Profile: string | undefined;
+  $Tag: string[];
 }>`
   height: 65vh;
+
+  h3 {
+    font-size: 1.8rem;
+    font-weight: 500;
+    margin-bottom: 10px;
+    span {
+      color: ${({ theme }) => theme.color.violet};
+    }
+  }
+
+  .input-box {
+    width: 100%;
+    padding: 15px 0px 15px 16px;
+    margin-bottom: 32px;
+
+    border-radius: 6px;
+    border: 1px solid ${({ theme }) => theme.color.gray_d9};
+    background: ${({ theme }) => theme.color.white};
+
+    font-size: 1.6rem;
+  }
+
+  .input-box::placeholder {
+    color: ${({ theme }) => theme.color.gray_9f};
+  }
+
+  .input-box.member-list {
+    ${(props) => (props.$isAsigneeClicked ? 'display:flex;' : 'display:none;')}
+    width: 100%;
+    position: absolute;
+    top: 85px;
+    box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.08);
+    flex-direction: column;
+  }
 
   .auth-box {
     user-select: none;
@@ -94,34 +129,22 @@ const StEditCard = styled.div<{
     }
   }
 
-  h3 {
-    font-size: 1.8rem;
-    font-weight: 500;
-    margin-bottom: 10px;
-    span {
-      color: ${({ theme }) => theme.color.violet};
-    }
+  .date-box {
+    background-image: url('/assets/image/icons/calendarIcon.svg');
+    background-repeat: no-repeat;
+    background-position: 10px;
+    padding-left: 35px;
   }
 
-  .input-box {
-    width: 100%;
-    padding: 15px 0px 15px 16px;
-    margin-bottom: 32px;
-
-    border-radius: 6px;
-    border: 1px solid ${({ theme }) => theme.color.gray_d9};
-    background: ${({ theme }) => theme.color.white};
-
-    font-size: 1.6rem;
+  .input-box.tag-input {
+    margin-bottom: ${(props) => (props.$Tag.length !== 0 ? '0;' : '32px;')};
   }
 
-  .input-box.member-list {
-    ${(props) => (props.$isAsigneeClicked ? 'display:flex;' : 'display:none;')}
-    width: 100%;
-    position: absolute;
-    top: 85px;
-    box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.08);
-    flex-direction: column;
+  .input-box.tag-list {
+    ${(props) => (props.$Tag.length !== 0 ? 'display:flex;' : 'display:none;')}
+    gap: 6px;
+    flex-wrap: wrap;
+    border: none;
   }
 
   .upload-button-box {
