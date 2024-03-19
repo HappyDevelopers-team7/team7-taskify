@@ -1,19 +1,33 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import {
-  StMyPageContainer,
-  StProfileInput,
-  StPasswordInputContainer,
-  StProfileContainer,
-  StPasswordContainer,
-} from './style';
+import { StMyPageContainer, StProfileInput, StProfileContainer, StProfileInputReadOnly } from './style';
 import { PutUserInformation } from '@/api/putUserInformation';
 import { PostProfileImage } from '@/api/postProfileImage';
+import { GetUserData } from '@/api/getUserData';
+import { ChangePassword } from '@/components/change-password';
 
 const MyPage = () => {
   const [nickname, setNickname] = useState('');
+  const [email, setEmail] = useState('');
   const [profileImage, setProfileImage] = useState<File | null>(null);
   const [profileImageUrl, setProfileImageUrl] = useState<string>('');
+
+  useEffect(() => {
+    fetchUserData();
+  }, []);
+
+  const fetchUserData = async () => {
+    try {
+      const userData = await GetUserData();
+      setEmail(userData.email);
+      setNickname(userData.nickname);
+      if (userData.profileImageUrl) {
+        setProfileImageUrl(userData.profileImageUrl);
+      }
+    } catch (error) {
+      console.error('사용자 정보를 불러오는 중 오류 발생:', error);
+    }
+  };
 
   const handleNicknameChange = (e: ChangeEvent<HTMLInputElement>) => {
     setNickname(e.target.value);
@@ -49,6 +63,8 @@ const MyPage = () => {
       }
       const putInformResponse = await PutUserInformation(nickname, imageUrl);
       if (putInformResponse) {
+        fetchUserData();
+        window.location.reload();
         alert('프로필 정보가 업데이트 되었습니다.');
       } else {
         alert('프로필 정보 업데이트에 실패했습니다.');
@@ -58,6 +74,8 @@ const MyPage = () => {
       alert('프로필 정보 업데이트 중 오류가 발생했습니다.');
     }
   };
+
+  GetUserData;
 
   return (
     <StMyPageContainer>
@@ -76,9 +94,9 @@ const MyPage = () => {
           <input id='profileImageInput' type='file' accept='image/*' onChange={handleProfileImageChange} />
           <div className='profile-input-container'>
             <div className='profile-small-title'>이메일</div>
-            <StProfileInput>
-              <input placeholder='이메일 정보 받아오기@@@@@@@@' />
-            </StProfileInput>
+            <StProfileInputReadOnly>
+              <input value={email} readOnly />
+            </StProfileInputReadOnly>
             <div className='profile-small-title'>닉네임</div>
             <StProfileInput>
               <input placeholder='닉네임을 입력해주세요' value={nickname} onChange={handleNicknameChange} />
@@ -91,25 +109,7 @@ const MyPage = () => {
           </button>
         </div>
       </StProfileContainer>
-
-      <StPasswordContainer>
-        <h1>비밀번호 변경</h1>
-        <div className='profile-small-title'>현재 비밀번호</div>
-        <StPasswordInputContainer>
-          <input placeholder='현재 비밀번호 입력' />
-        </StPasswordInputContainer>
-        <div className='profile-small-title'>새 비밀번호</div>
-        <StPasswordInputContainer>
-          <input placeholder='새 비밀번호 입력' />
-        </StPasswordInputContainer>
-        <div className='profile-small-title'> 새 비밀번호 확인</div>
-        <StPasswordInputContainer>
-          <input placeholder='새 비밀번호 입력' />
-        </StPasswordInputContainer>
-        <div className='button-container'>
-          <button type='submit'>변경</button>
-        </div>
-      </StPasswordContainer>
+      <ChangePassword />
     </StMyPageContainer>
   );
 };
