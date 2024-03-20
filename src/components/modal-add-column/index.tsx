@@ -6,10 +6,10 @@ import { StColumnModal } from './style';
 import ModalContainer from '@/components/modal-container';
 import API from '@/api/constants';
 import { useParams } from 'react-router-dom';
-import { Columns } from '../../pages/dashboard-id';
+import { dashboardIdTypes } from '@/types/dashboardIdTypes';
 
 interface AddColumnModalProps {
-  setColumns: Dispatch<SetStateAction<Columns[]>>;
+  setColumns: Dispatch<SetStateAction<dashboardIdTypes['Columns'][]>>;
 }
 
 const AddColumnModal = ({ setColumns }: AddColumnModalProps) => {
