@@ -48,6 +48,8 @@ export const COMMENT_ERROR_MESSAGES = {
 } as const;
 
 export const INVITATION_MESSAGES = {
+  DO_INVITATION: '대시보드에 초대하였습니다.',
+  ALREADY_INVITE: '이미 대시보드에 초대된 멤버입니다.',
   REJECT_INVITATION: '거절되었습니다.',
   ACCEPT_INVITATION: '수락되었습니다.',
   REJECT_CANCELED: '초대 거절이 취소되었습니다.',

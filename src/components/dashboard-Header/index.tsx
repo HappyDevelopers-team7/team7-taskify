@@ -6,9 +6,11 @@ import { SetMyInfo } from '@/redux/myInfoSlice';
 import { useParams } from 'react-router-dom';
 import API from '@/api/constants';
 import axiosInstance from '@/api/instance/axiosInstance';
+import { ModalRootState, openModal, setOpenModalName } from '@/redux/modalSlice';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
+import InviteDashboard from '../modal-contents/invite-dashboard';
 
 interface User {
   id: number;
@@ -21,6 +23,7 @@ interface User {
 
 interface Props {
   currentDashboard?: Dashboards;
+  id?: string;
 }
 
 interface DashboardmembersInfo {
@@ -36,19 +39,35 @@ const DashboardHeader = () => {
   const dispatch = useDispatch<AppDispatch>();
   const myInfo = useSelector(getMyInfo);
   const { id } = useParams();
+  const navigate = useNavigate();
+  const openModalName = useSelector((state: ModalRootState) => state.modal.openModalName);
   const [currentDashboard, setCurrentDashboard] = useState<Dashboards | undefined>(undefined);
   const [membersInfo, setMembersInfo] = useState<{
     members: User[];
     totalCount: number;
   } | null>(null);
 
+  const handleEditClick = () => {
+    navigate(`/dashboard/${id}/edit`);
+  };
+
+  const handleClickInviteDashboard = () => {
+    dispatch(setOpenModalName('InviteDashboard'));
+    dispatch(openModal('InviteDashboard'));
+  };
   //상태를 전역으로 관리해서 로그인정보가 바뀌거나 하면 바로 다시 렌더링
   useEffect(() => {
     dispatch(fetchMyInfo());
   }, [dispatch]);
 
-  //Todo
-  //useeffect fetchDashboardInfo & fetchDashboardMemberInfo 합쳐보기
+  // const openModal = () => {
+  //   setIsModalOpen(true);
+  // };
+
+  // const closeModal = () => {
+  //   setIsModalOpen(false);
+  // };
+
   useEffect(() => {
     const fetchDashboardInfo = async () => {
       try {
@@ -84,10 +103,12 @@ const DashboardHeader = () => {
 
   return (
     <Container>
-      <DashboardId currentDashboard={currentDashboard} />
+      <DashboardId currentDashboard={currentDashboard} id={id} />
       {/* <div> */}
-      {/* <inviteButton /> */}
       <div className='dashboard-right-space'>
+        {currentDashboard?.createdByMe && <EditButton onClick={handleEditClick} />}
+        <InviteButton onClick={handleClickInviteDashboard} membersInfo={membersInfo} />
+        {openModalName === 'InviteDashboard' ? <InviteDashboard id={id || ''} /> : null}
         {membersInfo && <DashboardMembers membersInfo={membersInfo} />}
         <ProfileInfo myInfo={myInfo} />
       </div>
@@ -98,11 +119,69 @@ const DashboardHeader = () => {
 
 export default DashboardHeader;
 
-function DashboardId({ currentDashboard }: Props) {
+interface InviteButtonProps {
+  onClick: () => void; // 온클릭이 함수 & 반환 값이 없는걸 명시해둠
+  membersInfo: DashboardmembersInfo | null;
+}
+
+function InviteButton({ onClick, membersInfo }: InviteButtonProps) {
+  let memberTotalCount: string = '';
+  switch (membersInfo?.totalCount) {
+    case 1:
+      memberTotalCount = 'one-man';
+      break;
+    case 2:
+      memberTotalCount = 'two-men';
+      break;
+    case 3:
+      memberTotalCount = 'three-men';
+      break;
+    case 4:
+      memberTotalCount = 'four-men';
+      break;
+    default:
+      memberTotalCount = '';
+      break;
+  }
+
+  return (
+    <button className={`invite-button ${memberTotalCount}`} onClick={onClick}>
+      <img src='/assets/image/icons/addBoxIcon.svg' alt='add-boxicon' />
+      초대하기
+    </button>
+  );
+}
+interface EditButtonProps {
+  onClick: () => void; // 온클릭이 함수 & 반환 값이 없는걸 명시해둠
+}
+
+function EditButton({ onClick }: EditButtonProps) {
+  return (
+    <button className='edit-button' onClick={onClick}>
+      <img src='/assets/image/icons/settingIcon.svg' alt='setting-icon' />
+      관리
+    </button>
+  );
+}
+
+function DashboardId({ currentDashboard, id }: Props) {
   const showIconClass = 'showIcon';
   const hiddenIconClass = 'hiddenIcon';
-  const title = currentDashboard ? currentDashboard?.title : '내 대시보드';
   const showIcon = currentDashboard?.createdByMe ? showIconClass : hiddenIconClass;
+  // const title = currentDashboard ? currentDashboard?.title : '내 대시보드';
+
+  let title = '';
+  switch (true) {
+    case currentDashboard !== null && currentDashboard !== undefined:
+      title = currentDashboard.title;
+      break;
+    case currentDashboard === null:
+      title = '내 대시보드';
+      break;
+    case id === 'mypage':
+      title = '계정관리';
+      break;
+  }
 
   return (
     <div className='titlebox'>
@@ -116,7 +195,6 @@ function DashboardMembers({ membersInfo }: { membersInfo: DashboardmembersInfo }
   const extraCount: number = membersInfo.totalCount >= 5 ? membersInfo.totalCount - 4 : 0;
   const slicedMembers = membersInfo.members.slice(0, 5);
   const containerSize = CONTAINER_SIZE[slicedMembers.length - 1];
-  const containerInIndex = ['네번째', '세번째', '두번째', '첫번째'];
 
   const generateColor = (name: string) => {
     const key = name.toUpperCase()[0];
@@ -138,17 +216,12 @@ function DashboardMembers({ membersInfo }: { membersInfo: DashboardmembersInfo }
   return (
     // 멤버들 먼저가입한 순서대로 출력
     <ul className={`dashboard-info-members-container ${containerSize}`}>
-      {slicedMembers.map((member: User, index: number) => (
+      {slicedMembers.map((member: User) => (
         <li key={member.id}>
           {member.profileImageUrl ? (
-            <div
-              className={`myinfo-image ${containerInIndex[slicedMembers.length - index - 1]}`}
-              style={{ backgroundImage: `url(${member?.profileImageUrl})` }}
-            ></div>
+            <div className={`myinfo-image`} style={{ backgroundImage: `url(${member?.profileImageUrl})` }}></div>
           ) : (
-            <div
-              className={`myinfo-color myinfo-color-${generateColor(member.nickname)} ${containerInIndex[slicedMembers.length - index - 1]}`}
-            >
+            <div className={`myinfo-color myinfo-color-${generateColor(member.nickname)}`}>
               <div className='myinfo-initial'>{member.nickname.toUpperCase()[0]}</div>
             </div>
           )}
