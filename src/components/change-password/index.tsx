@@ -1,17 +1,35 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { PutPassword } from '@/api/putPassword';
 import { StPasswordContainer, StPasswordInputContainer } from './style';
+import { useDispatch, useSelector } from 'react-redux';
+import { ModalRootState, openModal } from '@/redux/modalSlice';
+import PasswordErrorModal from '../modal-password-error';
 
 export const ChangePassword = () => {
+  const dispatch = useDispatch();
+  const openModalName = useSelector((state: ModalRootState) => state.modal.openModalName);
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
   const [confirmPasswordError, setConfirmPasswordError] = useState('');
+  const [isButtonActive, setIsButtonActive] = useState(false);
 
   const handleChangeCurrentPassword = (e: React.ChangeEvent<HTMLInputElement>) => setCurrentPassword(e.target.value);
   const handleChangeNewPassword = (e: React.ChangeEvent<HTMLInputElement>) => setNewPassword(e.target.value);
   const handleChangeConfirmNewPassword = (e: React.ChangeEvent<HTMLInputElement>) =>
     setConfirmNewPassword(e.target.value);
+
+  const checkInputValues = () => {
+    if (currentPassword && newPassword && confirmNewPassword) {
+      setIsButtonActive(true);
+    } else {
+      setIsButtonActive(false);
+    }
+  };
+
+  useEffect(() => {
+    checkInputValues();
+  }, [currentPassword, newPassword, confirmNewPassword]);
 
   const handleConfirmPasswordBlur = () => {
     if (newPassword !== confirmNewPassword) {
@@ -41,7 +59,7 @@ export const ChangePassword = () => {
         setNewPassword('');
         setConfirmNewPassword('');
       } else {
-        alert('비밀번호 변경에 실패했습니다.');
+        dispatch(openModal('passwordErrorModal'));
       }
     } catch (error) {
       console.error('비밀번호 변경 중 오류 발생:', error);
@@ -66,7 +84,7 @@ export const ChangePassword = () => {
         <input type='password' value={newPassword} onChange={handleChangeNewPassword} placeholder='새 비밀번호 입력' />
       </StPasswordInputContainer>
       <div className='profile-small-title'> 새 비밀번호 확인</div>
-      <StPasswordInputContainer style={{ border: confirmPasswordError ? '1px solid red' : 'none' }}>
+      <StPasswordInputContainer style={{ border: confirmPasswordError && '1px solid red' }}>
         <input
           type='password'
           value={confirmNewPassword}
@@ -76,8 +94,16 @@ export const ChangePassword = () => {
         />
       </StPasswordInputContainer>
       {confirmPasswordError && <div style={{ color: 'red' }}>{confirmPasswordError}</div>}
+      {openModalName === 'passwordErrorModal' && <PasswordErrorModal />}
       <div className='button-container'>
-        <button type='submit' onClick={handleSubmit}>
+        <button
+          type='submit'
+          onClick={handleSubmit}
+          style={{
+            backgroundColor: isButtonActive ? '#5534DA' : '#9FA6B2',
+            cursor: isButtonActive ? 'pointer' : 'default',
+          }}
+        >
           변경
         </button>
       </div>

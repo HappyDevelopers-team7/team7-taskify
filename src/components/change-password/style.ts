@@ -1,18 +1,26 @@
 import { inputContainer } from '@/styles/input/style';
 import { styled } from 'styled-components';
 
+interface StPasswordContainerProps {
+  disabled?: boolean;
+}
+
 interface StPasswordInputContainerProps {
   error?: boolean;
   inlineStyle?: React.CSSProperties;
 }
 
-export const StPasswordContainer = styled.div`
+export const StPasswordContainer = styled.div<StPasswordContainerProps>`
   border-radius: 8px;
   background-color: ${({ theme }) => theme.color.white};
   width: 620px;
   height: auto;
   padding: 30px;
   margin: 20px;
+
+  button {
+    background-color: ${({ theme, disabled }) => (disabled ? theme.color.gray_9f : theme.color.violet)};
+  }
 `;
 
 export const StPasswordInputContainer = styled.div<StPasswordInputContainerProps>`
