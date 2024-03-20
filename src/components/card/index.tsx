@@ -28,12 +28,15 @@ const Card = ({ cardList, setCardList, card, idGroup }: CardProps) => {
 
   const handleDeleteCard = async () => {
     try {
-      await deleteCard(card.id);
-      dispatch(closeSecondModal());
-      dispatch(closeModal());
-      const updatedCommentList = cardList?.filter((cardItem) => cardItem.id !== card.id);
-      setCardList(updatedCommentList);
-      return toast.success(SIMPLE_MESSAGES.DELETED);
+      const result = await deleteCard(card.id);
+      if (result === 204) {
+        dispatch(closeSecondModal());
+        dispatch(closeModal());
+        const updatedCommentList = cardList?.filter((cardItem) => cardItem.id !== card.id);
+        setCardList(updatedCommentList);
+        return toast.success(SIMPLE_MESSAGES.DELETED);
+      }
+      return toast.success(SIMPLE_MESSAGES.TRY_AGAIN);
     } catch (error) {
       console.error(error);
     }
@@ -48,7 +51,6 @@ const Card = ({ cardList, setCardList, card, idGroup }: CardProps) => {
     dispatch(setOpenModalName(`editCard${card.id}`));
     dispatch(openModal(`editCard${card.id}`));
   };
-  console.log('console is', card);
   return (
     <>
       <CardContainer onClick={handleClickOpenDetail}>
@@ -90,7 +92,9 @@ const Card = ({ cardList, setCardList, card, idGroup }: CardProps) => {
         )}
       </CardContainer>
       {openModalName === `cardDetailModal${card.id}` ? <CardDetail idGroup={idGroup} cardId={card.id} /> : null}
-      {openSecondModalName === 'deleteCardAlert' ? <DeleteAlert handleSubmitDelete={handleDeleteCard} /> : null}
+      {openSecondModalName === `deleteCardAlert${card.id}` ? (
+        <DeleteAlert handleSubmitDelete={handleDeleteCard} />
+      ) : null}
       {openModalName === `editCard${card.id}` ? <EditCard card={card} /> : null}
     </>
   );

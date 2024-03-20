@@ -10,7 +10,6 @@ const EditCard = ({ card }: CardObjectType) => {
 
   const handleCloseEditCardModal = () => {
     dispatch(closeModal());
-    console.log(card);
   };
 
   const handleSubmitEditCardModal = () => {
