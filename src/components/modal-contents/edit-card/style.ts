@@ -96,9 +96,9 @@ const StEditCard = styled.div<{
 
       .remove-icon {
         position: absolute;
-        width: 20px;
-        height: 20px;
-        left: 175px;
+        width: 18px;
+        height: 18px;
+        left: 50px;
         top: 2px;
         cursor: pointer;
       }
