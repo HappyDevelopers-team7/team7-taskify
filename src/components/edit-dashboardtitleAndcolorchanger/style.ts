@@ -1,9 +1,6 @@
 import styled from 'styled-components';
 
-const StCreateDashboard = styled.div`
-  width: 620px;
-  height: 256px;
-
+const EditTitleAndColorDiv = styled.div`
   .input-colorpicker__group {
     margin-top: 28px;
   }
@@ -17,4 +14,4 @@ const StCreateDashboard = styled.div`
   }
 `;
 
-export default StCreateDashboard;
+export default EditTitleAndColorDiv;

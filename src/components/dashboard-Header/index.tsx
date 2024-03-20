@@ -80,7 +80,6 @@ const DashboardHeader = () => {
         // 여기다 에러 로직 추가
       }
     };
-
     fetchDashboardInfo();
   }, [id]);
 
