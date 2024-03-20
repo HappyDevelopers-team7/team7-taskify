@@ -4,6 +4,7 @@ const StDashBoardWrap = styled.div`
   background: ${({ theme }) => theme.color.gray_fa};
   height: 100%;
   padding: 40px;
+  overflow: auto;
 `;
 
 export default StDashBoardWrap;
