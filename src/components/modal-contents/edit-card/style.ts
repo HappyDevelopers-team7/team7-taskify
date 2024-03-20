@@ -98,8 +98,8 @@ const StEditCard = styled.div<{
         position: absolute;
         width: 20px;
         height: 20px;
-        left: 50px;
-        top: 1px;
+        left: 175px;
+        top: 2px;
         cursor: pointer;
       }
 
