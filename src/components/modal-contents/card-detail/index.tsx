@@ -1,5 +1,5 @@
 import ModalContainer from '@/components/modal-container';
-import { closeModal } from '@/redux/modalSlice';
+import { closeModal, openModal, setOpenModalName } from '@/redux/modalSlice';
 import { useDispatch } from 'react-redux';
 import StDetailModalContainer from './style';
 import DetailContentArea from '@/components/detail-content-area';
@@ -34,6 +34,11 @@ const CardDetail = ({ idGroup, cardId }: CardDetailProps) => {
     dispatch(openSecondModal(`deleteCardAlert${cardId}`));
   };
 
+  const handleClickEditCard = () => {
+    dispatch(setOpenModalName(`editCard${cardId}`));
+    dispatch(openModal(`editCard${cardId}`));
+  };
+
   const setCardDetail = async () => {
     try {
       setDetailLoading(true);
@@ -59,6 +64,7 @@ const CardDetail = ({ idGroup, cardId }: CardDetailProps) => {
         modalWidth={730}
         handleDeleteModal={handleDeleteCard}
         handleCloseModal={handleCloseCard}
+        handleEditModal={handleClickEditCard}
       >
         {detailLoading ? (
           <LoadingSpinner />

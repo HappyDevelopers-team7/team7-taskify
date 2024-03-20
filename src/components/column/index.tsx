@@ -1,34 +1,35 @@
 import { AppDispatch } from '@/redux/myInfoSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { ColumnContainer, ModalContent } from './style';
-import { Columns, Members } from '@/pages/dashboard-id';
 import { ChangeEvent, useEffect, useState, useRef, KeyboardEvent } from 'react';
 import { ModalRootState, closeModal, openModal, setOpenModalName } from '@/redux/modalSlice';
+import { ColumnCardType } from '@/types/columnCardType';
+import { dashboardIdTypes } from '@/types/dashboardIdTypes';
 import { toast } from 'react-toastify';
 import { Types } from '@/types/columnDetailTypes';
+import { makeRandomBackgroundColor } from '@/utils/makeRandomBackgroundColor';
 import axiosInstance from '@/api/instance/axiosInstance';
 import API from '@/api/constants';
 import ModalContainer from '../modal-container';
 import Card from '../card';
 import LoadingSpinner from '@/components/loading-spinner';
-import Flatpickr from 'react-flatpickr';
 import EditColumnModal from '../modal-edit-column';
 import dateExtractor from '@/utils/dateExtractor';
 import TagComponent from '../tag-component';
+import Flatpickr from 'react-flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
-import { ColumnCardType } from '@/types/columnCardType';
 
 interface Props {
-  columnData: Columns;
-  memberData: Members[];
+  columnData: dashboardIdTypes['Columns'];
+  memberData: dashboardIdTypes['Members'][];
   viewColumns: () => void;
   dashboardId: string | undefined;
+  columns: dashboardIdTypes['Columns'][];
 }
 
-const Column = ({ columnData, memberData, viewColumns, dashboardId }: Props) => {
+const Column = ({ columnData, memberData, viewColumns, dashboardId, columns }: Props) => {
   const dispatch = useDispatch<AppDispatch>();
   const today = new Date();
-  const colorArray = ['#ff0000', '#29c936', '#ff8c00', '#000000', '#008000', '#f122f1', '#0000ff'];
   const openModalName = useSelector((state: ModalRootState) => state.modal.openModalName);
   const inputRef = useRef<HTMLInputElement>(null);
   const asigneeRef = useRef<number | null>(null);
@@ -40,9 +41,9 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId }: Props) => 
   const [isLoading, setIsLoading] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [isDropdownAsignee, setIsDropdownAsignee] = useState(false);
-  const [filterdMember, SetFilterdMember] = useState<Members[]>([]);
+  const [filterdMember, SetFilterdMember] = useState<dashboardIdTypes['Members'][]>([]);
   const [userProfile, setUserProfile] = useState<string | undefined>('');
-  const [tags, setTags] = useState<Types['Tag'][]>([]);
+  const [tags, setTags] = useState<string[]>([]);
   const [imageUrl, setImageUrl] = useState<string>('');
   const [pages, setPages] = useState<number>(3);
   const [createCardData, setCreateCardData] = useState<Types['CreateCardData']>({
@@ -100,7 +101,7 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId }: Props) => 
         title: createCardData.title,
         description: createCardData.description,
         dueDate: createCardData.dueDate ? createCardData.dueDate : undefined,
-        tags: tags.map((item) => item.name),
+        tags: tags.map((item) => item),
         imageUrl: imageUrl ? imageUrl : undefined,
       });
 
@@ -163,7 +164,7 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId }: Props) => 
     }
   };
 
-  const handleClickedMember = (member: Members) => {
+  const handleClickedMember = (member: dashboardIdTypes['Members']) => {
     // 현재 선택되어있는 담당자 핸들링
     setCreateCardData({ ...createCardData, asignee: member.nickname });
     setIsDropdownAsignee(false);
@@ -177,11 +178,7 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId }: Props) => 
   const handleCreateTag = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       const input = createCardData.tag;
-      const tag = {
-        id: Date.now(),
-        name: input,
-      };
-      setTags((prev) => [...prev, tag]);
+      setTags((prev) => [...prev, input]);
       setCreateCardData({ ...createCardData, tag: '' });
     }
   };
@@ -227,7 +224,17 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId }: Props) => 
         </button>
         {cardInfo &&
           cardInfo.map((card) => (
-            <Card key={card.id} card={card} idGroup={idGroup} cardList={cardInfo} setCardList={setCardInfo} />
+            <Card
+              key={card.id}
+              card={card}
+              idGroup={idGroup}
+              cardList={cardInfo}
+              setCardList={setCardInfo}
+              thisColumn={columnData}
+              columns={columns}
+              memberData={memberData}
+              viewCards={viewCards}
+            />
           ))}
       </div>
 
@@ -333,7 +340,7 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId }: Props) => 
               <input
                 value={createCardData.tag}
                 className='input-box tag-input'
-                placeholder='입력 후 Enter'
+                placeholder='입력 후 Enter!'
                 type='text'
                 onKeyDown={(e) => handleCreateTag(e)}
                 onChange={(e) => setCreateCardData({ ...createCardData, tag: e.target.value })}
@@ -341,11 +348,7 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId }: Props) => 
               <div className='input-box tag-list'>
                 {tags &&
                   tags.map((tag, index) => (
-                    <TagComponent
-                      key={tag.id}
-                      name={tag.name}
-                      backgroundColor={colorArray[index % colorArray.length]}
-                    />
+                    <TagComponent key={index} name={tag} backgroundColor={makeRandomBackgroundColor(index)} />
                   ))}
               </div>
             </div>

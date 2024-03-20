@@ -1,10 +1,10 @@
+import { commonHeight } from '@/styles/common-height/style';
 import styled from 'styled-components';
 
 const StDashBoardWrap = styled.div`
+  ${commonHeight}
   background: ${({ theme }) => theme.color.gray_fa};
-  height: 100%;
   padding: 40px;
-  overflow: auto;
 `;
 
 export default StDashBoardWrap;

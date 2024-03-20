@@ -88,18 +88,14 @@ export const ColumnContainer = styled.div`
     font-size: 3rem;
   }
 `;
-type Tag = {
-  name: string;
-  id: number;
-};
 
 export const ModalContent = styled.div<{
   $Image: string | null;
   $Text: boolean;
   $Profile: string | undefined;
-  $Tag: Tag[];
+  $Tag: string[];
 }>`
-  height: 65vh;
+  height: auto;
 
   &::-webkit-scrollbar {
     width: 3px;

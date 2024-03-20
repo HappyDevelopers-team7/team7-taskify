@@ -9,40 +9,14 @@ import LoadingSpinner from '@/components/loading-spinner';
 import AddColumnModal from '../../components/modal-add-column';
 import { useSelector } from 'react-redux';
 import { ModalRootState } from '@/redux/modalSlice';
-
-export type Columns = {
-  createdAt: string;
-  dashboardId: number;
-  id: number;
-  teamId: string;
-  title: string;
-  updatedAt: string;
-};
-
-export type Members = {
-  createdAt: string;
-  email: string;
-  id: number;
-  isOwner: true;
-  nickname: string;
-  profileImageUrl: string | undefined;
-  updatedAt: string;
-  userId: number;
-};
-
-export type Tag = {
-  id: number;
-  name: string;
-  backgroundColor: string;
-  color: string;
-};
+import { dashboardIdTypes } from '@/types/dashboardIdTypes';
 
 const DashBoardId = () => {
   const { id } = useParams();
-  const [columns, setColumns] = useState<Columns[]>([]);
+  const [columns, setColumns] = useState<dashboardIdTypes['Columns'][]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const openModalName = useSelector((state: ModalRootState) => state.modal.openModalName);
-  const [members, setMembers] = useState<Members[]>([]);
+  const [members, setMembers] = useState<dashboardIdTypes['Members'][]>([]);
 
   const viewColumns = () => {
     // 컬럼 조회 함수
@@ -80,6 +54,7 @@ const DashBoardId = () => {
             columnData={columnData}
             memberData={members}
             viewColumns={viewColumns}
+            columns={columns}
           />
         ))}
       <div className='button-box'>
