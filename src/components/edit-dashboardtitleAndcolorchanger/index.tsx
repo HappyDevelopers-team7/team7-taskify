@@ -1,4 +1,4 @@
-import { SyntheticEvent, useState } from 'react';
+import { SyntheticEvent, useState, useEffect } from 'react';
 import InputText from '@/components/input/input-text';
 import InputColorPicker from '@/components/input/input-color-picker';
 import { ChromePicker, ColorResult } from 'react-color';
@@ -7,9 +7,11 @@ import { putDashboardChange } from '@/api/putDashboardChange';
 import { DASHBOARD_MESSAGES, INPUT_ERROR_MESSAGES } from '@/constants/message';
 import { useParams } from 'react-router-dom';
 import EditTitleAndColorDiv from './style';
+import { getDashboardInfo } from '@/api/getDashboardInfo';
 
 const EditDashboardTitleAndColorChanger = () => {
   const { id } = useParams<{ id: string }>();
+  const [title, setTitle] = useState<string>('');
   const [dashboardNameInputValue, setDashboardNameInputValue] = useState('');
   const [isShow, setIsShow] = useState(false);
   const [dashboardColorValue, setDashboardColorValue] = useState('');
@@ -38,8 +40,22 @@ const EditDashboardTitleAndColorChanger = () => {
     setDashboardColorValue(newColorValue);
   };
 
+  useEffect(() => {
+    const fetchDashboardInfo = async () => {
+      if (!id) return;
+      try {
+        const response = await getDashboardInfo(id);
+        setTitle(response.title);
+      } catch (error) {
+        console.error('Error fetching dashboard info:', error);
+      }
+    };
+    fetchDashboardInfo();
+  }, [id]);
+
   return (
     <EditTitleAndColorDiv>
+      <div className='dashboard-title'>{title}</div>
       <form onSubmit={handleSubmitChangeDashboard}>
         <InputText
           setValue={setDashboardNameInputValue}
