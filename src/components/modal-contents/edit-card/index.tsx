@@ -28,6 +28,7 @@ const EditCard = ({ card, thisColumn, columns, memberData, viewCards }: CardObje
   const today = new Date();
   const asigneeRef = useRef<number | null>(card.assignee?.id || null);
   const imgRef = useRef<HTMLImageElement>(null!);
+  const divRef = useRef<HTMLDivElement>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(card.imageUrl);
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -81,6 +82,10 @@ const EditCard = ({ card, thisColumn, columns, memberData, viewCards }: CardObje
 
   const handleStatusDropdown = () => {
     setIsDropdownStatus((current) => !current);
+    const div = divRef.current;
+    if (!isDropdownStatus) {
+      div?.classList.add('focused');
+    }
   };
 
   const handleAsigneeDropdown = (e: ChangeEvent<HTMLInputElement>) => {
@@ -94,10 +99,12 @@ const EditCard = ({ card, thisColumn, columns, memberData, viewCards }: CardObje
   const handleSelectColumn = (e: MouseEvent<HTMLElement>) => {
     const target = e.target as HTMLElement;
     const newColumnName = target.innerText;
+    const div = divRef.current;
     setSelectedColumnName(newColumnName);
     const newColumnId = columns.find((column) => column.title === newColumnName)?.id;
     if (newColumnId !== undefined) setSelectedColumnId(newColumnId);
     setIsDropdownStatus(false);
+    div?.classList.remove('focused');
   };
 
   const handleClickedMember = (member: dashboardIdTypes['Members']) => {
@@ -185,7 +192,7 @@ const EditCard = ({ card, thisColumn, columns, memberData, viewCards }: CardObje
         <div className='auth-box'>
           <div className='auth-box-first-div'>
             <h3>상태</h3>
-            <div className='input-box status-box' onClick={handleStatusDropdown}>
+            <div className='input-box status-box' onClick={handleStatusDropdown} ref={divRef}>
               <ColumnNameTag name={selectedColumnName} />
             </div>
             <div className='input-box status-list'>

@@ -35,6 +35,14 @@ const StEditCard = styled.div<{
     color: ${({ theme }) => theme.color.gray_9f};
   }
 
+  .input-box:focus {
+    border-color: ${({ theme }) => theme.color.violet};
+  }
+
+  .focused {
+    border-color: ${({ theme }) => theme.color.violet};
+  }
+
   .input-box.member-list {
     ${(props) => (props.$isAsigneeClicked ? 'display:flex;' : 'display:none;')}
     width: 100%;
