@@ -33,12 +33,15 @@ const Card = ({ cardList, setCardList, card, idGroup, thisColumn, columns, membe
 
   const handleDeleteCard = async () => {
     try {
-      await deleteCard(card.id);
-      dispatch(closeSecondModal());
-      dispatch(closeModal());
-      const updatedCommentList = cardList?.filter((cardItem) => cardItem.id !== card.id);
-      setCardList(updatedCommentList);
-      return toast.success(SIMPLE_MESSAGES.DELETED);
+      const result = await deleteCard(card.id);
+      if (result === 204) {
+        dispatch(closeSecondModal());
+        dispatch(closeModal());
+        const updatedCommentList = cardList?.filter((cardItem) => cardItem.id !== card.id);
+        setCardList(updatedCommentList);
+        return toast.success(SIMPLE_MESSAGES.DELETED);
+      }
+      return toast.success(SIMPLE_MESSAGES.TRY_AGAIN);
     } catch (error) {
       alert(error);
     }
@@ -84,10 +87,10 @@ const Card = ({ cardList, setCardList, card, idGroup, thisColumn, columns, membe
           />
         )}
       </CardContainer>
-      {openModalName === `cardDetailModal${card.id}` ? (
-        <CardDetail idGroup={idGroup} cardId={card.id} card={card} />
+      {openModalName === `cardDetailModal${card.id}` ? <CardDetail idGroup={idGroup} cardId={card.id} /> : null}
+      {openSecondModalName === `deleteCardAlert${card.id}` ? (
+        <DeleteAlert handleSubmitDelete={handleDeleteCard} />
       ) : null}
-      {openSecondModalName === 'deleteCardAlert' ? <DeleteAlert handleSubmitDelete={handleDeleteCard} /> : null}
       {openModalName === `editCard${card.id}` ? (
         <EditCard card={card} columns={columns} thisColumn={thisColumn} memberData={memberData} viewCards={viewCards} />
       ) : null}

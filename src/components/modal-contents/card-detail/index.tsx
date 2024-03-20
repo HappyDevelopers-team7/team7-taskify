@@ -7,7 +7,6 @@ import DetailCommentArea from '@/components/detail-comment-area';
 import { useEffect, useState } from 'react';
 import { getCardDetail } from '@/api/getCardDetail';
 import { cardDetailType } from '@/types/cardDetailType';
-import { ColumnCardType } from '@/types/columnCardType';
 import ProfileImage from '@/components/profile-image';
 import LoadingSpinner from '@/components/loading-spinner';
 import { IdGroupType } from '@/types/idGroupType';
@@ -19,7 +18,6 @@ import ColumnNameTag from '@/components/column-name-tag';
 interface CardDetailProps {
   idGroup: IdGroupType;
   cardId: number;
-  card: ColumnCardType;
 }
 
 const CardDetail = ({ idGroup, cardId }: CardDetailProps) => {
@@ -27,13 +25,13 @@ const CardDetail = ({ idGroup, cardId }: CardDetailProps) => {
   const [detail, setDetail] = useState<cardDetailType>();
   const [detailLoading, setDetailLoading] = useState(true);
 
-  const handleCloseCardDetailModal = () => {
+  const handleCloseCard = () => {
     dispatch(closeModal());
   };
 
-  const handleDeleteCardDetailModal = () => {
-    dispatch(setOpenSecondModalName('deleteCardAlert'));
-    dispatch(openSecondModal('deleteCardAlert'));
+  const handleDeleteCard = () => {
+    dispatch(setOpenSecondModalName(`deleteCardAlert${cardId}`));
+    dispatch(openSecondModal(`deleteCardAlert${cardId}`));
   };
 
   const handleClickEditCard = () => {
@@ -64,8 +62,8 @@ const CardDetail = ({ idGroup, cardId }: CardDetailProps) => {
         type='detail'
         title={detail?.title}
         modalWidth={730}
-        handleDeleteModal={handleDeleteCardDetailModal}
-        handleCloseModal={handleCloseCardDetailModal}
+        handleDeleteModal={handleDeleteCard}
+        handleCloseModal={handleCloseCard}
         handleEditModal={handleClickEditCard}
       >
         {detailLoading ? (
@@ -93,17 +91,23 @@ const CardDetail = ({ idGroup, cardId }: CardDetailProps) => {
                 <li>
                   <p>담당자</p>
                   <div className='desc'>
-                    <ProfileImage
-                      imageUrl={detail?.assignee.profileImageUrl || null}
-                      alt={`${detail?.assignee.nickname}님의 프로필 이미지`}
-                    />
-                    <span>{detail?.assignee.nickname}</span>
+                    {detail?.assignee ? (
+                      <>
+                        <ProfileImage
+                          imageUrl={detail?.assignee.profileImageUrl || null}
+                          alt={`${detail?.assignee.nickname}님의 프로필 이미지`}
+                        />
+                        <span>{detail?.assignee.nickname}</span>
+                      </>
+                    ) : (
+                      <span className='no-data'>미지정</span>
+                    )}
                   </div>
                 </li>
                 <li>
                   <p>마감일</p>
                   <div className='desc'>
-                    <span>{detail?.dueDate}</span>
+                    {detail?.dueDate ? <span>{detail?.dueDate}</span> : <span className='no-data'>미지정</span>}
                   </div>
                 </li>
               </ul>

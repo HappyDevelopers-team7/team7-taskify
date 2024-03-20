@@ -59,9 +59,15 @@ const StDetailModalContainer = styled.article`
           display: flex;
           align-items: center;
           gap: 8px;
-          color: ${({ theme }) => theme.color.black_33};
-          font-size: 1.4rem;
-          font-weight: 400;
+
+          span {
+            color: ${({ theme }) => theme.color.black_33};
+            font-size: 1.4rem;
+            font-weight: 400;
+            &.no-data {
+              color: ${({ theme }) => theme.color.gray_78};
+            }
+          }
         }
       }
     }
@@ -93,8 +99,11 @@ const StDetailModalContainer = styled.article`
           }
 
           .desc {
-            font-size: 1.2rem;
             height: 26px;
+
+            span {
+              font-size: 1.2rem;
+            }
           }
         }
       }
