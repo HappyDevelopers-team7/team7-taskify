@@ -1,3 +1,5 @@
+import { dashboardIdTypes } from './dashboardIdTypes';
+
 export type CardObjectType = {
   card: {
     assignee: { id: number; nickname: string; profileImageUrl: string };
@@ -13,4 +15,8 @@ export type CardObjectType = {
     title: string;
     updatedAt: string;
   };
+  columns: dashboardIdTypes['Columns'][];
+  thisColumn: dashboardIdTypes['Columns'];
+  memberData: dashboardIdTypes['Members'][];
+  viewCards: () => void;
 };
