@@ -1,13 +1,13 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Container from './style';
-import CreateDashboard from '../modal-contents/create-dashboard';
 import { useDispatch, useSelector } from 'react-redux';
 import { ModalRootState, openModal, setOpenModalName } from '@/redux/modalSlice';
 import { DashBoardRootState, setSideDashboardList } from '@/redux/dashboardListSlice';
 import { getSideDashboardList } from '@/api/getSideDashboardList';
 import { AxiosError } from 'axios';
 import { toast } from 'react-toastify';
+import CreateDashboard from '../modal-contents/create-dashboard';
 
 export type Dashboards = {
   color: string;
@@ -30,8 +30,8 @@ const SideMenu = () => {
   const navigate = useNavigate();
 
   const handleClickCreateDashboard = () => {
-    dispatch(setOpenModalName('createDashboard'));
-    dispatch(openModal('createDashboard'));
+    dispatch(setOpenModalName('createSideDashboard'));
+    dispatch(openModal('createSideDashboard'));
   };
 
   const setSideDashboardListResult = async () => {
@@ -129,7 +129,7 @@ const SideMenu = () => {
           </button>
         </div>
       </Container>
-      {openModalName === 'createDashboard' ? <CreateDashboard /> : null}
+      {openModalName === 'createSideDashboard' ? <CreateDashboard /> : null}
     </>
   );
 };

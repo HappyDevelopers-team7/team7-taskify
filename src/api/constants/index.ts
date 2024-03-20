@@ -20,6 +20,9 @@ const API = {
   CARDS: {
     CARDS: 'cards',
   },
+  COMMENTS: {
+    COMMENTS: 'comments',
+  },
   MEMBERS: {
     MEMBERS: 'members',
   },

@@ -15,15 +15,14 @@ const InvitationList = () => {
   const updatedInvitationList = useSelector((state: InvitationRootState) => state.invitationList.updatedList);
   const openModalName = useSelector((state: ModalRootState) => state.modal.openModalName);
   const [selectedInvitationId, setSelectedInvitationId] = useState(0);
-  const [invitationLoading, setInvitationLoading] = useState(false);
   const [invitationLength, setInvitationLength] = useState(0);
   const [size, setSize] = useState(10);
+  const [cursorId, setCursorId] = useState<number | null>(null);
+
   const observerTarget = useRef<HTMLDivElement>(null);
-  const preventRef = useRef(true); //옵저버 중복 실행 방지
-  const endRef = useRef(false); //모든 글 로드 확인
+  const preventLoadRef = useRef(true);
 
   useEffect(() => {
-    //옵저버 생성
     const observer = new IntersectionObserver(obsHandler, { threshold: 0.5 });
     if (observerTarget.current) {
       observer.observe(observerTarget.current);
@@ -33,35 +32,32 @@ const InvitationList = () => {
     };
   });
 
+  const obsHandler = (entries: IntersectionObserverEntry[]) => {
+    const target = entries[0];
+    if (target.isIntersecting && preventLoadRef.current) {
+      preventLoadRef.current = false;
+      setSize((prev) => prev + 10);
+    }
+  };
+
   const setInvitation = async () => {
     try {
-      setInvitationLoading(true);
       const result = await getInvitation(size);
       setInvitationLength(result.invitations.length);
       dispatch(setInvitationList(result.invitations));
       dispatch(updateInvitationList(result.invitations));
+      preventLoadRef.current = true;
+      setCursorId(result.cursorId);
     } catch (error) {
       if (error instanceof Error) {
         console.error(error.message);
       }
-    } finally {
-      setInvitationLoading(false);
     }
   };
 
   useEffect(() => {
     setInvitation();
   }, [size]);
-
-  const obsHandler = (entries: IntersectionObserverEntry[]) => {
-    //옵저버 콜백함수
-    const target = entries[0];
-    if (!endRef.current && target.isIntersecting && preventRef.current) {
-      //옵저버 중복 실행 방지
-      preventRef.current = false; //옵저버 중복 실행 방지
-      setSize((prev) => prev + 10); //페이지 값 증가
-    }
-  };
 
   const handleClickReject = (id: number) => {
     setSelectedInvitationId(id);
@@ -74,13 +70,14 @@ const InvitationList = () => {
     dispatch(setOpenModalName('acceptInvitation'));
     dispatch(openModal('acceptInvitation'));
   };
+
   return (
     <>
       <StInvitedSection>
         <div className='invite-wrapper'>
           <h3>초대받은 대시보드</h3>
         </div>
-        {initialInvitationList.length > 0 && !invitationLoading ? (
+        {initialInvitationList.length > 0 ? (
           <>
             <div className='invite-wrapper'>
               <InputSearch />
@@ -134,7 +131,7 @@ const InvitationList = () => {
                   ))}
                 </tbody>
               </table>
-              {invitationLength >= 10 && <div ref={observerTarget}></div>}
+              {invitationLength >= 10 && cursorId !== null && <div id='invitation-observer' ref={observerTarget}></div>}
             </div>
           </>
         ) : (

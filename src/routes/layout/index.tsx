@@ -1,4 +1,4 @@
-import DashboardHeader from '@/components/dashboardHeader';
+import DashboardHeader from '@/components/dashboard-Header';
 import SideMenu from '@/components/side-menu';
 import { Outlet } from 'react-router-dom';
 import StWrapper from './style';

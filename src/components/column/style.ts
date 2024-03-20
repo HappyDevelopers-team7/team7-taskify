@@ -11,7 +11,7 @@ export const ColumnContainer = styled.div`
     background-color: tomato;
   }
 
-  .column-header {
+  .column-head {
     position: relative;
     display: flex;
     align-items: center;
@@ -33,7 +33,7 @@ export const ColumnContainer = styled.div`
     }
 
     .inner-cards {
-      width: 20px;
+      width: auto;
       height: 20px;
       padding: 3px 6px;
       border-radius: 4px;
@@ -53,6 +53,7 @@ export const ColumnContainer = styled.div`
 
   .column-body {
     padding: 0px 20px 16px;
+    transition: height 0.5s ease-in-out;
 
     .add-card {
       width: 100%;
@@ -67,13 +68,28 @@ export const ColumnContainer = styled.div`
     }
   }
 
+  .column-foot {
+    padding: 0px 20px 16px;
+
+    button {
+      width: 314px;
+      padding: 15px 0px 15px 16px;
+      margin-bottom: 32px;
+
+      border-radius: 6px;
+      border: 1px solid ${({ theme }) => theme.color.gray_d9};
+      background: ${({ theme }) => theme.color.white};
+
+      font-size: 1.6rem;
+    }
+  }
+
   h3 {
     font-size: 3rem;
   }
 `;
 type Tag = {
   name: string;
-  backgroundColor: string;
   id: number;
 };
 
@@ -108,10 +124,10 @@ export const ModalContent = styled.div<{
     font-size: 1.8rem;
     font-weight: 500;
     margin-bottom: 10px;
-  }
 
-  .essential {
-    color: ${({ theme }) => theme.color.violet};
+    span {
+      color: ${({ theme }) => theme.color.violet};
+    }
   }
 
   .input-box {
@@ -137,6 +153,9 @@ export const ModalContent = styled.div<{
   .input-box.asignee-box {
     width: 50%;
     ${(props) => props.$Profile && 'padding-left: 45px;'}
+    background-image: url('/assets/image/icons/arrowDropDownIcon.svg');
+    background-repeat: no-repeat;
+    background-position: 180px;
   }
 
   .input-box.member-list {
@@ -210,7 +229,7 @@ export const ModalContent = styled.div<{
       background-color: #f5f5f5;
       background-repeat: no-repeat;
       background-position: center;
-      ${(props) => props.$Image && 'background-size: contain;'}
+      ${(props) => (props.$Image ? 'background-size: contain;' : 'background-size: 28px 28px;')}
       border-radius: 6px;
       cursor: pointer;
     }
