@@ -43,7 +43,7 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId, columns }: P
   const [isDropdownAsignee, setIsDropdownAsignee] = useState(false);
   const [filterdMember, SetFilterdMember] = useState<dashboardIdTypes['Members'][]>([]);
   const [userProfile, setUserProfile] = useState<string | undefined>('');
-  const [tags, setTags] = useState<Types['Tag'][]>([]);
+  const [tags, setTags] = useState<string[]>([]);
   const [imageUrl, setImageUrl] = useState<string>('');
   const [pages, setPages] = useState<number>(3);
   const [createCardData, setCreateCardData] = useState<Types['CreateCardData']>({
@@ -101,7 +101,7 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId, columns }: P
         title: createCardData.title,
         description: createCardData.description,
         dueDate: createCardData.dueDate ? createCardData.dueDate : undefined,
-        tags: tags.map((item) => item.name),
+        tags: tags.map((item) => item),
         imageUrl: imageUrl ? imageUrl : undefined,
       });
 
@@ -178,11 +178,7 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId, columns }: P
   const handleCreateTag = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       const input = createCardData.tag;
-      const tag = {
-        id: Date.now(),
-        name: input,
-      };
-      setTags((prev) => [...prev, tag]);
+      setTags((prev) => [...prev, input]);
       setCreateCardData({ ...createCardData, tag: '' });
     }
   };
@@ -344,7 +340,7 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId, columns }: P
               <input
                 value={createCardData.tag}
                 className='input-box tag-input'
-                placeholder='입력 후 Enter'
+                placeholder='입력 후 Enter!'
                 type='text'
                 onKeyDown={(e) => handleCreateTag(e)}
                 onChange={(e) => setCreateCardData({ ...createCardData, tag: e.target.value })}
@@ -352,7 +348,7 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId, columns }: P
               <div className='input-box tag-list'>
                 {tags &&
                   tags.map((tag, index) => (
-                    <TagComponent key={tag.id} name={tag.name} backgroundColor={makeRandomBackgroundColor(index)} />
+                    <TagComponent key={index} name={tag} backgroundColor={makeRandomBackgroundColor(index)} />
                   ))}
               </div>
             </div>

@@ -149,6 +149,7 @@ const EditCard = ({ card, thisColumn, columns, memberData, viewCards }: CardObje
     if (img) img.classList.add('hidden');
     asigneeRef.current = null;
     setAsigneeName('');
+    setUserProfile('');
   };
 
   useEffect(() => {
@@ -209,6 +210,7 @@ const EditCard = ({ card, thisColumn, columns, memberData, viewCards }: CardObje
             />
             <input
               value={asgineeName}
+              placeholder='담당자 선택'
               className='input-box asignee-box'
               type='text'
               onChange={(e) => handleAsigneeDropdown(e)}
