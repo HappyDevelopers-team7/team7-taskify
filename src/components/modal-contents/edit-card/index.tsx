@@ -26,14 +26,14 @@ type Type = {
 const EditCard = ({ card, thisColumn, columns, memberData, viewCards }: CardObjectType) => {
   const dispatch = useDispatch();
   const today = new Date();
-  const asigneeRef = useRef<number | null>(card.assignee.id);
+  const asigneeRef = useRef<number | null>(card.assignee?.id || null);
   const imgRef = useRef<HTMLImageElement>(null!);
   const [imageUrl, setImageUrl] = useState<string | null>(card.imageUrl);
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [tags, setTags] = useState<string[]>(card.tags);
-  const [asgineeName, setAsigneeName] = useState<string | undefined>(card.assignee.nickname);
-  const [userProfile, setUserProfile] = useState<string | undefined>(card.assignee.profileImageUrl);
+  const [asgineeName, setAsigneeName] = useState<string | undefined>(card.assignee?.nickname || '');
+  const [userProfile, setUserProfile] = useState<string | undefined>(card.assignee?.profileImageUrl || '');
   const [selectedColumnName, setSelectedColumnName] = useState<string>(thisColumn.title);
   const [selectedColumnId, setSelectedColumnId] = useState<number>(thisColumn.id);
   const [isDropdownStatus, setIsDropdownStatus] = useState(false);
