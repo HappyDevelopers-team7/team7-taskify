@@ -5,7 +5,7 @@ import axiosInstance from './instance/axiosInstance';
 export const PutPassword = async (password: string, newPassword: string) => {
   try {
     const response = await axiosInstance.put(API.AUTH.PASSWORD, { password, newPassword });
-    const responseData = await response.data;
+    const responseData = await response;
 
     return responseData;
   } catch (e) {
