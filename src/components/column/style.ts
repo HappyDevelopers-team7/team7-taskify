@@ -99,7 +99,7 @@ export const ModalContent = styled.div<{
   $Profile: string | undefined;
   $Tag: Tag[];
 }>`
-  height: 65vh;
+  height: auto;
 
   &::-webkit-scrollbar {
     width: 3px;

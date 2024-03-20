@@ -8,7 +8,7 @@ const StEditCard = styled.div<{
   $Tag: string[];
   $NewImage: string | null;
 }>`
-  height: 65vh;
+  height: auto;
 
   h3 {
     font-size: 1.8rem;
