@@ -2,6 +2,7 @@ export const SIMPLE_MESSAGES = {
   CANCELED: '취소 되었습니다.',
   ACCEPTED: '수락 되었습니다.',
   DELETED: '삭제 되었습니다.',
+  TRY_AGAIN: '다시 시도해주세요.',
 } as const;
 
 export const AUTH_MESSAGES = {

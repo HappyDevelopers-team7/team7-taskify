@@ -244,7 +244,6 @@ function ProfileInfo({ myInfo }: { myInfo: SetMyInfo | null }) {
   const navigate = useNavigate();
 
   if (!myInfo) {
-    console.log('마이인포가 없다!');
     return null; // myInfo가 없을 경우 렌더링하지 않음
   }
   let hasImg: boolean = false;
