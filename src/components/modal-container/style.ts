@@ -153,11 +153,6 @@ const StModalContainer = styled.div<StModalContainer>`
         font-size: 2rem;
         margin-bottom: ${(props) => (props.$type === 'detail' ? '0' : '24')}px;
       }
-
-      .modal-content__box {
-        max-height: 80vh;
-        overflow: auto;
-      }
     }
 
     .modal-button-group {
