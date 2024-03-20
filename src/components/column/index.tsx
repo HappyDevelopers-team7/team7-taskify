@@ -182,7 +182,8 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId }: Props) => 
         name: input,
       };
       setTags((prev) => [...prev, tag]);
-      setCreateCardData({ ...createCardData, tag: '' });
+      const empty = '';
+      setCreateCardData({ ...createCardData, tag: empty });
     }
   };
 
