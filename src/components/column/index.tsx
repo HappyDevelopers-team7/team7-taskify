@@ -16,6 +16,7 @@ import LoadingSpinner from '@/components/loading-spinner';
 import EditColumnModal from '../modal-edit-column';
 import dateExtractor from '@/utils/dateExtractor';
 import TagComponent from '../tag-component';
+import CreateCard from '../modal-contents/create-card';
 import Flatpickr from 'react-flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 
@@ -62,6 +63,11 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId, columns }: P
   const handleOpenCreateCard = () => {
     dispatch(setOpenModalName(`createcard${columnData.id}`));
     dispatch(openModal(`createcard${columnData.id}`));
+  };
+
+  const handleOpenCreateCardModal = () => {
+    dispatch(setOpenModalName(`createCard${columnData.id}`));
+    dispatch(openModal(`createCard${columnData.id}`));
   };
 
   const handleCloseCreateCard = () => {
@@ -215,6 +221,7 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId, columns }: P
         <div className='column-color' />
         <h2>{columnData.title}</h2>
         <div className='inner-cards'>{totalCount}</div>
+        <button onClick={handleOpenCreateCardModal}>임시생성버튼</button>
         <img src='/assets/image/icons/settingIcon.svg' alt='setting-icon' onClick={handleEditColumn} />
       </div>
 
@@ -369,7 +376,9 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId, columns }: P
           </ModalContent>
         </ModalContainer>
       ) : null}
-
+      {openModalName === `createCard${columnData.id}` && (
+        <CreateCard memberData={memberData} columnData={columnData} dashboardId={dashboardId} viewCards={viewCards} />
+      )}
       {openModalName === `editcolumn${columnData.id}` && (
         <EditColumnModal
           columnId={columnData.id}

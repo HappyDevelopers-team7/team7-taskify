@@ -108,12 +108,6 @@ export const ModalContent = styled.div<{
 
   .first-div {
     position: relative;
-
-    .dropdown-icon {
-      position: absolute;
-      top: 43px;
-      right: 230px;
-    }
   }
 
   h3 {
