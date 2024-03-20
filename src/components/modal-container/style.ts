@@ -67,7 +67,7 @@ const StModalContainer = styled.div<StModalContainer>`
     }
 
     .modal-content__box {
-      max-height: 600px;
+      max-height: 400px;
       overflow: auto;
     }
   }
