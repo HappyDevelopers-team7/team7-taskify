@@ -5,7 +5,7 @@
 </div>
 </br>
 <div align="center">
-  🔗 <a href="https://rococo-kleicha-e4e6ed.netlify.app/">Taskify 하러 가자!</a>
+  🔗 <a href="https://taskify-team-7.netlify.app/">Taskify 하러 가자!</a>
 </div>
 </br>
 
