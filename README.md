@@ -172,9 +172,9 @@
 
 <br>
 
-## 🎀 트러블 슈팅
+## 🎀 트러블 슈팅 ([전체 기록 보러가기](https://github.com/HappyDevelopers-team7/team7-taskify/discussions/categories/%EC%98%A4%EB%A5%98-%ED%95%B4%EA%B2%B0-%EA%B8%B0%EB%A1%9D) )
 
 ### 📌 OS에서 Enter 이벤트 중복 처리 되는 문제
 
 ### 📌 textarea 자동으로 readonly되는 문제
-### 📌 맥북에서 Enter 이벤트 중복 처리 되는 문제
+
