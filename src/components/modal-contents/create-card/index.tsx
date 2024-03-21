@@ -98,6 +98,7 @@ const CreateCard = ({ memberData, columnData, dashboardId, viewCards }: Props) =
 
   const handleCreateTag = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
+      if (e.nativeEvent.isComposing) return;
       const input = cardData.tag;
       setTags((prev) => [...prev, input]);
       setCardData({ ...cardData, tag: '' });
