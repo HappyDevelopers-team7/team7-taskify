@@ -116,6 +116,7 @@ const EditCard = ({ card, thisColumn, columns, memberData, viewCards }: CardObje
   };
 
   const handleCreateTag = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.nativeEvent.isComposing) return;
     if (e.key === 'Enter') {
       const input = editCardData.tag;
       setTags((prev) => [...prev, input]);
