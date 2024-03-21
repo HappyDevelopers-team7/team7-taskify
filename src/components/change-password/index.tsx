@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import { PutPassword } from '@/api/putPassword';
 import { StPasswordContainer, StPasswordInputContainer } from './style';
-import { useDispatch, useSelector } from 'react-redux';
-import { ModalRootState, openModal } from '@/redux/modalSlice';
+import { useSelector } from 'react-redux';
+import { ModalRootState } from '@/redux/modalSlice';
 import PasswordErrorModal from '../modal-password-error';
+import { toast } from 'react-toastify';
 
 export const ChangePassword = () => {
-  const dispatch = useDispatch();
   const openModalName = useSelector((state: ModalRootState) => state.modal.openModalName);
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
@@ -42,28 +42,28 @@ export const ChangePassword = () => {
   const handleSubmit = async () => {
     try {
       if (!currentPassword || !newPassword || !confirmNewPassword) {
-        alert('모든 필드를 입력하세요.');
+        toast.error('모든 필드를 입력하세요.');
         return;
       }
 
       if (newPassword !== confirmNewPassword) {
-        alert('새 비밀번호가 일치하지 않습니다.');
+        toast.error('새 비밀번호가 일치하지 않습니다.');
         return;
       }
 
       const response = await PutPassword(currentPassword, newPassword);
       console.log(response);
       if (response?.status === 204) {
-        alert('비밀번호가 성공적으로 변경되었습니다.');
+        toast.error('비밀번호가 성공적으로 변경되었습니다.');
         setCurrentPassword('');
         setNewPassword('');
         setConfirmNewPassword('');
       } else {
-        dispatch(openModal('passwordErrorModal'));
+        toast.error('비밀번호가 일치하지 않습니다.');
       }
     } catch (error) {
       console.error('비밀번호 변경 중 오류 발생:', error);
-      alert('비밀번호 변경 중 오류가 발생했습니다.');
+      toast.error('비밀번호 변경 중 오류가 발생했습니다.');
     }
   };
 
