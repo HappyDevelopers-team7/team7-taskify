@@ -26,6 +26,7 @@ interface Props {
 const CreateCard = ({ memberData, columnData, dashboardId, viewCards }: Props) => {
   const dispatch = useDispatch();
   const today = new Date();
+  const imgRef = useRef<HTMLImageElement>(null!);
   const assigneeRef = useRef<number | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -126,6 +127,26 @@ const CreateCard = ({ memberData, columnData, dashboardId, viewCards }: Props) =
     }
   };
 
+  const handleAssigneeClear = () => {
+    const img = imgRef.current;
+    if (img) img.classList.add('hidden');
+    assigneeRef.current = null;
+    setCardData({ ...cardData, asignee: '' });
+    setUserProfile('');
+  };
+
+  useEffect(() => {
+    viewCards();
+    if (memberData.length > 0) {
+      // 멤버 목록을 받아왔을때 프로필이 null이면 기본값으로 변경
+      memberData.forEach((member) => {
+        member.profileImageUrl = member.profileImageUrl
+          ? member.profileImageUrl
+          : '/assets/image/icons/bannerLogoIconXL.svg';
+      });
+    }
+  }, [memberData]);
+
   useEffect(() => {
     // 입력값이 변할때마다 검색결과 재적용
     if (cardData.asignee !== '') {
@@ -152,8 +173,15 @@ const CreateCard = ({ memberData, columnData, dashboardId, viewCards }: Props) =
       <StCreateCard $Profile={userProfile} $IsDropdown={isDropdown} $Tag={tags} $Preview={previewUrl}>
         {isLoading && <LoadingSpinner />}
         <div className='section-div first-div'>
-          <h3>담당자</h3>
+          <h3 onClick={handleAssigneeClear}>담당자</h3>
+          <img
+            src='/assets/image/icons/removeIcon.svg'
+            className='remove-icon'
+            alt='remove-icon'
+            onClick={handleAssigneeClear}
+          />
           <input
+            value={cardData.asignee}
             className='input-box asignee-box'
             placeholder='이름을 입력해 주세요'
             type='text'
@@ -162,7 +190,7 @@ const CreateCard = ({ memberData, columnData, dashboardId, viewCards }: Props) =
             onFocus={(e) => handleDropdown(e)}
             onBlur={() => setIsDropdown(false)}
           />
-          {userProfile && <img src={userProfile} className='user-image in-searchbar' />}
+          {userProfile && <img src={userProfile} className='user-image in-searchbar' ref={imgRef} />}
           <div className='input-box member-list'>
             {isDropdown &&
               filterdMember.map((member) => (
