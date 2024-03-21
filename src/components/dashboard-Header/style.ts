@@ -25,7 +25,7 @@ export const Container = styled.header`
     width: 20%;
     height: 30%;
     display: flex;
-    color: var(--black-black_333236, #333236);
+    color: ${({ theme }) => theme.color.black_33};
     font-family: Pretendard;
     font-size: 2rem;
     font-style: normal;
@@ -81,7 +81,7 @@ export const Container = styled.header`
       justify-content: center;
 
       .myinfo-initial {
-        color: var(--white-white_FFFFFF, #fff);
+        color: ${({ theme }) => theme.color.white};
         text-align: center;
         font-family: Montserrat;
         font-size: 16px;
@@ -129,7 +129,7 @@ export const Container = styled.header`
     }
 
     .myinfo-name {
-      color: #333236;
+      color: ${({ theme }) => theme.color.black_33};
       font-family: Pretendard;
       font-size: 1.6rem;
       font-style: normal;
@@ -138,19 +138,19 @@ export const Container = styled.header`
     }
 
     .myinfo-color-green {
-      background-color: #5be352;
+      background-color: ${({ theme }) => theme.color.green_5b};
     }
     .myinfo-color-purple {
-      background-color: #bc57ff;
+      background-color: ${({ theme }) => theme.color.purple_bc};
     }
     .myinfo-color-orange {
-      background-color: #ffc85a;
+      background-color: ${({ theme }) => theme.color.orange_ff};
     }
     .myinfo-color-blue {
-      background-color: #9dd7ed;
+      background-color: ${({ theme }) => theme.color.blue_9d};
     }
     .myinfo-color-pink {
-      background-color: #ff6ee0;
+      background-color: ${({ theme }) => theme.color.pink_ff};
     }
   }
   .dashboard-info-members-container {
@@ -176,7 +176,7 @@ export const Container = styled.header`
       flex-shrink: 0;
       border-radius: 100%;
       border: 1px solid;
-      border-color: #ffffff;
+      border-color: ${({ theme }) => theme.color.white};
     }
 
     li ~ li {
@@ -232,12 +232,12 @@ export const Container = styled.header`
       height: 38px; /* 필요에 따라 너비와 높이 조절 */
       border-radius: 100%; /* 원으로 만듭니다 */
       border: 1px solid;
-      border-color: #ffffff;
+      border-color: ${({ theme }) => theme.color.white};
       flex-shrink: 0;
     }
 
     .myinfo-initial {
-      color: var(--white-white_FFFFFF, #fff);
+      color: ${({ theme }) => theme.color.white};
       padding-top: 3px; //가운데 정렬을 해서 배경가운데에 있는데 폰트때문인지 조금위쪽으로 뜬느낌이라서 패딩을 줌
       text-align: center;
       font-family: Montserrat;
@@ -248,8 +248,8 @@ export const Container = styled.header`
     }
 
     .extracolor {
-      color: #d25b68;
-      background-color: #f4d7da;
+      color: ${({ theme }) => theme.color.red_d2};
+      background-color: ${({ theme }) => theme.color.red_f4};
       font-size: 16px;
       font-family: Pretendard;
       text-align: center;
@@ -259,21 +259,22 @@ export const Container = styled.header`
     }
 
     &.myinfo-color-green {
-      background-color: #5be352;
+      background-color: ${({ theme }) => theme.color.green_5b};
     }
     .myinfo-color-purple {
-      background-color: #bc57ff;
+      background-color: ${({ theme }) => theme.color.purple_bc};
     }
     .myinfo-color-orange {
-      background-color: #ffc85a;
+      background-color: ${({ theme }) => theme.color.orange_ff};
     }
     .myinfo-color-blue {
-      background-color: #9dd7ed;
+      background-color: ${({ theme }) => theme.color.blue_9d};
     }
     .myinfo-color-pink {
-      background-color: #ff6ee0;
+      background-color: ${({ theme }) => theme.color.pink_ff};
     }
   }
+
   .invite-button {
     display: flex;
     align-items: center;
@@ -283,9 +284,9 @@ export const Container = styled.header`
     height: 40px;
     flex-shrink: 0;
     border-radius: 8px;
-    border: 1px solid #d9d9d9;
-    background: var(--white-white_FFFFFF, #fff);
-    color: var(--gray-gray_787486, #787486);
+    border: 1px solid ${({ theme }) => theme.color.gray_d9};
+    background: ${({ theme }) => theme.color.white};
+    color: ${({ theme }) => theme.color.gray_78};
     font-family: Pretendard;
     font-size: 16px;
     font-style: normal;
@@ -320,9 +321,9 @@ export const Container = styled.header`
     height: 40px;
     flex-shrink: 0;
     border-radius: 8px;
-    border: 1px solid #d9d9d9;
-    background: var(--white-white_FFFFFF, #fff);
-    color: var(--gray-gray_787486, #787486);
+    border: 1px solid ${({ theme }) => theme.color.gray_d9};
+    background: ${({ theme }) => theme.color.white};
+    color: ${({ theme }) => theme.color.gray_78};
     font-family: Pretendard;
     font-size: 16px;
     font-style: normal;
