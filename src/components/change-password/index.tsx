@@ -1,13 +1,9 @@
 import { useEffect, useState } from 'react';
 import { PutPassword } from '@/api/putPassword';
 import { StPasswordContainer, StPasswordInputContainer } from './style';
-import { useSelector } from 'react-redux';
-import { ModalRootState } from '@/redux/modalSlice';
-import PasswordErrorModal from '../modal-password-error';
 import { toast } from 'react-toastify';
 
 export const ChangePassword = () => {
-  const openModalName = useSelector((state: ModalRootState) => state.modal.openModalName);
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
@@ -94,7 +90,6 @@ export const ChangePassword = () => {
         />
       </StPasswordInputContainer>
       {confirmPasswordError && <div style={{ color: 'red' }}>{confirmPasswordError}</div>}
-      {openModalName === 'passwordErrorModal' && <PasswordErrorModal />}
       <div className='button-container'>
         <button
           type='submit'
