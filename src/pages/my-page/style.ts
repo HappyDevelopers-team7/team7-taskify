@@ -1,7 +1,9 @@
+import { commonHeight } from '@/styles/common-height/style';
 import { inputContainer } from '@/styles/input/style';
 import { styled } from 'styled-components';
 
 export const StMyPageContainer = styled.div`
+  ${commonHeight}
   background: #fafafa;
   color: var(--black-black_333236, #333236);
   font-size: 16px;

@@ -6,10 +6,10 @@ import { StColumnModal } from './style';
 import ModalContainer from '@/components/modal-container';
 import API from '@/api/constants';
 import { useParams } from 'react-router-dom';
-import { Columns } from '../../pages/dashboard-id';
+import { dashboardIdTypes } from '@/types/dashboardIdTypes';
 
 interface AddColumnModalProps {
-  setColumns: Dispatch<SetStateAction<Columns[]>>;
+  setColumns: Dispatch<SetStateAction<dashboardIdTypes['Columns'][]>>;
 }
 
 const AddColumnModal = ({ setColumns }: AddColumnModalProps) => {
@@ -35,8 +35,6 @@ const AddColumnModal = ({ setColumns }: AddColumnModalProps) => {
   };
 
   const handleSubmitModal = () => {
-    console.log('새로운 컬럼 이름:', newColumnName);
-
     if (existingColumns.includes(newColumnName)) {
       alert('중복된 컬럼 이름입니다.');
       return;

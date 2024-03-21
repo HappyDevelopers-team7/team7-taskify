@@ -67,7 +67,7 @@ const StModalContainer = styled.div<StModalContainer>`
     }
 
     .modal-content__box {
-      max-height: 600px;
+      max-height: 400px;
       overflow: auto;
     }
   }
@@ -152,11 +152,6 @@ const StModalContainer = styled.div<StModalContainer>`
       h2 {
         font-size: 2rem;
         margin-bottom: ${(props) => (props.$type === 'detail' ? '0' : '24')}px;
-      }
-
-      .modal-content__box {
-        max-height: 80vh;
-        overflow: auto;
       }
     }
 

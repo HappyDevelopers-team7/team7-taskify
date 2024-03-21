@@ -26,9 +26,5 @@ export interface Types {
     dueDate: string;
     tag: string;
   };
-  Tag: {
-    id: number;
-    name: string;
-  };
   totalCount: number;
 }
