@@ -15,11 +15,11 @@ interface Props {
 
 export const EditColumnModal = ({ columnId, columnName, handleEditColumn, handleDeleteColumn }: Props) => {
   const dispatch = useDispatch();
-  const [editedColumnName, setEditedColumnName] = useState(columnName);
+  const [editedColumnName, setEditedColumnName] = useState(columnName); // 수정 상태 추가
 
   const handleCloseModal = () => {
     dispatch(closeModal());
-    setEditedColumnName('');
+    setEditedColumnName(''); // 수정 상태 초기화
   };
 
   const handleSubmitModal = () => {
