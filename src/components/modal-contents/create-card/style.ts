@@ -21,6 +21,15 @@ const StCreateCard = styled.div<{
       }
     }
 
+    .remove-icon {
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      left: 50px;
+      top: 2px;
+      cursor: pointer;
+    }
+
     .input-box {
       width: 100%;
       padding: 15px 0px 15px 16px;

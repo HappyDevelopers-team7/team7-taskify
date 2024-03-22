@@ -1,25 +1,25 @@
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { ModalRootState } from '@/redux/modalSlice';
+import { dashboardIdTypes } from '@/types/dashboardIdTypes';
 import axiosInstance from '@/api/instance/axiosInstance';
 import Container from './style';
 import AddColumnButton from '@/components/add-column-button';
 import API from '@/api/constants';
-import { useEffect, useState } from 'react';
 import Column from '@/components/column';
 import LoadingSpinner from '@/components/loading-spinner';
 import AddColumnModal from '../../components/modal-add-column';
-import { useSelector } from 'react-redux';
-import { ModalRootState } from '@/redux/modalSlice';
-import { dashboardIdTypes } from '@/types/dashboardIdTypes';
 
 const DashBoardId = () => {
   const { id } = useParams();
-  const [columns, setColumns] = useState<dashboardIdTypes['Columns'][]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
   const openModalName = useSelector((state: ModalRootState) => state.modal.openModalName);
+  const [columns, setColumns] = useState<dashboardIdTypes['Columns'][]>([]);
   const [members, setMembers] = useState<dashboardIdTypes['Members'][]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const viewColumns = () => {
-    // 컬럼 조회 함수
     setIsLoading(true);
     axiosInstance
       .get(`${API.COLUMNS.COLUMNS}?dashboardId=${id}`)
@@ -27,15 +27,20 @@ const DashBoardId = () => {
         setColumns(res.data.data);
         setIsLoading(false);
       })
-      .catch(() => alert('컬럼 조회 실패'));
+      .catch(() => {
+        alert('컬럼 조회 실패');
+        navigate('/');
+      });
   };
 
   const viewMembers = () => {
-    // 초대받은 멤버 조회 함수
     axiosInstance
       .get(`${API.MEMBERS.MEMBERS}?page=1&size=9999&dashboardId=${id}`)
       .then((res) => setMembers(res.data.members))
-      .catch(() => alert('멤버 조회 실패'));
+      .catch(() => {
+        alert('멤버 조회 실패');
+        navigate('/');
+      });
   };
 
   useEffect(() => {

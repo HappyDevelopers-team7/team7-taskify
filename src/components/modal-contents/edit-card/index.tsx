@@ -69,7 +69,7 @@ const EditCard = ({ card, thisColumn, columns, memberData, viewCards }: CardObje
         imageUrl: imageUrl ? imageUrl : undefined,
       });
 
-      alert('수정완료');
+      toast.success('수정완료');
       dispatch(closeModal());
     } catch (err) {
       alert(err);
@@ -135,7 +135,7 @@ const EditCard = ({ card, thisColumn, columns, memberData, viewCards }: CardObje
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
       if (!file.type.startsWith('image/') || file.type === 'image/gif') {
-        alert('파일은 gif를 제외한 이미지 타입만 첨부 가능합니다.');
+        toast.warning('파일은 gif를 제외한 이미지 타입만 첨부 가능합니다.');
       } else {
         setUploadedFile(file);
         const formData = new FormData();
