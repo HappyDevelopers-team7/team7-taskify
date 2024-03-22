@@ -11,6 +11,7 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import InviteDashboard from '../modal-contents/invite-dashboard';
+import getDefaultImageUrlIfNull from '@/utils/getDefaultImageIfNull';
 
 interface User {
   id: number;
@@ -245,34 +246,34 @@ function ProfileInfo({ myInfo }: { myInfo: SetMyInfo | null }) {
   if (!myInfo) {
     return null; // myInfo가 없을 경우 렌더링하지 않음
   }
-  let hasImg: boolean = false;
-  hasImg = myInfo.profileImageUrl === null ? false : true; //프로필 이미지를 가지고 있는지 체크
+  // let hasImg: boolean = false;
+  // hasImg = myInfo.profileImageUrl === null ? false : true; //프로필 이미지를 가지고 있는지 체크
 
-  const COLORS = ['green', 'purple', 'orange', 'blue', 'pink'] as const;
+  // const COLORS = ['green', 'purple', 'orange', 'blue', 'pink'] as const;
 
-  const generateColor = (name: string) => {
-    const key = name.toUpperCase()[0];
+  // const generateColor = (name: string) => {
+  //   const key = name.toUpperCase()[0];
 
-    switch (true) {
-      case (key >= 'A' && key < 'F') || (key >= '가' && key < '다'):
-        return COLORS[0];
-      case (key >= 'F' && key < 'K') || (key >= '다' && key < '바'):
-        return COLORS[1];
-      case (key >= 'K' && key < 'Q') || (key >= '바' && key < '아'):
-        return COLORS[2];
-      case (key >= 'Q' && key < 'V') || (key >= '아' && key < '타'):
-        return COLORS[3];
-      default:
-        return COLORS[4];
-    }
-  };
+  //   switch (true) {
+  //     case (key >= 'A' && key < 'F') || (key >= '가' && key < '다'):
+  //       return COLORS[0];
+  //     case (key >= 'F' && key < 'K') || (key >= '다' && key < '바'):
+  //       return COLORS[1];
+  //     case (key >= 'K' && key < 'Q') || (key >= '바' && key < '아'):
+  //       return COLORS[2];
+  //     case (key >= 'Q' && key < 'V') || (key >= '아' && key < '타'):
+  //       return COLORS[3];
+  //     default:
+  //       return COLORS[4];
+  //   }
+  // };
 
-  const initial = myInfo!.nickname.toUpperCase()[0];
+  // const initial = myInfo!.nickname.toUpperCase()[0];
 
-  let imageBackgroundColor: string = '';
-  if (myInfo && hasImg == false) {
-    imageBackgroundColor = generateColor(myInfo.nickname);
-  }
+  // let imageBackgroundColor: string = '';
+  // if (myInfo && hasImg == false) {
+  //   imageBackgroundColor = generateColor(myInfo.nickname);
+  // }
 
   // 드롭다운 나타나게함
   const handleMouseEnter = () => {
@@ -298,13 +299,17 @@ function ProfileInfo({ myInfo }: { myInfo: SetMyInfo | null }) {
   return (
     //가져온 정보들을 가지고 여기서 프로필을 띄운다.
     <div className='myinfo' onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-      {hasImg == false ? (
+      <div
+        className='myinfo-image'
+        style={{ backgroundImage: `url(${getDefaultImageUrlIfNull(myInfo?.profileImageUrl)})` }}
+      ></div>
+      {/* {hasImg == false ? (
         <div className={`myinfo-color myinfo-color-${imageBackgroundColor}`}>
           <div className='myinfo-initial'>{initial}</div>
         </div>
       ) : (
         <div className='myinfo-image' style={{ backgroundImage: `url(${myInfo?.profileImageUrl})` }}></div>
-      )}
+      )} */}
       <div className='myinfo-name'>{myInfo?.nickname}</div>
       {isDropdownOpen ? (
         <ul className='drop-down-menu'>
