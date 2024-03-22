@@ -48,7 +48,6 @@ export const StProfileContainer = styled.div`
   border-radius: 8px;
   padding: 32px 28px;
   margin: 0 20px 20px;
-  /* display: table; */
 
   img {
     cursor: pointer;
