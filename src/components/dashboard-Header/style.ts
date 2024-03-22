@@ -163,6 +163,7 @@ export const Container = styled.header`
       border-radius: 100%;
       border: 1px solid;
       border-color: ${({ theme }) => theme.color.white};
+      background-size: contain;
     }
 
     li ~ li {

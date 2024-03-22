@@ -196,35 +196,39 @@ function DashboardMembers({ membersInfo }: { membersInfo: DashboardmembersInfo }
   const slicedMembers = membersInfo.members.slice(0, 5);
   const containerSize = CONTAINER_SIZE[slicedMembers.length - 1];
 
-  const generateColor = (name: string) => {
-    const key = name.toUpperCase()[0];
+  // const generateColor = (name: string) => {
+  //   const key = name.toUpperCase()[0];
 
-    switch (true) {
-      case (key >= 'A' && key < 'F') || (key >= '가' && key < '다'):
-        return 'green';
-      case (key >= 'F' && key < 'K') || (key >= '다' && key < '바'):
-        return 'purple';
-      case (key >= 'K' && key < 'Q') || (key >= '바' && key < '아'):
-        return 'orange';
-      case (key >= 'Q' && key < 'V') || (key >= '아' && key < '타'):
-        return 'blue';
-      default:
-        return 'pink';
-    }
-  };
+  //   switch (true) {
+  //     case (key >= 'A' && key < 'F') || (key >= '가' && key < '다'):
+  //       return 'green';
+  //     case (key >= 'F' && key < 'K') || (key >= '다' && key < '바'):
+  //       return 'purple';
+  //     case (key >= 'K' && key < 'Q') || (key >= '바' && key < '아'):
+  //       return 'orange';
+  //     case (key >= 'Q' && key < 'V') || (key >= '아' && key < '타'):
+  //       return 'blue';
+  //     default:
+  //       return 'pink';
+  //   }
+  // };
 
   return (
     // 멤버들 먼저가입한 순서대로 출력
     <ul className={`dashboard-info-members-container ${containerSize}`}>
       {slicedMembers.map((member: User) => (
         <li key={member.id}>
-          {member.profileImageUrl ? (
+          <div
+            className='myinfo-image'
+            style={{ backgroundImage: `url(${getDefaultImageUrlIfNull(member?.profileImageUrl)}) no-repeat center` }}
+          ></div>
+          {/* {member.profileImageUrl ? (
             <div className={`myinfo-image`} style={{ backgroundImage: `url(${member?.profileImageUrl})` }}></div>
           ) : (
             <div className={`myinfo-color myinfo-color-${generateColor(member.nickname)}`}>
               <div className='myinfo-initial'>{member.nickname.toUpperCase()[0]}</div>
             </div>
-          )}
+          )} */}
         </li>
       ))}
       {/* 5명 넘어갈때 몇명더 있는지 해주는 이미지 */}
@@ -301,7 +305,7 @@ function ProfileInfo({ myInfo }: { myInfo: SetMyInfo | null }) {
     <div className='myinfo' onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
       <div
         className='myinfo-image'
-        style={{ backgroundImage: `url(${getDefaultImageUrlIfNull(myInfo?.profileImageUrl)})` }}
+        style={{ backgroundImage: `url(${getDefaultImageUrlIfNull(myInfo?.profileImageUrl)}) no-repeat center` }}
       ></div>
       {/* {hasImg == false ? (
         <div className={`myinfo-color myinfo-color-${imageBackgroundColor}`}>
