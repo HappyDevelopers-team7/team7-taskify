@@ -64,8 +64,8 @@ const DashboardHeader = () => {
 
   useEffect(() => {
     const fetchDashboardInfo = async () => {
+      if (!id) return;
       try {
-        if (!id) return;
         const res = await axiosInstance.get(`${API.DASHBOARDS.DASHBOARDS}/${id}`);
         const responseData = await res.data;
         setCurrentDashboard(responseData);
@@ -79,6 +79,7 @@ const DashboardHeader = () => {
 
   useEffect(() => {
     const fetchDashboardMemberInfo = async () => {
+      if (!id) return;
       try {
         const res = await axiosInstance.get(API.MEMBERS.MEMBERS, {
           params: { page: 1, size: 4, dashboardId: id ?? 1 },
