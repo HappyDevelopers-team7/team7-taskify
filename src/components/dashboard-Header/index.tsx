@@ -11,6 +11,7 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import InviteDashboard from '../modal-contents/invite-dashboard';
+import getDefaultImageUrlIfNull from '@/utils/getDefaultImageIfNull';
 
 interface User {
   id: number;
@@ -105,8 +106,8 @@ const DashboardHeader = () => {
       <DashboardId currentDashboard={currentDashboard} id={id} />
       {/* <div> */}
       <div className='dashboard-right-space'>
-        {currentDashboard?.createdByMe && <EditButton onClick={handleEditClick} />}
-        <InviteButton onClick={handleClickInviteDashboard} membersInfo={membersInfo} />
+        {currentDashboard?.createdByMe && id && <EditButton onClick={handleEditClick} />}
+        {id ? <InviteButton onClick={handleClickInviteDashboard} membersInfo={membersInfo} /> : null}
         {openModalName === 'InviteDashboard' ? <InviteDashboard id={id || ''} /> : null}
         {membersInfo && <DashboardMembers membersInfo={membersInfo} />}
         <ProfileInfo myInfo={myInfo} />
@@ -191,48 +192,78 @@ function DashboardId({ currentDashboard, id }: Props) {
 }
 
 function DashboardMembers({ membersInfo }: { membersInfo: DashboardmembersInfo }) {
-  const extraCount: number = membersInfo.totalCount >= 5 ? membersInfo.totalCount - 4 : 0;
+  const extraCount: number = membersInfo.members.length >= 5 ? membersInfo.members.length - 4 : 0;
   const slicedMembers = membersInfo.members.slice(0, 5);
   const containerSize = CONTAINER_SIZE[slicedMembers.length - 1];
+  const [isMemberInfoOpen, setIsMemberInfoOpen] = useState(false);
 
-  const generateColor = (name: string) => {
-    const key = name.toUpperCase()[0];
+  // const generateColor = (name: string) => {
+  //   const key = name.toUpperCase()[0];
 
-    switch (true) {
-      case (key >= 'A' && key < 'F') || (key >= '가' && key < '다'):
-        return 'green';
-      case (key >= 'F' && key < 'K') || (key >= '다' && key < '바'):
-        return 'purple';
-      case (key >= 'K' && key < 'Q') || (key >= '바' && key < '아'):
-        return 'orange';
-      case (key >= 'Q' && key < 'V') || (key >= '아' && key < '타'):
-        return 'blue';
-      default:
-        return 'pink';
-    }
+  //   switch (true) {
+  //     case (key >= 'A' && key < 'F') || (key >= '가' && key < '다'):
+  //       return 'green';
+  //     case (key >= 'F' && key < 'K') || (key >= '다' && key < '바'):
+  //       return 'purple';
+  //     case (key >= 'K' && key < 'Q') || (key >= '바' && key < '아'):
+  //       return 'orange';
+  //     case (key >= 'Q' && key < 'V') || (key >= '아' && key < '타'):
+  //       return 'blue';
+  //     default:
+  //       return 'pink';
+  //   }
+  // };
+
+  const handleMouseEnterShow = () => {
+    setIsMemberInfoOpen((prev) => !prev);
+  };
+  const handleMouseLeaveHide = () => {
+    setIsMemberInfoOpen((prev) => !prev);
   };
 
   return (
     // 멤버들 먼저가입한 순서대로 출력
-    <ul className={`dashboard-info-members-container ${containerSize}`}>
-      {slicedMembers.map((member: User) => (
-        <li key={member.id}>
-          {member.profileImageUrl ? (
+    <>
+      <ul
+        className={`dashboard-info-members-container ${containerSize}`}
+        onMouseEnter={handleMouseEnterShow}
+        onMouseLeave={handleMouseLeaveHide}
+      >
+        {slicedMembers.map((member: User) => (
+          <li key={member.id}>
+            <div
+              className='myinfo-image'
+              style={{ backgroundImage: `url(${getDefaultImageUrlIfNull(member?.profileImageUrl)})` }}
+            ></div>
+            {/* {member.profileImageUrl ? (
             <div className={`myinfo-image`} style={{ backgroundImage: `url(${member?.profileImageUrl})` }}></div>
           ) : (
             <div className={`myinfo-color myinfo-color-${generateColor(member.nickname)}`}>
               <div className='myinfo-initial'>{member.nickname.toUpperCase()[0]}</div>
             </div>
-          )}
-        </li>
-      ))}
-      {/* 5명 넘어갈때 몇명더 있는지 해주는 이미지 */}
-      {extraCount > 0 && (
-        <li>
-          <div className='myinfo-color extracolor'>{`+${extraCount}`}</div>
-        </li>
-      )}
-    </ul>
+          )} */}
+          </li>
+        ))}
+        {/* 5명 넘어갈때 몇명더 있는지 해주는 이미지 */}
+        {extraCount > 0 && (
+          <li>
+            <div className='myinfo-color extracolor'>{`+${extraCount}`}</div>
+          </li>
+        )}
+        {isMemberInfoOpen ? (
+          <li className='hover-member-info'>
+            <span>
+              {slicedMembers.map((member: User, index: number) => (
+                <span key={member.id}>
+                  {member.nickname}
+                  {index !== slicedMembers.length - 1 && ','}
+                </span>
+              ))}
+            </span>
+          </li>
+        ) : null}
+      </ul>
+    </>
   );
 }
 
@@ -245,34 +276,34 @@ function ProfileInfo({ myInfo }: { myInfo: SetMyInfo | null }) {
   if (!myInfo) {
     return null; // myInfo가 없을 경우 렌더링하지 않음
   }
-  let hasImg: boolean = false;
-  hasImg = myInfo.profileImageUrl === null ? false : true; //프로필 이미지를 가지고 있는지 체크
+  // let hasImg: boolean = false;
+  // hasImg = myInfo.profileImageUrl === null ? false : true; //프로필 이미지를 가지고 있는지 체크
 
-  const COLORS = ['green', 'purple', 'orange', 'blue', 'pink'] as const;
+  // const COLORS = ['green', 'purple', 'orange', 'blue', 'pink'] as const;
 
-  const generateColor = (name: string) => {
-    const key = name.toUpperCase()[0];
+  // const generateColor = (name: string) => {
+  //   const key = name.toUpperCase()[0];
 
-    switch (true) {
-      case (key >= 'A' && key < 'F') || (key >= '가' && key < '다'):
-        return COLORS[0];
-      case (key >= 'F' && key < 'K') || (key >= '다' && key < '바'):
-        return COLORS[1];
-      case (key >= 'K' && key < 'Q') || (key >= '바' && key < '아'):
-        return COLORS[2];
-      case (key >= 'Q' && key < 'V') || (key >= '아' && key < '타'):
-        return COLORS[3];
-      default:
-        return COLORS[4];
-    }
-  };
+  //   switch (true) {
+  //     case (key >= 'A' && key < 'F') || (key >= '가' && key < '다'):
+  //       return COLORS[0];
+  //     case (key >= 'F' && key < 'K') || (key >= '다' && key < '바'):
+  //       return COLORS[1];
+  //     case (key >= 'K' && key < 'Q') || (key >= '바' && key < '아'):
+  //       return COLORS[2];
+  //     case (key >= 'Q' && key < 'V') || (key >= '아' && key < '타'):
+  //       return COLORS[3];
+  //     default:
+  //       return COLORS[4];
+  //   }
+  // };
 
-  const initial = myInfo!.nickname.toUpperCase()[0];
+  // const initial = myInfo!.nickname.toUpperCase()[0];
 
-  let imageBackgroundColor: string = '';
-  if (myInfo && hasImg == false) {
-    imageBackgroundColor = generateColor(myInfo.nickname);
-  }
+  // let imageBackgroundColor: string = '';
+  // if (myInfo && hasImg == false) {
+  //   imageBackgroundColor = generateColor(myInfo.nickname);
+  // }
 
   // 드롭다운 나타나게함
   const handleMouseEnter = () => {
@@ -298,13 +329,17 @@ function ProfileInfo({ myInfo }: { myInfo: SetMyInfo | null }) {
   return (
     //가져온 정보들을 가지고 여기서 프로필을 띄운다.
     <div className='myinfo' onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-      {hasImg == false ? (
+      <div
+        className='myinfo-image'
+        style={{ backgroundImage: `url(${getDefaultImageUrlIfNull(myInfo?.profileImageUrl)})` }}
+      ></div>
+      {/* {hasImg == false ? (
         <div className={`myinfo-color myinfo-color-${imageBackgroundColor}`}>
           <div className='myinfo-initial'>{initial}</div>
         </div>
       ) : (
         <div className='myinfo-image' style={{ backgroundImage: `url(${myInfo?.profileImageUrl})` }}></div>
-      )}
+      )} */}
       <div className='myinfo-name'>{myInfo?.nickname}</div>
       {isDropdownOpen ? (
         <ul className='drop-down-menu'>
