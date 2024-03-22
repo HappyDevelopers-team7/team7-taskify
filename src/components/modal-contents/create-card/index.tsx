@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, ChangeEvent, KeyboardEvent, MouseEvent } from 'react';
+import { useState, useEffect, useRef, ChangeEvent, KeyboardEvent } from 'react';
 import { useDispatch } from 'react-redux';
 import { closeModal } from '@/redux/modalSlice';
 import { dashboardIdTypes } from '@/types/dashboardIdTypes';
@@ -20,7 +20,7 @@ interface Props {
   columnData: dashboardIdTypes['Columns'];
   memberData: dashboardIdTypes['Members'][];
   dashboardId: string | undefined;
-  viewCards: () => void;
+  viewCards: (columId: number) => void;
 }
 
 const CreateCard = ({ memberData, columnData, dashboardId, viewCards }: Props) => {
@@ -73,7 +73,7 @@ const CreateCard = ({ memberData, columnData, dashboardId, viewCards }: Props) =
       alert(`오류가 발생했습니다.(${err})`);
     } finally {
       setIsLoading(false);
-      viewCards();
+      viewCards(columnData.id);
     }
   };
 
@@ -106,10 +106,8 @@ const CreateCard = ({ memberData, columnData, dashboardId, viewCards }: Props) =
     }
   };
 
-  const handleRemoveTag = (e: MouseEvent<HTMLElement>) => {
-    const target = e.target as HTMLElement;
-    const removeTag = target.innerText;
-    setTags(tags.filter((item) => item !== removeTag));
+  const handleRemoveTag = (tag: string) => {
+    setTags(tags.filter((item) => item !== tag));
   };
 
   const handleUploadFile = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -142,7 +140,7 @@ const CreateCard = ({ memberData, columnData, dashboardId, viewCards }: Props) =
   };
 
   useEffect(() => {
-    viewCards();
+    viewCards(columnData.id);
     if (memberData.length > 0) {
       // 멤버 목록을 받아왔을때 프로필이 null이면 기본값으로 변경
       memberData.forEach((member) => {
@@ -164,7 +162,6 @@ const CreateCard = ({ memberData, columnData, dashboardId, viewCards }: Props) =
     } else if (cardData.asignee === '') {
       SetFilterdMember(memberData);
     }
-    console.log(filterdMember);
   }, [cardData]);
 
   return (
@@ -271,7 +268,7 @@ const CreateCard = ({ memberData, columnData, dashboardId, viewCards }: Props) =
                   key={index}
                   name={tag}
                   backgroundColor={makeRandomBackgroundColor(index)}
-                  onClick={(e) => handleRemoveTag(e)}
+                  onClick={() => handleRemoveTag(tag)}
                 />
               ))}
           </div>
