@@ -28,6 +28,7 @@ const EditCard = ({ card, thisColumn, columns, memberData, viewCards }: CardObje
   const today = new Date();
   const asigneeRef = useRef<number | null>(card.assignee?.id || null);
   const imgRef = useRef<HTMLImageElement>(null!);
+  const divRef = useRef<HTMLDivElement>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(card.imageUrl);
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -63,24 +64,28 @@ const EditCard = ({ card, thisColumn, columns, memberData, viewCards }: CardObje
         assigneeUserId: asigneeRef ? asigneeRef.current : undefined,
         title: editCardData.title,
         description: editCardData.description,
-        dueDate: editCardData.dueDate ? editCardData.dueDate : undefined,
+        dueDate: editCardData.dueDate ? editCardData.dueDate : null,
         tags: tags,
         imageUrl: imageUrl ? imageUrl : undefined,
       });
 
-      alert('수정완료');
+      toast.success('수정완료');
       dispatch(closeModal());
     } catch (err) {
       alert(err);
     } finally {
       setIsLoading(false);
-      viewCards();
-      window.location.reload();
+      viewCards(thisColumn.id);
+      viewCards(selectedColumnId);
     }
   };
 
   const handleStatusDropdown = () => {
     setIsDropdownStatus((current) => !current);
+    const div = divRef.current;
+    if (!isDropdownStatus) {
+      div?.classList.add('focused');
+    }
   };
 
   const handleAsigneeDropdown = (e: ChangeEvent<HTMLInputElement>) => {
@@ -94,10 +99,12 @@ const EditCard = ({ card, thisColumn, columns, memberData, viewCards }: CardObje
   const handleSelectColumn = (e: MouseEvent<HTMLElement>) => {
     const target = e.target as HTMLElement;
     const newColumnName = target.innerText;
+    const div = divRef.current;
     setSelectedColumnName(newColumnName);
     const newColumnId = columns.find((column) => column.title === newColumnName)?.id;
     if (newColumnId !== undefined) setSelectedColumnId(newColumnId);
     setIsDropdownStatus(false);
+    div?.classList.remove('focused');
   };
 
   const handleClickedMember = (member: dashboardIdTypes['Members']) => {
@@ -109,6 +116,7 @@ const EditCard = ({ card, thisColumn, columns, memberData, viewCards }: CardObje
   };
 
   const handleCreateTag = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.nativeEvent.isComposing) return;
     if (e.key === 'Enter') {
       const input = editCardData.tag;
       setTags((prev) => [...prev, input]);
@@ -116,10 +124,8 @@ const EditCard = ({ card, thisColumn, columns, memberData, viewCards }: CardObje
     }
   };
 
-  const handleRemoveTag = (e: MouseEvent<HTMLElement>) => {
-    const target = e.target as HTMLElement;
-    const removeTag = target.innerText;
-    setTags(tags.filter((item) => item !== removeTag));
+  const handleRemoveTag = (tag: string) => {
+    setTags(tags.filter((item) => item !== tag));
   };
 
   const handleUploadFile = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -127,7 +133,7 @@ const EditCard = ({ card, thisColumn, columns, memberData, viewCards }: CardObje
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
       if (!file.type.startsWith('image/') || file.type === 'image/gif') {
-        alert('파일은 gif를 제외한 이미지 타입만 첨부 가능합니다.');
+        toast.warning('파일은 gif를 제외한 이미지 타입만 첨부 가능합니다.');
       } else {
         setUploadedFile(file);
         const formData = new FormData();
@@ -151,6 +157,18 @@ const EditCard = ({ card, thisColumn, columns, memberData, viewCards }: CardObje
     setAsigneeName('');
     setUserProfile('');
   };
+
+  useEffect(() => {
+    viewCards(thisColumn.id);
+    if (memberData.length > 0) {
+      // 멤버 목록을 받아왔을때 프로필이 null이면 기본값으로 변경
+      memberData.forEach((member) => {
+        member.profileImageUrl = member.profileImageUrl
+          ? member.profileImageUrl
+          : '/assets/image/icons/bannerLogoIconXL.svg';
+      });
+    }
+  }, [memberData]);
 
   useEffect(() => {
     if (asgineeName !== '') {
@@ -185,7 +203,7 @@ const EditCard = ({ card, thisColumn, columns, memberData, viewCards }: CardObje
         <div className='auth-box'>
           <div className='auth-box-first-div'>
             <h3>상태</h3>
-            <div className='input-box status-box' onClick={handleStatusDropdown}>
+            <div className='input-box status-box' onClick={handleStatusDropdown} ref={divRef}>
               <ColumnNameTag name={selectedColumnName} />
             </div>
             <div className='input-box status-list'>
@@ -271,7 +289,7 @@ const EditCard = ({ card, thisColumn, columns, memberData, viewCards }: CardObje
               minDate: dateExtractor(today).slice(0, 10),
               closeOnSelect: true,
             }}
-            onChange={(e) => setEditCardData({ ...editCardData, dueDate: dateExtractor(e[0]) })}
+            onChange={(e) => setEditCardData({ ...editCardData, dueDate: e[0] ? dateExtractor(e[0]) : null })}
           />
         </div>
         <div>
@@ -291,7 +309,7 @@ const EditCard = ({ card, thisColumn, columns, memberData, viewCards }: CardObje
                   key={index}
                   name={tag}
                   backgroundColor={makeRandomBackgroundColor(index)}
-                  onClick={(e) => handleRemoveTag(e)}
+                  onClick={() => handleRemoveTag(tag)}
                 />
               ))}
           </div>

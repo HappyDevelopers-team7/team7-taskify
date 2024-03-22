@@ -75,13 +75,16 @@ const CardDetail = ({ idGroup, cardId }: CardDetailProps) => {
                 <div className='column-name-box'>
                   <ColumnNameTag name={idGroup.columnTitle} />
                 </div>
-                <span className='divide-bar'></span>
-                <div className='sub-tag-box'>
-                  {detail?.tags &&
-                    detail?.tags.map((tag, index) => (
-                      <TagComponent key={index} name={tag} backgroundColor={makeRandomBackgroundColor(index)} />
-                    ))}
-                </div>
+                {detail?.tags && detail?.tags.length > 0 ? (
+                  <>
+                    <span className='divide-bar'></span>
+                    <div className='sub-tag-box'>
+                      {detail?.tags.map((tag, index) => (
+                        <TagComponent key={index} name={tag} backgroundColor={makeRandomBackgroundColor(index)} />
+                      ))}
+                    </div>
+                  </>
+                ) : null}
               </div>
               <DetailContentArea imageUrl={detail?.imageUrl} content={detail?.description} />
               <DetailCommentArea idGroup={idGroup} cardId={cardId} />

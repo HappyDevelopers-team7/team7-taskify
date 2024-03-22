@@ -4,9 +4,9 @@ import { styled } from 'styled-components';
 
 export const StMyPageContainer = styled.div`
   ${commonHeight}
-  background: #fafafa;
-  color: var(--black-black_333236, #333236);
-  font-size: 16px;
+  background: ${({ theme }) => theme.color.gray_fa};
+  color: ${({ theme }) => theme.color.black_33};
+  font-size: 1.6rem;
   font-weight: 500;
   line-height: normal;
   padding-bottom: 120px;
@@ -18,7 +18,7 @@ export const StMyPageContainer = styled.div`
   }
 
   h1 {
-    font-size: 24px;
+    font-size: 2.4rem;
     font-weight: 700;
     margin: 30px auto;
   }
@@ -33,9 +33,9 @@ export const StMyPageContainer = styled.div`
     height: 32px;
     border-radius: 4px;
     background: var(--violet-violet_5534DA, #5534da);
-    color: var(--white-white_FFFFFF, #fff);
+    color: ${({ theme }) => theme.color.white};
     text-align: center;
-    font-size: 14px;
+    font-size: 1.4rem;
     font-weight: 500;
     line-height: normal;
   }
@@ -64,8 +64,8 @@ export const StProfileContainer = styled.div`
 
   .profile-small-title {
     margin-bottom: 10px;
-    color: var(--black-black_333236, #333236);
-    font-size: 18px;
+    color: ${({ theme }) => theme.color.black_33};
+    font-size: 1.8rem;
     font-weight: 500;
     line-height: normal;
   }
@@ -78,26 +78,24 @@ export const StProfileInput = styled.div`
   margin-bottom: 20px;
   margin-top: 10px;
   padding: 15px;
-  color: var(--gray-gray_9FA6B2, #9fa6b2);
+  color: ${({ theme }) => theme.color.gray_9f};
   font-weight: 400;
 `;
 
-export const StPasswordContainer = styled.div`
-  border-radius: 8px;
-  background-color: ${({ theme }) => theme.color.white};
-  width: 620px;
-  height: auto;
-  padding: 30px;
-  margin: 20px;
-`;
-
-export const StPasswordInputContainer = styled.div`
+export const StProfileInputReadOnly = styled.div`
   ${inputContainer}
-  width: 564px;
+  width: 366px;
   height: 48px;
   margin-bottom: 20px;
   margin-top: 10px;
   padding: 15px;
-  color: var(--gray-gray_9FA6B2, #9fa6b2);
+  color: ${({ theme }) => theme.color.gray_9f};
   font-weight: 400;
+  &:focus-within {
+    border: 1px solid ${({ theme }) => theme.color.gray_d9};
+  }
+
+  input {
+    cursor: default;
+  }
 `;
