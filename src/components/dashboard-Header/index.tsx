@@ -105,8 +105,8 @@ const DashboardHeader = () => {
       <DashboardId currentDashboard={currentDashboard} id={id} />
       {/* <div> */}
       <div className='dashboard-right-space'>
-        {currentDashboard?.createdByMe && <EditButton onClick={handleEditClick} />}
-        <InviteButton onClick={handleClickInviteDashboard} membersInfo={membersInfo} />
+        {currentDashboard?.createdByMe && id && <EditButton onClick={handleEditClick} />}
+        {id ? <InviteButton onClick={handleClickInviteDashboard} membersInfo={membersInfo} /> : null}
         {openModalName === 'InviteDashboard' ? <InviteDashboard id={id || ''} /> : null}
         {membersInfo && <DashboardMembers membersInfo={membersInfo} />}
         <ProfileInfo myInfo={myInfo} />
