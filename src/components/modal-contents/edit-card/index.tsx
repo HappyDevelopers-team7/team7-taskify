@@ -123,10 +123,8 @@ const EditCard = ({ card, thisColumn, columns, memberData, viewCards }: CardObje
     }
   };
 
-  const handleRemoveTag = (e: MouseEvent<HTMLElement>) => {
-    const target = e.target as HTMLElement;
-    const removeTag = target.innerText;
-    setTags(tags.filter((item) => item !== removeTag));
+  const handleRemoveTag = (tag: string) => {
+    setTags(tags.filter((item) => item !== tag));
   };
 
   const handleUploadFile = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -310,7 +308,7 @@ const EditCard = ({ card, thisColumn, columns, memberData, viewCards }: CardObje
                   key={index}
                   name={tag}
                   backgroundColor={makeRandomBackgroundColor(index)}
-                  onClick={(e) => handleRemoveTag(e)}
+                  onClick={() => handleRemoveTag(tag)}
                 />
               ))}
           </div>

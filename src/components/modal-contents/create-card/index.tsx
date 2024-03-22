@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, ChangeEvent, KeyboardEvent, MouseEvent } from 'react';
+import { useState, useEffect, useRef, ChangeEvent, KeyboardEvent } from 'react';
 import { useDispatch } from 'react-redux';
 import { closeModal } from '@/redux/modalSlice';
 import { dashboardIdTypes } from '@/types/dashboardIdTypes';
@@ -106,10 +106,8 @@ const CreateCard = ({ memberData, columnData, dashboardId, viewCards }: Props) =
     }
   };
 
-  const handleRemoveTag = (e: MouseEvent<HTMLElement>) => {
-    const target = e.target as HTMLElement;
-    const removeTag = target.innerText;
-    setTags(tags.filter((item) => item !== removeTag));
+  const handleRemoveTag = (tag: string) => {
+    setTags(tags.filter((item) => item !== tag));
   };
 
   const handleUploadFile = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -270,7 +268,7 @@ const CreateCard = ({ memberData, columnData, dashboardId, viewCards }: Props) =
                   key={index}
                   name={tag}
                   backgroundColor={makeRandomBackgroundColor(index)}
-                  onClick={(e) => handleRemoveTag(e)}
+                  onClick={() => handleRemoveTag(tag)}
                 />
               ))}
           </div>
