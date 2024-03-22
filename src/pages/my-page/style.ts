@@ -48,6 +48,7 @@ export const StProfileContainer = styled.div`
   border-radius: 8px;
   padding: 32px 28px;
   margin: 0 20px 20px;
+  /* display: table; */
 
   img {
     cursor: pointer;
@@ -55,6 +56,13 @@ export const StProfileContainer = styled.div`
 
   .profile-container {
     display: flex;
+
+    img {
+      max-width: 182px;
+      max-height: 182px;
+      width: auto;
+      height: auto;
+    }
   }
 
   .profile-input-container {
