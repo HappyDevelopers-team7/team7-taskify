@@ -86,6 +86,7 @@ const StMemberListDiv = styled.div`
       justify-content: center;
     }
     .myinfo-image {
+      background-size: contain;
       width: 38px;
       height: 38px;
       flex-shrink: 0;

@@ -2,27 +2,14 @@ import { useEffect, useState } from 'react';
 import StMemberListDiv from './style';
 import { getDashboardMemberList } from '@/api/getDashboardMemberList';
 import { useParams } from 'react-router-dom';
-// import { DashboardMembers } from '../dashboard-Header';
+import { DashboardMembers } from '../dashboard-Header';
 import ArrowButton from '../arrow_button';
 import React from 'react';
 import { deleteDashboardMember } from '@/api/deleteDashboardMember';
 import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, fetchMyInfo, getMyInfo } from '@/redux/myInfoSlice';
-
-export interface User {
-  id: number;
-  email: string;
-  nickname: string;
-  profileImageUrl: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface DashboardMembers {
-  members: User[];
-  totalCount: number;
-}
+import getDefaultImageUrlIfNull from '@/utils/getDefaultImageIfNull';
 
 const EditDashboardMemberList = () => {
   const { id } = useParams<{ id: string }>();
@@ -32,7 +19,6 @@ const EditDashboardMemberList = () => {
   const currentMembers = member?.members || [];
   const dispatch = useDispatch<AppDispatch>();
   const myInfo = useSelector(getMyInfo);
-  // const [dashboardCreateByme, setDashboardCreateByme] = useState<boolean | null>(null);
 
   const handleLeftClick = () => setCurrentPage(currentPage - 1);
   const handleRightClick = () => setCurrentPage(currentPage + 1);
@@ -88,23 +74,22 @@ const EditDashboardMemberList = () => {
   };
 
   const containerSize = getContainerSizeClass(currentMembers.length);
+  // const generateColor = (name: string) => {
+  //   const key = name.toUpperCase()[0];
 
-  const generateColor = (name: string) => {
-    const key = name.toUpperCase()[0];
-
-    switch (true) {
-      case (key >= 'A' && key < 'F') || (key >= '가' && key < '다'):
-        return 'green';
-      case (key >= 'F' && key < 'K') || (key >= '다' && key < '바'):
-        return 'purple';
-      case (key >= 'K' && key < 'Q') || (key >= '바' && key < '아'):
-        return 'orange';
-      case (key >= 'Q' && key < 'V') || (key >= '아' && key < '타'):
-        return 'blue';
-      default:
-        return 'pink';
-    }
-  };
+  //   switch (true) {
+  //     case (key >= 'A' && key < 'F') || (key >= '가' && key < '다'):
+  //       return 'green';
+  //     case (key >= 'F' && key < 'K') || (key >= '다' && key < '바'):
+  //       return 'purple';
+  //     case (key >= 'K' && key < 'Q') || (key >= '바' && key < '아'):
+  //       return 'orange';
+  //     case (key >= 'Q' && key < 'V') || (key >= '아' && key < '타'):
+  //       return 'blue';
+  //     default:
+  //       return 'pink';
+  //   }
+  // };
 
   return (
     <StMemberListDiv>
@@ -133,12 +118,16 @@ const EditDashboardMemberList = () => {
                   <p>{member.nickname}</p>
                 </div>
               ) : (
-                <div className='profile-box'>
-                  <div className={`myinfo-color myinfo-color-${generateColor(member.nickname)}`}>
-                    <div className='myinfo-initial'>{member.nickname.toUpperCase()[0]}</div>
-                  </div>
-                  <p>{member.nickname}</p>
-                </div>
+                <div
+                  className='myinfo-image'
+                  style={{ backgroundImage: `url(${getDefaultImageUrlIfNull(member?.profileImageUrl)})` }}
+                ></div>
+                // <div className='profile-box'>
+                //   <div className={`myinfo-color myinfo-color-${generateColor(member.nickname)}`}>
+                //     <div className='myinfo-initial'>{member.nickname.toUpperCase()[0]}</div>
+                //   </div>
+                //   <p>{member.nickname}</p>
+                // </div>
               )}
               {myInfo.id === member.id ? (
                 <button className='delete-button' onClick={() => handleDeleteUserClick(member.id)}>
