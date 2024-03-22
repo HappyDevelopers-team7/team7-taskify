@@ -11,6 +11,8 @@ import Column from '@/components/column';
 import LoadingSpinner from '@/components/loading-spinner';
 import AddColumnModal from '../../components/modal-add-column';
 
+import { ColumnCardType } from '@/types/columnCardType';
+
 const DashBoardId = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -18,6 +20,7 @@ const DashBoardId = () => {
   const [columns, setColumns] = useState<dashboardIdTypes['Columns'][]>([]);
   const [members, setMembers] = useState<dashboardIdTypes['Members'][]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [cardInfo, setCardInfo] = useState<Record<string, ColumnCardType[]>>();
 
   const viewColumns = () => {
     setIsLoading(true);
@@ -60,6 +63,8 @@ const DashBoardId = () => {
             memberData={members}
             viewColumns={viewColumns}
             columns={columns}
+            cardInfo={cardInfo}
+            setCardInfo={setCardInfo}
           />
         ))}
       <div className='button-box'>

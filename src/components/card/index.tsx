@@ -17,13 +17,13 @@ import { dashboardIdTypes } from '@/types/dashboardIdTypes';
 
 interface CardProps {
   cardList: ColumnCardType[];
-  setCardList: Dispatch<SetStateAction<ColumnCardType[] | undefined>>;
+  setCardList: Dispatch<SetStateAction<Record<string, ColumnCardType[]> | undefined>>;
   idGroup: IdGroupType;
   card: ColumnCardType;
   columns: dashboardIdTypes['Columns'][];
   thisColumn: dashboardIdTypes['Columns'];
   memberData: dashboardIdTypes['Members'][];
-  viewCards: () => void;
+  viewCards: (columId: number) => void;
 }
 
 const Card = ({ cardList, setCardList, card, idGroup, thisColumn, columns, memberData, viewCards }: CardProps) => {
@@ -38,7 +38,11 @@ const Card = ({ cardList, setCardList, card, idGroup, thisColumn, columns, membe
         dispatch(closeSecondModal());
         dispatch(closeModal());
         const updatedCommentList = cardList?.filter((cardItem) => cardItem.id !== card.id);
-        setCardList(updatedCommentList);
+        // setCardList(updatedCommentList);
+        setCardList((prev) => ({
+          ...prev,
+          [thisColumn.id]: updatedCommentList,
+        }));
         return toast.success(SIMPLE_MESSAGES.DELETED);
       }
       return toast.success(SIMPLE_MESSAGES.TRY_AGAIN);
