@@ -12,8 +12,8 @@ const theme = {
   color: {
     white: '#ffffff',
     red: '#D6173A',
-    red_d2: 'D25B68',
-    red_f4: 'F4D7DA',
+    red_d2: '#D25B68',
+    red_f4: '#F4D7DA',
     green: '#7AC555',
     green_5b: '#5BE352',
     purple: '#760DDE',
