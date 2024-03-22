@@ -149,6 +149,9 @@
 
 ![image](https://github.com/HappyDevelopers-team7/team7-taskify/assets/134386378/caaa134a-c977-43f6-9954-ebc6e11cdae5)
 
+#### 시연
+![ezgif com-video-to-gif-converter (1)](https://github.com/HappyDevelopers-team7/team7-taskify/assets/134386378/7c4b704d-7ac4-45cc-a834-c90ae15c1e0b)
+
 
 - 사용자의 선택을 존중하지만, 사람은 누구나 실수를 하기 때문에 쿠션을 하나 넣어주었습니다. (주로 거절 / 삭제 등에 사용됨)
 
