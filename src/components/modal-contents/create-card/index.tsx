@@ -20,12 +20,13 @@ interface Props {
   columnData: dashboardIdTypes['Columns'];
   memberData: dashboardIdTypes['Members'][];
   dashboardId: string | undefined;
-  viewCards: () => void;
+  viewCards: (columId: number) => void;
 }
 
 const CreateCard = ({ memberData, columnData, dashboardId, viewCards }: Props) => {
   const dispatch = useDispatch();
   const today = new Date();
+  const imgRef = useRef<HTMLImageElement>(null!);
   const assigneeRef = useRef<number | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -66,13 +67,13 @@ const CreateCard = ({ memberData, columnData, dashboardId, viewCards }: Props) =
         imageUrl ? imageUrl : undefined,
       );
 
-      alert('생성 성공');
+      toast.success('생성 성공');
       dispatch(closeModal());
     } catch (err) {
       alert(`오류가 발생했습니다.(${err})`);
     } finally {
       setIsLoading(false);
-      viewCards();
+      viewCards(columnData.id);
     }
   };
 
@@ -105,11 +106,15 @@ const CreateCard = ({ memberData, columnData, dashboardId, viewCards }: Props) =
     }
   };
 
+  const handleRemoveTag = (tag: string) => {
+    setTags(tags.filter((item) => item !== tag));
+  };
+
   const handleUploadFile = async (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
       if (!file.type.startsWith('image/') || file.type === 'image/gif') {
-        alert('파일은 gif를 제외한 이미지 타입만 첨부 가능합니다.');
+        toast.warning('파일은 gif를 제외한 이미지 타입만 첨부 가능합니다.');
       } else {
         setUploadedFile(file);
         const formData = new FormData();
@@ -126,6 +131,26 @@ const CreateCard = ({ memberData, columnData, dashboardId, viewCards }: Props) =
     }
   };
 
+  const handleAssigneeClear = () => {
+    const img = imgRef.current;
+    if (img) img.classList.add('hidden');
+    assigneeRef.current = null;
+    setCardData({ ...cardData, asignee: '' });
+    setUserProfile('');
+  };
+
+  useEffect(() => {
+    viewCards(columnData.id);
+    if (memberData.length > 0) {
+      // 멤버 목록을 받아왔을때 프로필이 null이면 기본값으로 변경
+      memberData.forEach((member) => {
+        member.profileImageUrl = member.profileImageUrl
+          ? member.profileImageUrl
+          : '/assets/image/icons/bannerLogoIconXL.svg';
+      });
+    }
+  }, [memberData]);
+
   useEffect(() => {
     // 입력값이 변할때마다 검색결과 재적용
     if (cardData.asignee !== '') {
@@ -137,7 +162,6 @@ const CreateCard = ({ memberData, columnData, dashboardId, viewCards }: Props) =
     } else if (cardData.asignee === '') {
       SetFilterdMember(memberData);
     }
-    console.log(filterdMember);
   }, [cardData]);
 
   return (
@@ -152,8 +176,15 @@ const CreateCard = ({ memberData, columnData, dashboardId, viewCards }: Props) =
       <StCreateCard $Profile={userProfile} $IsDropdown={isDropdown} $Tag={tags} $Preview={previewUrl}>
         {isLoading && <LoadingSpinner />}
         <div className='section-div first-div'>
-          <h3>담당자</h3>
+          <h3 onClick={handleAssigneeClear}>담당자</h3>
+          <img
+            src='/assets/image/icons/removeIcon.svg'
+            className='remove-icon'
+            alt='remove-icon'
+            onClick={handleAssigneeClear}
+          />
           <input
+            value={cardData.asignee}
             className='input-box asignee-box'
             placeholder='이름을 입력해 주세요'
             type='text'
@@ -162,7 +193,7 @@ const CreateCard = ({ memberData, columnData, dashboardId, viewCards }: Props) =
             onFocus={(e) => handleDropdown(e)}
             onBlur={() => setIsDropdown(false)}
           />
-          {userProfile && <img src={userProfile} className='user-image in-searchbar' />}
+          {userProfile && <img src={userProfile} className='user-image in-searchbar' ref={imgRef} />}
           <div className='input-box member-list'>
             {isDropdown &&
               filterdMember.map((member) => (
@@ -233,7 +264,12 @@ const CreateCard = ({ memberData, columnData, dashboardId, viewCards }: Props) =
           <div className='input-box tag-list'>
             {tags &&
               tags.map((tag, index) => (
-                <TagComponent key={index} name={tag} backgroundColor={makeRandomBackgroundColor(index)} />
+                <TagComponent
+                  key={index}
+                  name={tag}
+                  backgroundColor={makeRandomBackgroundColor(index)}
+                  onClick={() => handleRemoveTag(tag)}
+                />
               ))}
           </div>
         </div>

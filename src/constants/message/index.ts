@@ -30,6 +30,7 @@ export const INPUT_ERROR_MESSAGES = {
 
 export const DASHBOARD_MESSAGES = {
   CREATE_DASHBOARD: '대시보드가 생성되었습니다.',
+  CHANGE_DASHBOARD: '대시보드가 변경되었습니다.',
 } as const;
 
 export const DASHBOARD_ERROR_MESSAGES = {

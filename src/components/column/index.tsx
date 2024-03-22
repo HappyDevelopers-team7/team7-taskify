@@ -1,11 +1,10 @@
 import { AppDispatch } from '@/redux/myInfoSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { ColumnContainer } from './style';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Dispatch, SetStateAction } from 'react';
 import { ModalRootState, openModal, setOpenModalName } from '@/redux/modalSlice';
 import { ColumnCardType } from '@/types/columnCardType';
 import { dashboardIdTypes } from '@/types/dashboardIdTypes';
-import { Types } from '@/types/columnDetailTypes';
 import axiosInstance from '@/api/instance/axiosInstance';
 import API from '@/api/constants';
 import Card from '../card';
@@ -19,14 +18,28 @@ interface Props {
   viewColumns: () => void;
   dashboardId: string | undefined;
   columns: dashboardIdTypes['Columns'][];
+  cardInfo: Record<string, ColumnCardType[]> | undefined;
+  // setState type
+  setCardInfo: Dispatch<SetStateAction<Record<string, ColumnCardType[]> | undefined>>;
+  totalCount: Record<number, number> | undefined;
+  setTotalCount: Dispatch<SetStateAction<Record<number, number> | undefined>>;
 }
 
-const Column = ({ columnData, memberData, viewColumns, dashboardId, columns }: Props) => {
+const Column = ({
+  columnData,
+  memberData,
+  viewColumns,
+  dashboardId,
+  columns,
+  setCardInfo,
+  cardInfo,
+  totalCount,
+  setTotalCount,
+}: Props) => {
   const dispatch = useDispatch<AppDispatch>();
   const MORE_CARDS = 3;
   const openModalName = useSelector((state: ModalRootState) => state.modal.openModalName);
-  const [cardInfo, setCardInfo] = useState<ColumnCardType[]>();
-  const [totalCount, setTotalCount] = useState<Types['totalCount']>(0);
+  //const [totalCount, setTotalCount] = useState<Types['totalCount']>(0);
   const [isLoading, setIsLoading] = useState(false);
   const [pages, setPages] = useState<number>(MORE_CARDS);
 
@@ -54,29 +67,37 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId, columns }: P
     }
   };
 
-  const viewCards = async () => {
+  const viewCards = async (columId: number) => {
     setIsLoading(true);
     await axiosInstance
-      .get(`${API.CARDS.CARDS}?size=${pages}&columnId=${columnData.id}`)
+      .get(`${API.CARDS.CARDS}?size=${pages}&columnId=${columId}`)
       .then((res) => {
-        setCardInfo(res.data.cards);
-        setTotalCount(res.data.totalCount);
+        setCardInfo((prev) => ({
+          ...prev,
+          [columId]: res.data.cards,
+        }));
+        setTotalCount((prev) => ({
+          ...prev,
+          [columId]: res.data.totalCount,
+        }));
+        console.log(totalCount);
       })
       .catch((err) => alert(`카드 조회 실패(${err})`))
       .finally(() => setIsLoading(false));
   };
 
   useEffect(() => {
-    viewCards();
+    viewCards(columnData.id);
   }, [pages]);
 
+  const cardList = (cardInfo && cardInfo[columnData.id]) || [];
   return (
     <ColumnContainer>
       {isLoading && <LoadingSpinner />}
       <div className='column-head'>
         <div className='column-color' />
         <h2>{columnData.title}</h2>
-        <div className='inner-cards'>{totalCount}</div>
+        <div className='inner-cards'>{totalCount && totalCount[columnData.id]}</div>
         <img src='/assets/image/icons/settingIcon.svg' alt='setting-icon' onClick={handleEditColumn} />
       </div>
 
@@ -84,24 +105,23 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId, columns }: P
         <button type='button' className='add-card' onClick={handleOpenCreateCardModal}>
           <img src='/assets/image/icons/bannerAddIcon.svg' alt='add-icon' />
         </button>
-        {cardInfo &&
-          cardInfo.map((card) => (
-            <Card
-              key={card.id}
-              card={card}
-              idGroup={idGroup}
-              cardList={cardInfo}
-              setCardList={setCardInfo}
-              thisColumn={columnData}
-              columns={columns}
-              memberData={memberData}
-              viewCards={viewCards}
-            />
-          ))}
+        {cardList.map((card) => (
+          <Card
+            key={card.id}
+            card={card}
+            idGroup={idGroup}
+            cardList={cardList}
+            setCardList={setCardInfo}
+            thisColumn={columnData}
+            columns={columns}
+            memberData={memberData}
+            viewCards={viewCards}
+          />
+        ))}
       </div>
 
       <div className='column-foot'>
-        {totalCount > pages && (
+        {totalCount && totalCount[columnData.id] > pages && (
           <button
             onClick={() => {
               setPages((prev) => prev + MORE_CARDS);
