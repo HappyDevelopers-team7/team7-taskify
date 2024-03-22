@@ -192,7 +192,7 @@ function DashboardId({ currentDashboard, id }: Props) {
 }
 
 function DashboardMembers({ membersInfo }: { membersInfo: DashboardmembersInfo }) {
-  const extraCount: number = membersInfo.totalCount >= 5 ? membersInfo.totalCount - 4 : 0;
+  const extraCount: number = membersInfo.members.length >= 5 ? membersInfo.members.length - 4 : 0;
   const slicedMembers = membersInfo.members.slice(0, 5);
   const containerSize = CONTAINER_SIZE[slicedMembers.length - 1];
   const [isMemberInfoOpen, setIsMemberInfoOpen] = useState(false);
