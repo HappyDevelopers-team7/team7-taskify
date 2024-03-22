@@ -105,7 +105,6 @@ const EditDashboardMemberList = () => {
         return 'pink';
     }
   };
-  console.log(currentMembers);
 
   return (
     <StMemberListDiv>
