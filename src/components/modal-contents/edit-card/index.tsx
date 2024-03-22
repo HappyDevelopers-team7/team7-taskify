@@ -160,6 +160,18 @@ const EditCard = ({ card, thisColumn, columns, memberData, viewCards }: CardObje
   };
 
   useEffect(() => {
+    viewCards();
+    if (memberData.length > 0) {
+      // 멤버 목록을 받아왔을때 프로필이 null이면 기본값으로 변경
+      memberData.forEach((member) => {
+        member.profileImageUrl = member.profileImageUrl
+          ? member.profileImageUrl
+          : '/assets/image/icons/bannerLogoIconXL.svg';
+      });
+    }
+  }, [memberData]);
+
+  useEffect(() => {
     if (asgineeName !== '') {
       const data = [...memberData];
       const filterdData = data.filter((member) => {
