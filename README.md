@@ -138,7 +138,7 @@
 
 ### 📌 불필요한 alert 는 토스트 팝업으로 대체
 
-![image](https://github.com/HappyDevelopers-team7/team7-taskify/assets/134386378/47594653-8bf5-4828-9aee-d3df584ae036)
+![image](https://github.com/HappyDevelopers-team7/team7-taskify/assets/134386378/a47eddd5-2af2-419f-a41f-813cdda83114)
 
 
 - 불필요한 alert로 사용자 동작이 추가될 필요 없도록 토스트 팝업으로 대체하였습니다.
@@ -147,7 +147,8 @@
 
 ### 📌 돌이킬 수 없는 선택하기 전에 alert로 경고해주기
 
-![image](https://github.com/HappyDevelopers-team7/team7-taskify/assets/134386378/6574fe7d-0a36-4446-9ff8-31107e18e572)
+![image](https://github.com/HappyDevelopers-team7/team7-taskify/assets/134386378/caaa134a-c977-43f6-9954-ebc6e11cdae5)
+
 
 - 사용자의 선택을 존중하지만, 사람은 누구나 실수를 하기 때문에 쿠션을 하나 넣어주었습니다. (주로 거절 / 삭제 등에 사용됨)
 
