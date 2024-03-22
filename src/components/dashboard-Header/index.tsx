@@ -195,6 +195,7 @@ function DashboardMembers({ membersInfo }: { membersInfo: DashboardmembersInfo }
   const extraCount: number = membersInfo.totalCount >= 5 ? membersInfo.totalCount - 4 : 0;
   const slicedMembers = membersInfo.members.slice(0, 5);
   const containerSize = CONTAINER_SIZE[slicedMembers.length - 1];
+  const [isMemberInfoOpen, setIsMemberInfoOpen] = useState(false);
 
   // const generateColor = (name: string) => {
   //   const key = name.toUpperCase()[0];
@@ -213,31 +214,56 @@ function DashboardMembers({ membersInfo }: { membersInfo: DashboardmembersInfo }
   //   }
   // };
 
+  const handleMouseEnterShow = () => {
+    setIsMemberInfoOpen((prev) => !prev);
+  };
+  const handleMouseLeaveHide = () => {
+    setIsMemberInfoOpen((prev) => !prev);
+  };
+
   return (
     // 멤버들 먼저가입한 순서대로 출력
-    <ul className={`dashboard-info-members-container ${containerSize}`}>
-      {slicedMembers.map((member: User) => (
-        <li key={member.id}>
-          <div
-            className='myinfo-image'
-            style={{ backgroundImage: `url(${getDefaultImageUrlIfNull(member?.profileImageUrl)}) no-repeat center` }}
-          ></div>
-          {/* {member.profileImageUrl ? (
+    <>
+      <ul
+        className={`dashboard-info-members-container ${containerSize}`}
+        onMouseEnter={handleMouseEnterShow}
+        onMouseLeave={handleMouseLeaveHide}
+      >
+        {slicedMembers.map((member: User) => (
+          <li key={member.id}>
+            <div
+              className='myinfo-image'
+              style={{ backgroundImage: `url(${getDefaultImageUrlIfNull(member?.profileImageUrl)})` }}
+            ></div>
+            {/* {member.profileImageUrl ? (
             <div className={`myinfo-image`} style={{ backgroundImage: `url(${member?.profileImageUrl})` }}></div>
           ) : (
             <div className={`myinfo-color myinfo-color-${generateColor(member.nickname)}`}>
               <div className='myinfo-initial'>{member.nickname.toUpperCase()[0]}</div>
             </div>
           )} */}
-        </li>
-      ))}
-      {/* 5명 넘어갈때 몇명더 있는지 해주는 이미지 */}
-      {extraCount > 0 && (
-        <li>
-          <div className='myinfo-color extracolor'>{`+${extraCount}`}</div>
-        </li>
-      )}
-    </ul>
+          </li>
+        ))}
+        {/* 5명 넘어갈때 몇명더 있는지 해주는 이미지 */}
+        {extraCount > 0 && (
+          <li>
+            <div className='myinfo-color extracolor'>{`+${extraCount}`}</div>
+          </li>
+        )}
+        {isMemberInfoOpen ? (
+          <li className='hover-member-info'>
+            <span>
+              {slicedMembers.map((member: User, index: number) => (
+                <span key={member.id}>
+                  {member.nickname}
+                  {index !== slicedMembers.length - 1 && ','}
+                </span>
+              ))}
+            </span>
+          </li>
+        ) : null}
+      </ul>
+    </>
   );
 }
 
@@ -305,7 +331,7 @@ function ProfileInfo({ myInfo }: { myInfo: SetMyInfo | null }) {
     <div className='myinfo' onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
       <div
         className='myinfo-image'
-        style={{ backgroundImage: `url(${getDefaultImageUrlIfNull(myInfo?.profileImageUrl)}) no-repeat center` }}
+        style={{ backgroundImage: `url(${getDefaultImageUrlIfNull(myInfo?.profileImageUrl)})` }}
       ></div>
       {/* {hasImg == false ? (
         <div className={`myinfo-color myinfo-color-${imageBackgroundColor}`}>

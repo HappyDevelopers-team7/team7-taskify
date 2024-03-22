@@ -149,6 +149,7 @@ export const Container = styled.header`
     }
   }
   .dashboard-info-members-container {
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -229,6 +230,23 @@ export const Container = styled.header`
     }
     .myinfo-color-pink {
       background-color: ${({ theme }) => theme.color.pink_ff};
+    }
+
+    .hover-member-info {
+      z-index: 10;
+      width: 250px;
+      padding: 24px;
+      background-color: ${({ theme }) => theme.color.white};
+      position: absolute;
+      top: 100%;
+      left: -50%;
+      margin-left: 0;
+      box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.08);
+      border-radius: 8px;
+
+      span {
+        font-size: 1.6rem;
+      }
     }
   }
 
