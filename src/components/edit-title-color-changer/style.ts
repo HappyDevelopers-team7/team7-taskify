@@ -10,7 +10,8 @@ const StEditTitleAndColorContainer = styled.div`
   margin-bottom: 12px;
 
   .dashboard-title {
-    padding: 0px 522px 20px 28px;
+    padding: 0px 0px 20px 28px;
+    white-space: nowrap;
     color: ${({ theme }) => theme.color.black_33};
     font-family: Pretendard;
     font-size: 2rem;
