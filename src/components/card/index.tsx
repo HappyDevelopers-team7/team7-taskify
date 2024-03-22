@@ -38,7 +38,6 @@ const Card = ({ cardList, setCardList, card, idGroup, thisColumn, columns, membe
         dispatch(closeSecondModal());
         dispatch(closeModal());
         const updatedCommentList = cardList?.filter((cardItem) => cardItem.id !== card.id);
-        // setCardList(updatedCommentList);
         setCardList((prev) => ({
           ...prev,
           [thisColumn.id]: updatedCommentList,
@@ -48,6 +47,8 @@ const Card = ({ cardList, setCardList, card, idGroup, thisColumn, columns, membe
       return toast.success(SIMPLE_MESSAGES.TRY_AGAIN);
     } catch (error) {
       alert(error);
+    } finally {
+      viewCards(thisColumn.id);
     }
   };
 

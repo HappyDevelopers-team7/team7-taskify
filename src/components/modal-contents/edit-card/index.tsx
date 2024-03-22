@@ -75,9 +75,8 @@ const EditCard = ({ card, thisColumn, columns, memberData, viewCards }: CardObje
       alert(err);
     } finally {
       setIsLoading(false);
-      viewCards(selectedColumnId);
       viewCards(thisColumn.id);
-      //window.location.reload();
+      viewCards(selectedColumnId);
     }
   };
 

@@ -21,6 +21,7 @@ const DashBoardId = () => {
   const [members, setMembers] = useState<dashboardIdTypes['Members'][]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [cardInfo, setCardInfo] = useState<Record<string, ColumnCardType[]>>();
+  const [totalCount, setTotalCount] = useState<Record<number, number>>();
 
   const viewColumns = () => {
     setIsLoading(true);
@@ -65,6 +66,8 @@ const DashBoardId = () => {
             columns={columns}
             cardInfo={cardInfo}
             setCardInfo={setCardInfo}
+            totalCount={totalCount}
+            setTotalCount={setTotalCount}
           />
         ))}
       <div className='button-box'>

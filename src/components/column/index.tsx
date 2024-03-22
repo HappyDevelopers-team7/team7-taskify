@@ -5,24 +5,12 @@ import { useEffect, useState, Dispatch, SetStateAction } from 'react';
 import { ModalRootState, openModal, setOpenModalName } from '@/redux/modalSlice';
 import { ColumnCardType } from '@/types/columnCardType';
 import { dashboardIdTypes } from '@/types/dashboardIdTypes';
-import { Types } from '@/types/columnDetailTypes';
 import axiosInstance from '@/api/instance/axiosInstance';
 import API from '@/api/constants';
 import Card from '../card';
 import LoadingSpinner from '@/components/loading-spinner';
 import EditColumnModal from '../modal-edit-column';
 import CreateCard from '../modal-contents/create-card';
-
-// Column - CardInfo[]
-// Column - CardInfo[]
-// Column - CardInfo[]
-
-// {
-//   columId: CardInfo[],
-//   columId: CardInfo[]
-//   columId: CardInfo[]
-//   columId: CardInfo[]
-// }
 
 interface Props {
   columnData: dashboardIdTypes['Columns'];
@@ -33,13 +21,25 @@ interface Props {
   cardInfo: Record<string, ColumnCardType[]> | undefined;
   // setState type
   setCardInfo: Dispatch<SetStateAction<Record<string, ColumnCardType[]> | undefined>>;
+  totalCount: Record<number, number> | undefined;
+  setTotalCount: Dispatch<SetStateAction<Record<number, number> | undefined>>;
 }
 
-const Column = ({ columnData, memberData, viewColumns, dashboardId, columns, setCardInfo, cardInfo }: Props) => {
+const Column = ({
+  columnData,
+  memberData,
+  viewColumns,
+  dashboardId,
+  columns,
+  setCardInfo,
+  cardInfo,
+  totalCount,
+  setTotalCount,
+}: Props) => {
   const dispatch = useDispatch<AppDispatch>();
   const MORE_CARDS = 3;
   const openModalName = useSelector((state: ModalRootState) => state.modal.openModalName);
-  const [totalCount, setTotalCount] = useState<Types['totalCount']>(0);
+  //const [totalCount, setTotalCount] = useState<Types['totalCount']>(0);
   const [isLoading, setIsLoading] = useState(false);
   const [pages, setPages] = useState<number>(MORE_CARDS);
 
@@ -76,7 +76,11 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId, columns, set
           ...prev,
           [columId]: res.data.cards,
         }));
-        setTotalCount(res.data.totalCount);
+        setTotalCount((prev) => ({
+          ...prev,
+          [columId]: res.data.totalCount,
+        }));
+        console.log(totalCount);
       })
       .catch((err) => alert(`카드 조회 실패(${err})`))
       .finally(() => setIsLoading(false));
@@ -84,7 +88,7 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId, columns, set
 
   useEffect(() => {
     viewCards(columnData.id);
-  }, [pages, totalCount]);
+  }, [pages]);
 
   const cardList = (cardInfo && cardInfo[columnData.id]) || [];
   return (
@@ -93,7 +97,7 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId, columns, set
       <div className='column-head'>
         <div className='column-color' />
         <h2>{columnData.title}</h2>
-        <div className='inner-cards'>{totalCount}</div>
+        <div className='inner-cards'>{totalCount && totalCount[columnData.id]}</div>
         <img src='/assets/image/icons/settingIcon.svg' alt='setting-icon' onClick={handleEditColumn} />
       </div>
 
@@ -117,7 +121,7 @@ const Column = ({ columnData, memberData, viewColumns, dashboardId, columns, set
       </div>
 
       <div className='column-foot'>
-        {totalCount > pages && (
+        {totalCount && totalCount[columnData.id] > pages && (
           <button
             onClick={() => {
               setPages((prev) => prev + MORE_CARDS);
