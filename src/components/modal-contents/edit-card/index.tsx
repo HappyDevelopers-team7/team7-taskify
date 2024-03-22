@@ -64,7 +64,7 @@ const EditCard = ({ card, thisColumn, columns, memberData, viewCards }: CardObje
         assigneeUserId: asigneeRef ? asigneeRef.current : undefined,
         title: editCardData.title,
         description: editCardData.description,
-        dueDate: editCardData.dueDate ? editCardData.dueDate : undefined,
+        dueDate: editCardData.dueDate ? editCardData.dueDate : null,
         tags: tags,
         imageUrl: imageUrl ? imageUrl : undefined,
       });
@@ -290,7 +290,7 @@ const EditCard = ({ card, thisColumn, columns, memberData, viewCards }: CardObje
               minDate: dateExtractor(today).slice(0, 10),
               closeOnSelect: true,
             }}
-            onChange={(e) => setEditCardData({ ...editCardData, dueDate: dateExtractor(e[0]) })}
+            onChange={(e) => setEditCardData({ ...editCardData, dueDate: e[0] ? dateExtractor(e[0]) : null })}
           />
         </div>
         <div>
