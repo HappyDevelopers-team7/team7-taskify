@@ -78,7 +78,10 @@
 - 대시보드 리스트 / 내 정보 전역 관리
 - 전역 모달 컴포넌트화 (portal 사용)
 - input 컴포넌트화
-- 비동기 커스텀 훅 
+- 비동기 커스텀 훅
+
+#### 비개발
+- 리드미, 위키 관리
 
 <br>
 
@@ -94,7 +97,8 @@
 - 초대하기 모달
 
 
-#### 공통 
+#### 비개발
+- 회의록 기록 ([보러가기](https://github.com/HappyDevelopers-team7/team7-taskify/discussions/categories/%ED%9A%8C%EC%9D%98%EB%A1%9D))
 
 <br>
 
