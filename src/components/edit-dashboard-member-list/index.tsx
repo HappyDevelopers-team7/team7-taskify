@@ -2,10 +2,13 @@ import { useEffect, useState } from 'react';
 import StMemberListDiv from './style';
 import { getDashboardMemberList } from '@/api/getDashboardMemberList';
 import { useParams } from 'react-router-dom';
-// import { DashboardMembers, User } from '../dashboard-Header';
+// import { DashboardMembers } from '../dashboard-Header';
 import ArrowButton from '../arrow_button';
 import React from 'react';
 import { deleteDashboardMember } from '@/api/deleteDashboardMember';
+import { toast } from 'react-toastify';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, fetchMyInfo, getMyInfo } from '@/redux/myInfoSlice';
 
 export interface User {
   id: number;
@@ -16,26 +19,20 @@ export interface User {
   updatedAt: string;
 }
 
-export type Dashboards = {
-  color: string;
-  createdAt: string;
-  createdByMe: boolean;
-  id: number;
-  title: string;
-  updatedAt: string;
-  userId: number;
-};
-
 export interface DashboardMembers {
   members: User[];
   totalCount: number;
 }
 
-const DashboardMemberList = () => {
+const EditDashboardMemberList = () => {
   const { id } = useParams<{ id: string }>();
   const [member, setMember] = useState<DashboardMembers | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1); // 총 페이지 수
+  const currentMembers = member?.members || [];
+  const dispatch = useDispatch<AppDispatch>();
+  const myInfo = useSelector(getMyInfo);
+  // const [dashboardCreateByme, setDashboardCreateByme] = useState<boolean | null>(null);
 
   const handleLeftClick = () => setCurrentPage(currentPage - 1);
   const handleRightClick = () => setCurrentPage(currentPage + 1);
@@ -58,24 +55,39 @@ const DashboardMemberList = () => {
   };
 
   useEffect(() => {
+    dispatch(fetchMyInfo());
+  }, [dispatch]);
+
+  useEffect(() => {
     if (!id) return;
-    // useEffect 내에서 fetchDashboardMemberList를 호출합니다.
     fetchDashboardMemberList(id, currentPage, setMember, setTotalPages, MEMBERS_PER_PAGE);
   }, [id, currentPage]);
 
   const handleDeleteUserClick = (memberId: number) => {
     deleteDashboardMember(memberId)
       .then(() => {
+        toast.success('삭제가 완료 되었습니다.');
         if (!id) return;
         fetchDashboardMemberList(id, currentPage, setMember, setTotalPages, MEMBERS_PER_PAGE);
       })
       .catch((error) => {
-        console.error('구성원 삭제 중 오류 발생:', error);
+        console.error('fetching delete member error:', error);
       });
   };
 
-  const currentMembers = member?.members || [];
-  const containerSize = `size-${currentMembers.length}`;
+  const handleDeleteFailMySelf = () => {
+    return toast.error('자기 자신을 삭제할순 없습니다.');
+  };
+
+  const getContainerSizeClass = (length: number) => {
+    if (length >= 4) {
+      return 'size-4';
+    } else {
+      return `size-${length}`;
+    }
+  };
+
+  const containerSize = getContainerSizeClass(currentMembers.length);
 
   const generateColor = (name: string) => {
     const key = name.toUpperCase()[0];
@@ -93,9 +105,8 @@ const DashboardMemberList = () => {
         return 'pink';
     }
   };
-  console.log(`currentMembers: ${currentMembers}`);
-  console.log(`id: ${id}`);
-  console.log(totalPages);
+  console.log(currentMembers);
+
   return (
     <StMemberListDiv>
       <div className='memberlist-head'>
@@ -130,9 +141,15 @@ const DashboardMemberList = () => {
                   <p>{member.nickname}</p>
                 </div>
               )}
-              <button className='delete-button' onClick={() => handleDeleteUserClick(member.id)}>
-                삭제
-              </button>
+              {myInfo.id === member.id ? (
+                <button className='delete-button' onClick={() => handleDeleteUserClick(member.id)}>
+                  삭제
+                </button>
+              ) : (
+                <button className='delete-button' onClick={handleDeleteFailMySelf}>
+                  삭제
+                </button>
+              )}
             </li>
             {index !== currentMembers.length - 1 && <div className='gray-line' key={`line-${member.id}-${index}`} />}
           </React.Fragment>
@@ -142,4 +159,4 @@ const DashboardMemberList = () => {
   );
 };
 
-export default DashboardMemberList;
+export default EditDashboardMemberList;

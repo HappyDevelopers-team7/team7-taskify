@@ -1,8 +1,7 @@
-import { AppDispatch, fetchMyInfo, getMyInfo } from '@/redux/myInfoSlice';
+import { AppDispatch, fetchMyInfo, getMyInfo, SetMyInfo } from '@/redux/myInfoSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { Container } from './style';
 import { Dashboards } from '../side-menu';
-import { SetMyInfo } from '@/redux/myInfoSlice';
 import { useParams } from 'react-router-dom';
 import API from '@/api/constants';
 import axiosInstance from '@/api/instance/axiosInstance';
@@ -38,9 +37,6 @@ export interface DashboardmembersInfo {
 }
 
 const CONTAINER_SIZE = ['only-one', 'two-members', 'three-members', 'four-members', 'five-members'];
-// const MEMBERS_POSITION = ['first', 'second', 'third', 'fourth', 'fifth'];
-// const dashboardHeader = ({ currentDashboard }: Props) => {
-// 임시
 const DashboardHeader = () => {
   const dispatch = useDispatch<AppDispatch>();
   const myInfo = useSelector(getMyInfo);
@@ -65,14 +61,6 @@ const DashboardHeader = () => {
   useEffect(() => {
     dispatch(fetchMyInfo());
   }, [dispatch]);
-
-  // const openModal = () => {
-  //   setIsModalOpen(true);
-  // };
-
-  // const closeModal = () => {
-  //   setIsModalOpen(false);
-  // };
 
   useEffect(() => {
     const fetchDashboardInfo = async () => {

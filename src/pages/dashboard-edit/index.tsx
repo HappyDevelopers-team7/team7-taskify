@@ -1,7 +1,9 @@
 import StEditContainer from './style';
 import EditTitleAndColorChanger from '@/components/edit-title-color-changer';
 import BackButton from '@/components/backbutton';
-import DashboardMemberList from '@/components/dashboard-member-list';
+import DashboardMemberList from '@/components/edit-dashboard-member-list';
+import EditdeleteButton from '@/components/edit-delete-button';
+import EditDashBoardInviteList from '@/components/edit-dashboard-invite-list';
 
 const DashboardEdit = () => {
   return (
@@ -12,7 +14,9 @@ const DashboardEdit = () => {
       <DashboardMemberList />
       {/* //대시보드 멤버들 리스트 (페이지 네이션으로) <DashboardMembersList>
     //초대내역 <DashboardInvite>
-    //대시보드 삭제하기 <InvitationLog> */}
+  //대시보드 삭제하기 <InvitationLog> */}
+      <EditDashBoardInviteList />
+      <EditdeleteButton />
     </StEditContainer>
   );
 };

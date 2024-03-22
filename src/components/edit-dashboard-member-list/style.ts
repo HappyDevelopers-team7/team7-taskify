@@ -2,13 +2,25 @@ import styled from 'styled-components';
 
 const StMemberListDiv = styled.div`
   width: 620px;
-  height: 350px;
   flex-shrink: 0;
   padding: 24px 16px 0px;
   border-radius: 8px;
   background: ${({ theme }) => theme.color.white};
   color: #333236;
   margin-bottom: 12px;
+
+  .size-1 {
+    height: 200px;
+  }
+  .size-2 {
+    height: 250px;
+  }
+  .size-3 {
+    height: 300px;
+  }
+  .size-4 {
+    height: 350px;
+  }
 
   .memberlist-head {
     font-family: Pretendard;
@@ -46,6 +58,18 @@ const StMemberListDiv = styled.div`
     align-items: center;
     justify-content: center;
     gap: 12px;
+    &.size-1 {
+      height: 75px;
+    }
+    &.size-2 {
+      height: 125px;
+    }
+    &.size-3 {
+      height: 175px;
+    }
+    &.size-4 {
+      height: 225px;
+    }
     li {
       display: flex;
       height: 40px;
