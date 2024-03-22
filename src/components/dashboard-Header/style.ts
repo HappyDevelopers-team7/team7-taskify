@@ -243,6 +243,7 @@ export const Container = styled.header`
       margin-left: 0;
       box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.08);
       border-radius: 8px;
+      border: 1px solid ${({ theme }) => theme.color.gray_d9};
 
       span {
         font-size: 1.6rem;
