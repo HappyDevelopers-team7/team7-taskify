@@ -13,9 +13,6 @@ export const Container = styled.header`
   display: flex;
   justify-content: space-between;
 
-  .invite-button {
-  }
-
   .dashboard-right-space {
     display: flex;
     align-items: center;
@@ -63,7 +60,6 @@ export const Container = styled.header`
     }
 
     .myinfo-image {
-      //임시로해놓음 나중에 잘되는지 체크해야됨.
       display: flex;
       width: 38px;
       height: 38px;
@@ -161,15 +157,6 @@ export const Container = styled.header`
     padding-right: 24px;
     border-right: 1px solid ${({ theme }) => theme.color.gray_d9};
 
-    /* .dashboard-info-members-container li {
-      position: absolute; /* 각 요소를 absolute로 설정합니다. */
-    /* margin-right: -28px; 인덱스에 따라 왼쪽으로 이동하여 겹치도록 설정합니다. */
-    /* } */
-
-    /* .dashboard-info-members-container ul {
-      position: relative;
-    } */
-
     .myinfo-image {
       width: 38px;
       height: 38px;
@@ -198,31 +185,6 @@ export const Container = styled.header`
     .five-members {
       width: 160px;
     }
-    /* 
-    .첫번째 {
-      z-index: 1;
-      position: absolute;
-      right: 356px;
-      bottom: 16px;
-    }
-    .두번째 {
-      z-index: 2;
-      position: absolute;
-      right: 326px;
-      bottom: 16px;
-    }
-    .세번째 {
-      z-index: 3;
-      position: absolute;
-      right: 296px;
-      bottom: 16px;
-    }
-    .네번째 {
-      z-index: 4;
-      position: absolute;
-      right: 266px;
-      bottom: 16px;
-    } */
 
     .myinfo-color {
       display: flex;

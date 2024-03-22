@@ -12,7 +12,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import InviteDashboard from '../modal-contents/invite-dashboard';
 
-interface User {
+export interface User {
   id: number;
   email: string;
   nickname: string;
@@ -26,7 +26,7 @@ interface Props {
   id?: string;
 }
 
-interface DashboardmembersInfo {
+export interface DashboardMembers {
   members: User[];
   totalCount: number;
 }
@@ -120,7 +120,7 @@ export default DashboardHeader;
 
 interface InviteButtonProps {
   onClick: () => void; // 온클릭이 함수 & 반환 값이 없는걸 명시해둠
-  membersInfo: DashboardmembersInfo | null;
+  membersInfo: DashboardMembers | null;
 }
 
 function InviteButton({ onClick, membersInfo }: InviteButtonProps) {
@@ -190,7 +190,7 @@ function DashboardId({ currentDashboard, id }: Props) {
   );
 }
 
-function DashboardMembers({ membersInfo }: { membersInfo: DashboardmembersInfo }) {
+function DashboardMembers({ membersInfo }: { membersInfo: DashboardMembers }) {
   const extraCount: number = membersInfo.totalCount >= 5 ? membersInfo.totalCount - 4 : 0;
   const slicedMembers = membersInfo.members.slice(0, 5);
   const containerSize = CONTAINER_SIZE[slicedMembers.length - 1];

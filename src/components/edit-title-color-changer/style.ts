@@ -6,9 +6,11 @@ const StEditTitleAndColorContainer = styled.div`
   flex-shrink: 0;
   border-radius: 8px;
   background: ${({ theme }) => theme.color.white};
+  padding: 32px 16px;
+  margin-bottom: 12px;
 
   .dashboard-title {
-    padding: 32px 522px 20px 28px;
+    padding: 0px 522px 20px 28px;
     color: ${({ theme }) => theme.color.black_33};
     font-family: Pretendard;
     font-size: 2rem;
@@ -24,6 +26,8 @@ const StEditTitleAndColorContainer = styled.div`
 
   button {
     padding: 20px 46px;
+    width: 110px;
+    height: 28px;
     border-radius: 8px;
     color: ${({ theme }) => theme.color.gray_78};
     font-size: 1.6rem;
@@ -31,11 +35,14 @@ const StEditTitleAndColorContainer = styled.div`
   }
 
   .change-button {
+    display: flex;
+    justify-content: center;
     float: right;
     color: ${({ theme }) => theme.color.white};
     background: ${({ theme }) => theme.color.violet};
     transition: background-color 0.1s;
-
+    align-items: center;
+    justify-content: center;
     &:hover {
       color: ${({ theme }) => theme.color.violet};
       outline: 1px solid ${({ theme }) => theme.color.violet};
