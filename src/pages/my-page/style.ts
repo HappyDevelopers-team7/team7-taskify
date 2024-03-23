@@ -55,6 +55,13 @@ export const StProfileContainer = styled.div`
 
   .profile-container {
     display: flex;
+
+    img {
+      max-width: 182px;
+      max-height: 182px;
+      width: auto;
+      height: auto;
+    }
   }
 
   .profile-input-container {

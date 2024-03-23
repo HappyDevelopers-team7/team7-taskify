@@ -5,6 +5,7 @@ import axiosInstance from '@/api/instance/axiosInstance';
 import { StColumnModal } from './style';
 import ModalContainer from '@/components/modal-container';
 import API from '@/api/constants';
+import { toast } from 'react-toastify';
 
 interface Props {
   columnId: number;
@@ -24,7 +25,7 @@ export const EditColumnModal = ({ columnId, columnName, handleEditColumn, handle
 
   const handleSubmitModal = () => {
     if (!editedColumnName) {
-      alert('컬럼 이름을 입력하세요.');
+      toast('컬럼 이름을 입력하세요.');
       return;
     }
 

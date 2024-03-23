@@ -8,6 +8,12 @@ export const StHeader = styled.header`
 
   img {
     margin-top: 100px;
+
+    @media (max-width: 767px) {
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
   }
 
   h1 {

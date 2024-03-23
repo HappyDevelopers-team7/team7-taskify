@@ -1,9 +1,6 @@
-import { inputContainer } from '@/styles/input/style';
 import styled from 'styled-components';
 
 export const StColumnModal = styled.div`
-  /* ${inputContainer} */
-
   h3 {
     font-size: 1.8rem;
     font-weight: 500;
