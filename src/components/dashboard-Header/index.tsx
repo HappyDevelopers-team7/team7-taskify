@@ -1,8 +1,7 @@
-import { AppDispatch, fetchMyInfo, getMyInfo } from '@/redux/myInfoSlice';
+import { AppDispatch, fetchMyInfo, getMyInfo, SetMyInfo } from '@/redux/myInfoSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { Container } from './style';
 import { Dashboards } from '../side-menu';
-import { SetMyInfo } from '@/redux/myInfoSlice';
 import { useParams } from 'react-router-dom';
 import API from '@/api/constants';
 import axiosInstance from '@/api/instance/axiosInstance';
@@ -13,7 +12,7 @@ import Cookies from 'js-cookie';
 import InviteDashboard from '../modal-contents/invite-dashboard';
 import getDefaultImageUrlIfNull from '@/utils/getDefaultImageIfNull';
 
-interface User {
+export interface User {
   id: number;
   email: string;
   nickname: string;
@@ -27,15 +26,17 @@ interface Props {
   id?: string;
 }
 
-interface DashboardmembersInfo {
+export interface DashboardMembers {
+  members: User[];
+  totalCount: number;
+}
+
+export interface DashboardmembersInfo {
   members: User[];
   totalCount: number;
 }
 
 const CONTAINER_SIZE = ['only-one', 'two-members', 'three-members', 'four-members', 'five-members'];
-// const MEMBERS_POSITION = ['first', 'second', 'third', 'fourth', 'fifth'];
-// const dashboardHeader = ({ currentDashboard }: Props) => {
-// 임시
 const DashboardHeader = () => {
   const dispatch = useDispatch<AppDispatch>();
   const myInfo = useSelector(getMyInfo);
@@ -61,18 +62,10 @@ const DashboardHeader = () => {
     dispatch(fetchMyInfo());
   }, [dispatch]);
 
-  // const openModal = () => {
-  //   setIsModalOpen(true);
-  // };
-
-  // const closeModal = () => {
-  //   setIsModalOpen(false);
-  // };
-
   useEffect(() => {
     const fetchDashboardInfo = async () => {
+      if (!id) return;
       try {
-        if (!id) return;
         const res = await axiosInstance.get(`${API.DASHBOARDS.DASHBOARDS}/${id}`);
         const responseData = await res.data;
         setCurrentDashboard(responseData);
@@ -86,6 +79,7 @@ const DashboardHeader = () => {
 
   useEffect(() => {
     const fetchDashboardMemberInfo = async () => {
+      if (!id) return;
       try {
         const res = await axiosInstance.get(API.MEMBERS.MEMBERS, {
           params: { page: 1, size: 4, dashboardId: id ?? 1 },
@@ -121,7 +115,7 @@ export default DashboardHeader;
 
 interface InviteButtonProps {
   onClick: () => void; // 온클릭이 함수 & 반환 값이 없는걸 명시해둠
-  membersInfo: DashboardmembersInfo | null;
+  membersInfo: DashboardMembers | null;
 }
 
 function InviteButton({ onClick, membersInfo }: InviteButtonProps) {

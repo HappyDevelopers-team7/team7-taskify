@@ -13,9 +13,6 @@ export const Container = styled.header`
   display: flex;
   justify-content: space-between;
 
-  .invite-button {
-  }
-
   .dashboard-right-space {
     display: flex;
     align-items: center;
