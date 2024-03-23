@@ -6,6 +6,7 @@ export const ColumnContainer = styled.div`
   background-color: ${({ theme }) => theme.color.gray_fa};
   border-right: 1px solid ${({ theme }) => theme.color.gray_ee};
   flex-shrink: 0;
+  user-select: none;
 
   .flat {
     background-color: tomato;

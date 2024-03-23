@@ -12,6 +12,7 @@ const Container = styled.div`
   background-color: ${({ theme }) => theme.color.white};
   z-index: 10;
   flex-shrink: 0;
+  user-select: none;
 
   &::-webkit-scrollbar {
     width: 5px;

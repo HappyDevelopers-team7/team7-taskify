@@ -15,6 +15,8 @@ const Button = styled.button`
 
   font-size: 1.8rem;
   font-weight: 700;
+
+  user-select: none;
 `;
 
 export default Button;

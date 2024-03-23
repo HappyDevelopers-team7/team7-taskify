@@ -22,6 +22,7 @@ const CardContainer = styled.article`
   background: ${({ theme }) => theme.color.white};
 
   cursor: pointer;
+  user-select: none;
 
   .image-box {
     width: 274px;
