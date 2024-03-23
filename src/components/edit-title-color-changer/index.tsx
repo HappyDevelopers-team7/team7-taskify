@@ -15,17 +15,32 @@ const EditTitleAndColorChanger = () => {
   const [dashboardNameInputValue, setDashboardNameInputValue] = useState('');
   const [isShow, setIsShow] = useState(false);
   const [dashboardColorValue, setDashboardColorValue] = useState('');
+  const [currentDashboardColor, setCurrentDashboardColor] = useState('');
 
   const handleSubmitChangeDashboard = async (e: SyntheticEvent) => {
     e.preventDefault();
-    if (dashboardNameInputValue && dashboardColorValue) {
+    const updatedTitle = dashboardNameInputValue ? dashboardNameInputValue : title;
+    const updatedColor = dashboardColorValue ? dashboardColorValue : currentDashboardColor;
+
+    if (dashboardNameInputValue || dashboardColorValue) {
       if (!id) return;
-      const result = await putDashboardChange(id, dashboardNameInputValue, dashboardColorValue);
-      if (result && result.status === 200) {
-        toast.success(DASHBOARD_MESSAGES.CHANGE_DASHBOARD);
+      try {
+        const result = await putDashboardChange(id, updatedTitle, updatedColor);
+        if (result && result.status === 200) {
+          if (dashboardNameInputValue) {
+            setTitle(dashboardNameInputValue);
+          }
+          if (dashboardColorValue) {
+            setCurrentDashboardColor(dashboardColorValue);
+          }
+          toast.success(DASHBOARD_MESSAGES.CHANGE_DASHBOARD);
+        }
+      } catch (error) {
+        console.error('Error updating dashboard:', error);
+        toast.error('대시보드 변경 중 오류가 발생했습니다.');
       }
-      setDashboardNameInputValue('');
-      setDashboardColorValue('');
+      if (dashboardNameInputValue) setDashboardNameInputValue('');
+      if (dashboardColorValue) setDashboardColorValue('');
     } else {
       toast.error(INPUT_ERROR_MESSAGES.PLEASE_ENTER_VALUE);
     }
@@ -46,6 +61,7 @@ const EditTitleAndColorChanger = () => {
       try {
         const response = await getDashboardInfo(id);
         setTitle(response.title);
+        setCurrentDashboardColor(response.color);
       } catch (error) {
         console.error('Error fetching dashboard info:', error);
       }
@@ -59,6 +75,7 @@ const EditTitleAndColorChanger = () => {
       <div className='change-form-div'>
         <form onSubmit={handleSubmitChangeDashboard}>
           <InputText
+            value={dashboardNameInputValue}
             setValue={setDashboardNameInputValue}
             autoFocus={true}
             required
