@@ -118,10 +118,13 @@ const EditDashboardMemberList = () => {
                   <p>{member.nickname}</p>
                 </div>
               ) : (
-                <div
-                  className='myinfo-image'
-                  style={{ backgroundImage: `url(${getDefaultImageUrlIfNull(member?.profileImageUrl)})` }}
-                ></div>
+                <div className='profile-box'>
+                  <div
+                    className='myinfo-image'
+                    style={{ backgroundImage: `url(${getDefaultImageUrlIfNull(member?.profileImageUrl)})` }}
+                  ></div>
+                  <p>{member.nickname}</p>
+                </div>
                 // <div className='profile-box'>
                 //   <div className={`myinfo-color myinfo-color-${generateColor(member.nickname)}`}>
                 //     <div className='myinfo-initial'>{member.nickname.toUpperCase()[0]}</div>
