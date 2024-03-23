@@ -172,17 +172,68 @@
 
 <br>
 
-## 🎀 기술 구현 고민
+## 🎀 주요 기능 시연
 
-### 📌 라우터에서 로그인 권한 분기 처리
+# 🎀 회원가입/로그인
 
-### 📌 웹접근성
+![ezgif com-video-to-gif-converter](https://github.com/HappyDevelopers-team7/team7-taskify/assets/134386378/29579609-9381-49d2-b395-56b8c65e622e)
 
-<br>
+# 🎀 /dashboard
 
-## 🎀 트러블 슈팅 ([전체 기록 보러가기](https://github.com/HappyDevelopers-team7/team7-taskify/discussions/categories/%EC%98%A4%EB%A5%98-%ED%95%B4%EA%B2%B0-%EA%B8%B0%EB%A1%9D) )
+## 📌 대시보드 생성
 
-### 📌 OS에서 Enter 이벤트 중복 처리 되는 문제
+![대시보드생성](https://github.com/HappyDevelopers-team7/team7-taskify/assets/134386378/2d9c2069-80ac-4ff2-8f7c-a00f05aef4a5)
 
-### 📌 textarea 자동으로 readonly되는 문제
+
+## 📌 초대 수락/거절
+
+![초대거절수락](https://github.com/HappyDevelopers-team7/team7-taskify/assets/134386378/43b1eb72-3845-4710-b713-e356ff6bbbbf)
+
+
+## 📌 무한 스크롤
+
+![무한스크롤](https://github.com/HappyDevelopers-team7/team7-taskify/assets/134386378/8e28263f-3ade-4dad-b0d2-6efe4470794c)
+
+
+## 📌 초대 검색 기능
+
+![초대검색](https://github.com/HappyDevelopers-team7/team7-taskify/assets/134386378/0e023fc4-5d7c-4537-87d9-09d1eaa62f92)
+
+# 🎀 /dashbaord/:id
+
+## 📌 카드 생성
+
+![카드생성](https://github.com/HappyDevelopers-team7/team7-taskify/assets/134386378/c2bb2d7b-2e0d-4c18-8a1d-2f19105105fe)
+
+## 📌 카드 상세
+
+![카드상세](https://github.com/HappyDevelopers-team7/team7-taskify/assets/134386378/5082dd36-850e-4395-b535-fdc135b36340)
+
+## 📌 카드 수정
+
+![카드수정](https://github.com/HappyDevelopers-team7/team7-taskify/assets/134386378/7dc9ebe6-4b71-4806-8955-8229c2df829e)
+
+## 📌 칼럼 생성
+
+![칼럼생성](https://github.com/HappyDevelopers-team7/team7-taskify/assets/134386378/fe466871-0506-4bb6-85a8-c8d504a285f9)
+
+## 📌 칼럼 이름 수정
+
+![칼럼이름수정](https://github.com/HappyDevelopers-team7/team7-taskify/assets/134386378/78a56a41-bc89-4783-bf3e-0303c8ad7467)
+
+## 📌 멤버가 아닌 대시보드 접근시 /dashboard로 튕김
+
+![멤버아닌면튕김](https://github.com/HappyDevelopers-team7/team7-taskify/assets/134386378/5dd095bc-8d3c-4857-85b8-03c4e04a74c6)
+
+
+# 🎀 대시보드 관리
+
+# 🎀 마이페이지
+
+# 🎀 Page Not Found
+
+![2024-03-238 50 29-ezgif com-video-to-gif-converter](https://github.com/HappyDevelopers-team7/team7-taskify/assets/134386378/df98037a-a7f5-4ea8-8b40-16b06990f635)
+
+
+
 
