@@ -83,3 +83,9 @@ export const StHeader = styled.header`
     background: ${({ theme }) => theme.color.violet};
   }
 `;
+
+export const StSmallDescription = styled.div`
+  font-size: 1.8rem;
+  line-height: 28px;
+  text-align: center;
+`;

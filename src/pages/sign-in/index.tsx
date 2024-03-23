@@ -43,7 +43,7 @@ const SignIn = () => {
 
     if (result?.status === 201) {
       Cookies.set('accessToken', result?.data?.accessToken, {
-        expires: 1,
+        expires: 0.5,
         path: '/',
       }); // 유저 정보 쿠키 저장
       toast.success(AUTH_MESSAGES.LOGIN_SUCCESS); // 로그인 성공 토스트

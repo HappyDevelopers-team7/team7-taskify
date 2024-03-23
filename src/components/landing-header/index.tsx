@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { StHeader } from './style';
+import { StHeader, StSmallDescription } from './style';
 import { LandingImage } from '@/pages/landing';
 import { ReactNode } from 'react';
 
@@ -17,7 +17,7 @@ const Title = () => {
 };
 
 const Description = ({ children }: MediumButtonProps) => {
-  return <h3>{children}</h3>;
+  return <StSmallDescription>{children}</StSmallDescription>;
 };
 
 const MediumButton = ({ children, type }: MediumButtonProps) => {
@@ -34,7 +34,9 @@ export const Header = () => {
       )}
       <Title />
       <Description>
-        <h3>서비스 메인 설명 들어갑니다.</h3>
+        <p>Taskify는 할일을 등록하고, 진행 상황을 체계적으로 관리하도록 도와줍니다.</p>
+        <p>팀원을 초대하고 추가함으로써, 업무 과정을 실시간으로 공유할 수 있습니다.</p>
+        <p>더 이상 업무 관리에 시간을 낭비하지 말고, Taskify하세요!</p>
       </Description>
       <Link to='/sign-in'>
         <MediumButton type='button'>로그인하기</MediumButton>
