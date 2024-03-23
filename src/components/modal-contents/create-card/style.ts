@@ -151,6 +151,23 @@ const StCreateCard = styled.div<{
       margin-bottom: 5px;
     }
   }
+
+  @media (max-width: 767px) {
+    .section-div {
+      .input-box {
+        margin-bottom: 24px;
+      }
+
+      .input-box.asignee-box {
+        width: 100%;
+        background-position: 95%;
+      }
+
+      .input-box.member-list {
+        width: 100%;
+      }
+    }
+  }
 `;
 
 export default StCreateCard;

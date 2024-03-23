@@ -22,6 +22,7 @@ const CardContainer = styled.article`
   background: ${({ theme }) => theme.color.white};
 
   cursor: pointer;
+  user-select: none;
 
   .image-box {
     width: 274px;
@@ -61,6 +62,54 @@ const CardContainer = styled.article`
     bottom: 20px;
     right: 20px;
     border-radius: 50%;
+  }
+
+  @media (max-width: 1199px) {
+    width: 100%;
+    height: auto;
+
+    .image-box {
+      width: 90px;
+      height: 53px;
+      float: left;
+      margin-right: 20px;
+      img {
+        border-radius: 4px;
+      }
+    }
+
+    .tag-date-box {
+      display: flex;
+
+      .date-box {
+        flex-shrink: 0;
+        position: relative;
+        bottom: 8px;
+        margin-left: 16px;
+      }
+    }
+  }
+
+  @media (max-width: 767px) {
+    padding: 12px;
+
+    .image-box {
+      width: 100%;
+      height: 152px;
+      float: none;
+    }
+
+    .tag-date-box {
+      flex-direction: column;
+      gap: 11px;
+
+      .date-box {
+        flex-shrink: 0;
+        position: relative;
+        bottom: 8px;
+        margin: 0;
+      }
+    }
   }
 `;
 

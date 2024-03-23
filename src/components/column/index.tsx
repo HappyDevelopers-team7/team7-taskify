@@ -1,6 +1,6 @@
 import { AppDispatch } from '@/redux/myInfoSlice';
 import { useDispatch, useSelector } from 'react-redux';
-import { ColumnContainer } from './style';
+import { StColumnContainer } from './style';
 import { useEffect, useState, Dispatch, SetStateAction } from 'react';
 import { ModalRootState, openModal, setOpenModalName } from '@/redux/modalSlice';
 import { ColumnCardType } from '@/types/columnCardType';
@@ -39,7 +39,6 @@ const Column = ({
   const dispatch = useDispatch<AppDispatch>();
   const MORE_CARDS = 3;
   const openModalName = useSelector((state: ModalRootState) => state.modal.openModalName);
-  //const [totalCount, setTotalCount] = useState<Types['totalCount']>(0);
   const [isLoading, setIsLoading] = useState(false);
   const [pages, setPages] = useState<number>(MORE_CARDS);
 
@@ -80,7 +79,6 @@ const Column = ({
           ...prev,
           [columId]: res.data.totalCount,
         }));
-        console.log(totalCount);
       })
       .catch((err) => alert(`카드 조회 실패(${err})`))
       .finally(() => setIsLoading(false));
@@ -92,8 +90,9 @@ const Column = ({
 
   const cardList = (cardInfo && cardInfo[columnData.id]) || [];
   return (
-    <ColumnContainer>
+    <StColumnContainer>
       {isLoading && <LoadingSpinner />}
+
       <div className='column-head'>
         <div className='column-color' />
         <h2>{columnData.title}</h2>
@@ -143,7 +142,7 @@ const Column = ({
           handleDeleteColumn={handleDeleteColumn}
         />
       )}
-    </ColumnContainer>
+    </StColumnContainer>
   );
 };
 

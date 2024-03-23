@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { ModalRootState } from '@/redux/modalSlice';
 import { dashboardIdTypes } from '@/types/dashboardIdTypes';
 import axiosInstance from '@/api/instance/axiosInstance';
-import Container from './style';
+import StDashboardIdContainer from './style';
 import AddColumnButton from '@/components/add-column-button';
 import API from '@/api/constants';
 import Column from '@/components/column';
@@ -53,7 +53,7 @@ const DashBoardId = () => {
   }, [id]);
 
   return (
-    <Container>
+    <StDashboardIdContainer>
       {isLoading && <LoadingSpinner />}
       {columns &&
         columns.map((columnData) => (
@@ -74,7 +74,7 @@ const DashBoardId = () => {
         <AddColumnButton>새로운 컬럼 추가하기</AddColumnButton>
       </div>
       {openModalName === 'addColumnModal' && <AddColumnModal setColumns={setColumns} />}
-    </Container>
+    </StDashboardIdContainer>
   );
 };
 
