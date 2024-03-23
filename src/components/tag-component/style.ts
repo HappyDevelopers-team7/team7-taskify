@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 const StTagComponent = styled.div<{ $backgroundColor: string }>`
-  min-width: 54px;
+  width: auto;
   height: 22px;
   padding: 4px 6px;
   border-radius: 4px;
@@ -10,6 +10,10 @@ const StTagComponent = styled.div<{ $backgroundColor: string }>`
   text-align: center;
   font-size: 1.2rem;
   cursor: pointer;
+
+  @media (max-width: 767px) {
+    height: 20px;
+  }
 `;
 
 export default StTagComponent;
