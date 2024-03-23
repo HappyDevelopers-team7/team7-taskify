@@ -43,7 +43,7 @@
 |<img width="180" alt="image" src="https://github.com/HappyDevelopers-team7/team7-taskify/assets/134386378/43757814-d19c-4ee5-b913-456ca1ae058e">|<img width="180" alt="image" src="https://github.com/HappyDevelopers-team7/team7-taskify/assets/134386378/d7ea7170-c01e-4bc6-a4c6-e88bb4e4efbf">|<img width="180" alt="image" src="https://github.com/HappyDevelopers-team7/team7-taskify/assets/134386378/356762a5-0269-4ed9-ab8a-ca8cbc57b229">|<img width="180" alt="image" src="https://github.com/HappyDevelopers-team7/team7-taskify/assets/134386378/ea90d43d-ee8d-4c3e-a09c-4c46a8d7d8d6">|
 |:------:|:---:|:---:|:---:|
 |[권지민 👑](https://github.com/mingzzi96)|[김준형](https://github.com/jjunhyuki)|[박준용](https://github.com/mocking-tiger)|[최유정](https://github.com/yoojungChoii)|
-|7팀 아자자자 화이띵!!|테스트2|항상 행복하세요|테스트3|
+|7팀 아자자자 화이띵!!|이것 또한 이겨내리라|항상 행복하세요|7팀 우리팀 최고 홧띵!!|
 
 
 
