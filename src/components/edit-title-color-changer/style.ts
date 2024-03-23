@@ -44,6 +44,8 @@ const StEditTitleAndColorContainer = styled.div`
     transition: background-color 0.1s;
     align-items: center;
     justify-content: center;
+    position: relative;
+    margin-top: 20px;
     &:hover {
       color: ${({ theme }) => theme.color.violet};
       outline: 1px solid ${({ theme }) => theme.color.violet};
@@ -53,6 +55,7 @@ const StEditTitleAndColorContainer = styled.div`
 
   .input-colorpicker__group {
     margin-top: 28px;
+    position: relative;
   }
 
   .input-colorpicker {
@@ -60,6 +63,7 @@ const StEditTitleAndColorContainer = styled.div`
   }
 
   .color-picker-box {
+    position: absolute;
     margin-top: 12px;
   }
 `;

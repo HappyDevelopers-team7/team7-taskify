@@ -78,7 +78,6 @@ const EditTitleAndColorChanger = () => {
             value={dashboardNameInputValue}
             setValue={setDashboardNameInputValue}
             autoFocus={true}
-            required
             labelName='대시보드 이름'
             placeholder='대시보드 이름을 입력하세요.'
           />
@@ -86,7 +85,6 @@ const EditTitleAndColorChanger = () => {
             <div className='' onClick={handleShowColorPicker} role='button'>
               <InputColorPicker
                 value={dashboardColorValue}
-                required
                 readonly
                 imgAlt='색상 선택 아이콘'
                 imgUrl='/assets/image/icons/brushIcon.svg'
