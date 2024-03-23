@@ -17,6 +17,10 @@ const Button = styled.button`
   font-weight: 700;
 
   user-select: none;
+
+  @media (max-width: 1199px) {
+    width: 100%;
+  }
 `;
 
 export default Button;

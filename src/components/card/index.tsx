@@ -66,22 +66,24 @@ const Card = ({ cardList, setCardList, card, idGroup, thisColumn, columns, membe
           </div>
         )}
         <h2 className='title-box'>{card.title}</h2>
-        <div className='tag-box'>
-          {card.tags.length > 0 &&
-            card.tags.map((tag, index) => (
-              <TagComponent
-                key={card.tags.indexOf(tag)}
-                name={tag}
-                backgroundColor={makeRandomBackgroundColor(index)}
-              />
-            ))}
-        </div>
-        {card.dueDate && (
-          <div className='date-box'>
-            <img src='/assets/image/icons/calendarIcon.svg' />
-            <span>{card.dueDate}</span>
+        <div className='tag-date-box'>
+          <div className='tag-box'>
+            {card.tags.length > 0 &&
+              card.tags.map((tag, index) => (
+                <TagComponent
+                  key={card.tags.indexOf(tag)}
+                  name={tag}
+                  backgroundColor={makeRandomBackgroundColor(index)}
+                />
+              ))}
           </div>
-        )}
+          {card.dueDate && (
+            <div className='date-box'>
+              <img src='/assets/image/icons/calendarIcon.svg' />
+              <span>{card.dueDate}</span>
+            </div>
+          )}
+        </div>
         {card.assignee && (
           <img
             className='asignee-box'

@@ -10,6 +10,18 @@ const StWrapper = styled.div`
     height: calc(100vh - 70px);
     overflow: hidden;
   }
+
+  @media (max-width: 1199px) {
+    #container {
+      padding-left: 160px;
+    }
+  }
+
+  @media (max-width: 767px) {
+    #container {
+      padding-left: 67px;
+    }
+  }
 `;
 
 export default StWrapper;
