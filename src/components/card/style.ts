@@ -95,7 +95,7 @@ const CardContainer = styled.article`
 
     .image-box {
       width: 100%;
-      height: auto;
+      height: 152px;
       float: none;
     }
 
