@@ -80,7 +80,6 @@ const Column = ({
           ...prev,
           [columId]: res.data.totalCount,
         }));
-        console.log(totalCount);
       })
       .catch((err) => alert(`카드 조회 실패(${err})`))
       .finally(() => setIsLoading(false));
