@@ -7,6 +7,8 @@ import { INVITATION_ERROR_MESSAGES, INVITATION_MESSAGES } from '@/constants/mess
 import { toast } from 'react-toastify';
 import { getInvitation } from '@/api/getInvitation';
 import { setInvitationList, updateInvitationList } from '@/redux/invitationSlice';
+import { getDashboardList } from '@/api/getDashboardList';
+import { setDashboardList } from '@/redux/dashboardListSlice';
 
 interface AcceptInvitationProps {
   invitationId: number;
@@ -24,8 +26,10 @@ const AcceptInvitation = ({ invitationId }: AcceptInvitationProps) => {
       const result = await putInviteAccepted(true, invitationId);
       if (result?.status === 200) {
         const invitationListResult = await getInvitation();
+        const dashboardListResult = await getDashboardList(1);
         dispatch(setInvitationList(invitationListResult.invitations));
         dispatch(updateInvitationList(invitationListResult.invitations));
+        dispatch(setDashboardList(dashboardListResult.dashboards));
         toast.success(INVITATION_MESSAGES.ACCEPT_INVITATION);
       }
 

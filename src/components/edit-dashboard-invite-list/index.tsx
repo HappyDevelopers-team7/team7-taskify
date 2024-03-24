@@ -95,10 +95,10 @@ const EditDashBoardInviteList = () => {
 
   const currentInvites = list?.invitations || [];
 
-  const uniqueInvites = currentInvites.filter(
-    //중복된 이메일 제거함
-    (invite, index, self) => self.findIndex((t) => t.invitee.email === invite.invitee.email) === index,
-  );
+  // const uniqueInvites = currentInvites.filter(
+  //   //중복된 이메일 제거함
+  //   (invite, index, self) => self.findIndex((t) => t.invitee.email === invite.invitee.email) === index,
+  // );
 
   const getContainerSizeClass = (length: number) => {
     if (length >= 5) {
@@ -108,7 +108,7 @@ const EditDashBoardInviteList = () => {
     }
   };
 
-  const containerSize = getContainerSizeClass(uniqueInvites.length);
+  const containerSize = getContainerSizeClass(currentInvites.length);
 
   return (
     <StInviteList>
@@ -121,8 +121,8 @@ const EditDashBoardInviteList = () => {
           <ArrowButton
             onLeftClick={handleLeftClick}
             onRightClick={handleRightClick}
-            leftDisabled={currentPage === 1 || uniqueInvites.length === 0}
-            rightDisabled={currentPage === totalPages || uniqueInvites.length === 0}
+            leftDisabled={currentPage === 1 || currentInvites.length === 0}
+            rightDisabled={currentPage === totalPages || currentInvites.length === 0}
           />
           <button className='invite-button' onClick={handleClickInviteDashboard}>
             <img src='/assets/image/icons/addBoxIcon.svg' alt='초대하기(플러스) 아이콘' />
@@ -132,7 +132,7 @@ const EditDashBoardInviteList = () => {
       </div>
       <p className='email'>이메일</p>
       <ul className={`member-list ${containerSize}`}>
-        {uniqueInvites.map((list, index) => (
+        {currentInvites.map((list, index) => (
           <React.Fragment key={list.id}>
             <li key={list.id}>
               {list.invitee.email}
@@ -140,7 +140,7 @@ const EditDashBoardInviteList = () => {
                 취소
               </button>
             </li>
-            {index !== uniqueInvites.length - 1 && (
+            {index !== currentInvites.length - 1 && (
               <div className='gray-line' key={`line-${list.invitee.id}-${index}`} />
             )}
           </React.Fragment>
