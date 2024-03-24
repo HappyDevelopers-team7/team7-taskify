@@ -2,6 +2,7 @@ import { ChangeEvent, Dispatch, SetStateAction } from 'react';
 import StInputContainer from './style';
 
 interface InputTextProps {
+  value?: string; // value prop 추가
   required?: boolean;
   labelName: string;
   placeholder: string;
@@ -12,6 +13,7 @@ interface InputTextProps {
 }
 
 const InputText = ({
+  value,
   setValue,
   autoFocus = false,
   readonly = false,
@@ -33,6 +35,7 @@ const InputText = ({
         </div>
         <div className='input-box'>
           <input
+            value={value}
             autoFocus={autoFocus}
             readOnly={readonly}
             type='text'

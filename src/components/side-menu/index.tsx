@@ -75,6 +75,7 @@ const SideMenu = () => {
       <Container ref={scrollHandler}>
         <Link to={'/'}>
           <img src='/assets/image/logos/mediumLogo.svg' className='logo' alt='logo-image' />
+          <img src='/assets/image/logos/smallLogo.svg' className='small-logo' />
         </Link>
 
         <div className='sidemenu-head'>

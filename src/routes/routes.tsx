@@ -23,6 +23,7 @@ const DashBoardTestPage = lazy(() => import('@pages/dashboard-test'));
 const ProtectedRoutes = lazy(() => import('@routes/protected-routes'));
 const NotFoundPage = lazy(() => import('@pages/not-found'));
 const MyPage = lazy(() => import('@pages/my-page'));
+const DashboardEdit = lazy(() => import('@pages/dashboard-edit'));
 
 const PrimaryRoute = (
   <Route path='/' element={<Loading />}>
@@ -35,6 +36,7 @@ const PrimaryRoute = (
       <Route path='/' element={<Layout />}>
         <Route path='dashboard' element={<DashBoardPage />} />
         <Route path='dashboard/:id' element={<DashBoardIdPage />} />
+        <Route path='dashboard/:id/edit' element={<DashboardEdit />} />
         <Route path='dashboard-test' element={<DashBoardTestPage />} />
 
         <Route path='my-page' element={<MyPage />} />

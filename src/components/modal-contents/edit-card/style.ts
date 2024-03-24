@@ -80,6 +80,7 @@ const StEditCard = styled.div<{
         box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.08);
         position: absolute;
         top: 85px;
+        z-index: 1;
 
         div {
           padding-left: 28px;
@@ -210,6 +211,34 @@ const StEditCard = styled.div<{
 
   .hidden {
     display: none;
+  }
+
+  @media (max-width: 767px) {
+    .auth-box {
+      flex-direction: column;
+      gap: 0;
+
+      .auth-box-first-div {
+        .status-box {
+          width: 100%;
+          background-position: 95%;
+        }
+
+        .status-list {
+          width: 100%;
+        }
+      }
+      .auth-box-second-div {
+        .asignee-box {
+          width: 100%;
+          background-position: 95%;
+        }
+      }
+    }
+
+    .input-box {
+      margin-bottom: 24px;
+    }
   }
 `;
 
