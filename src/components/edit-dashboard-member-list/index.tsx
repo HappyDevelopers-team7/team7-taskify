@@ -50,15 +50,19 @@ const EditDashboardMemberList = () => {
   }, [id, currentPage]);
 
   const handleDeleteUserClick = (memberId: number) => {
-    deleteDashboardMember(memberId)
-      .then(() => {
-        toast.success('삭제가 완료 되었습니다.');
-        if (!id) return;
-        fetchDashboardMemberList(id, currentPage, setMember, setTotalPages, MEMBERS_PER_PAGE);
-      })
-      .catch((error) => {
-        console.error('fetching delete member error:', error);
-      });
+    if (myInfo.id === memberId) {
+      handleDeleteFailMySelf();
+    } else {
+      deleteDashboardMember(memberId)
+        .then(() => {
+          toast.success('삭제가 완료 되었습니다.');
+          if (!id) return;
+          fetchDashboardMemberList(id, currentPage, setMember, setTotalPages, MEMBERS_PER_PAGE);
+        })
+        .catch((error) => {
+          console.error('fetching delete member error:', error);
+        });
+    }
   };
 
   const handleDeleteFailMySelf = () => {
@@ -132,15 +136,10 @@ const EditDashboardMemberList = () => {
                 //   <p>{member.nickname}</p>
                 // </div>
               )}
-              {myInfo.id === member.id ? (
-                <button className='delete-button' onClick={() => handleDeleteUserClick(member.id)}>
-                  삭제
-                </button>
-              ) : (
-                <button className='delete-button' onClick={handleDeleteFailMySelf}>
-                  삭제
-                </button>
-              )}
+
+              <button className='delete-button' onClick={() => handleDeleteUserClick(member.id)}>
+                삭제
+              </button>
             </li>
             {index !== currentMembers.length - 1 && <div className='gray-line' key={`line-${member.id}-${index}`} />}
           </React.Fragment>
