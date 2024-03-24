@@ -226,9 +226,25 @@
 ![멤버아닌면튕김](https://github.com/HappyDevelopers-team7/team7-taskify/assets/134386378/5dd095bc-8d3c-4857-85b8-03c4e04a74c6)
 
 
+
+
 ## 📌 대시보드 관리
 
+### 대시보드 이름 + 컬러 수정
+
+![대시보드관리-이름수정](https://github.com/HappyDevelopers-team7/team7-taskify/assets/134386378/68d4be4f-e349-4246-be77-7dae01946edc)
+
+
 ## 📌 마이페이지
+
+### 프로필 변경
+
+![프로필수정](https://github.com/HappyDevelopers-team7/team7-taskify/assets/134386378/973a31fe-deb6-4c61-bfa8-71891b1a8499)
+
+### 비밀번호 변경
+
+![비밀번호변경](https://github.com/HappyDevelopers-team7/team7-taskify/assets/134386378/ae6e80df-69b7-4080-bb00-4556b7889a2d)
+
 
 ## 📌 Page Not Found
 
