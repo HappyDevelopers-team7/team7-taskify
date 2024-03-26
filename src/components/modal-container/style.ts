@@ -5,7 +5,7 @@ interface StModalContainer {
   $type?: string;
 }
 
-const StModalContainer = styled.div<StModalContainer>`
+const StModalContainer = styled.dialog<StModalContainer>`
   position: fixed;
   top: 0;
   left: 0;
@@ -15,6 +15,8 @@ const StModalContainer = styled.div<StModalContainer>`
   align-items: center;
   justify-content: center;
   z-index: 20; // 사이드바가 10이라서 그것보다 높혀주기 위함
+  border: none;
+  background: transparent;
 
   .modal-dim {
     position: fixed;

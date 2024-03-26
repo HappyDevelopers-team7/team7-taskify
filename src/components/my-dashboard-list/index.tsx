@@ -65,7 +65,11 @@ const MyDashBoardList = ({ handleCreateDashboard }: MyDashBoardListProps) => {
           <li>
             <button aria-haspopup='true' type='button' onClick={handleCreateDashboard}>
               <p>새로운 대시보드 생성</p>
-              <img src='assets/image/icons/bannerAddIcon.svg' alt='새로운 대시보드 생성하려면 클릭' />
+              <img
+                src='assets/image/icons/bannerAddIcon.svg'
+                alt='새로운 대시보드 생성하려면 클릭'
+                aria-hidden='true'
+              />
             </button>
           </li>
           {errorMessage ? (
@@ -96,7 +100,7 @@ const MyDashBoardList = ({ handleCreateDashboard }: MyDashBoardListProps) => {
                       ? '/assets/image/icons/arrowForwardIconGrayLeft.svg'
                       : '/assets/image/icons/arrowForwardIconLeft.svg'
                   }
-                  alt='이전 목록 버튼'
+                  alt='이전 목록'
                 />
               </button>
               <button className='next-button' disabled={nextDisabled} type='button' onClick={handleClickNext}>
@@ -106,7 +110,7 @@ const MyDashBoardList = ({ handleCreateDashboard }: MyDashBoardListProps) => {
                       ? '/assets/image/icons/arrowForwardIconGray.svg'
                       : '/assets/image/icons/arrowForwardIcon.svg'
                   }
-                  alt='다음 목록 버튼'
+                  alt='다음 목록'
                 />
               </button>
             </div>

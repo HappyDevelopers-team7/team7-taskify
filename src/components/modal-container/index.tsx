@@ -49,7 +49,7 @@ const ModalContainer = ({
     case 'detail':
       return (
         <PortalContainer>
-          <StModalContainer $type={type} $modalWidth={modalWidth} role='dialog' aria-modal='true' tabIndex={0}>
+          <StModalContainer $type={type} $modalWidth={modalWidth}>
             <div className='modal-dim' onClick={handleCloseModal}></div>
             <div className='modal-content'>
               <div className='detail-header'>
@@ -87,7 +87,7 @@ const ModalContainer = ({
     default:
       return (
         <PortalContainer>
-          <StModalContainer $modalWidth={modalWidth} role='dialog' aria-modal='true' tabIndex={0}>
+          <StModalContainer $modalWidth={modalWidth}>
             <div className='modal-dim' onClick={handleCloseModal}></div>
             <div className='modal-content'>
               {title ? <h2>{title}</h2> : null}
