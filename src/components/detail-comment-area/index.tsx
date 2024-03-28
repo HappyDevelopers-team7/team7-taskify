@@ -5,8 +5,9 @@ import { IdGroupType } from '@/types/idGroupType';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { DASHBOARD_ERROR_MESSAGES } from '@/constants/message';
 import { toast } from 'react-toastify';
-import { CommentListType } from '@/types/commentListType';
+import { CommentData, CommentListType } from '@/types/commentListType';
 import StCommentArea from './style';
+import { useQuery } from '@tanstack/react-query';
 
 interface DetailCommentAreaProps {
   idGroup: IdGroupType;
@@ -17,6 +18,13 @@ const DetailCommentArea = ({ idGroup, cardId }: DetailCommentAreaProps) => {
   const [commentList, setCommentList] = useState<CommentListType[]>([]);
   const [size, setSize] = useState(10);
   const [cursorId, setCursorId] = useState<number | null>(null);
+
+  const { data: commentData } = useQuery<CommentData>({
+    queryKey: ['comments', size, cardId],
+    queryFn: () => getComments(size, cardId),
+  });
+
+  const commentArray: CommentListType[] = commentData?.comments || [];
 
   const observerTarget = useRef<HTMLDivElement>(null);
   const preventLoadRef = useRef(true);
@@ -60,19 +68,20 @@ const DetailCommentArea = ({ idGroup, cardId }: DetailCommentAreaProps) => {
   return (
     <>
       <StCommentArea>
-        <CommentWriteBox idGroup={idGroup} cardId={cardId} setCommentList={setCommentList} />
-        {commentList.length > 0 &&
-          commentList.map((content) => (
-            <CommentReadBox
-              key={content?.id}
-              commentId={content?.id}
-              content={content}
-              commentList={commentList}
-              setCommentList={setCommentList}
-            />
-          ))}
+        <CommentWriteBox idGroup={idGroup} cardId={cardId} />
+        {commentArray.length > 0
+          ? commentArray.map((comment) => (
+              <CommentReadBox
+                key={comment?.id}
+                commentId={comment?.id}
+                content={comment}
+                commentList={commentList}
+                setCommentList={setCommentList}
+              />
+            ))
+          : null}
 
-        {commentList.length >= 10 && cursorId !== null && <div id='comment-observer' ref={observerTarget}></div>}
+        {commentArray.length >= 10 && cursorId !== null && <div id='comment-observer' ref={observerTarget}></div>}
       </StCommentArea>
     </>
   );
