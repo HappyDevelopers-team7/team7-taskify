@@ -1,3 +1,8 @@
+export interface CommentData {
+  cursorId: number;
+  comments: CommentListType[];
+}
+
 export interface CommentListType {
   id: number;
   content: string;
@@ -5,8 +10,8 @@ export interface CommentListType {
   updatedAt: string;
   cardId: number;
   author: {
-    id: number;
-    nickname: string;
     profileImageUrl: string;
+    nickname: string;
+    id: number;
   };
 }
