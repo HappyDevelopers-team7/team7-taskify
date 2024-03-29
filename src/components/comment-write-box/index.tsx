@@ -14,7 +14,7 @@ const CommentWriteBox = ({ idGroup, cardId }: CommentWriteBoxProps) => {
   const [commentValue, setCommentValue] = useState('');
 
   const queryClient = useQueryClient();
-  const uploadPostMutation = useMutation({
+  const uploadCommentMutation = useMutation({
     mutationFn: () => postComment(commentValue, idGroup.columnId, cardId, idGroup.dashboardId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['comments'] });
@@ -23,7 +23,7 @@ const CommentWriteBox = ({ idGroup, cardId }: CommentWriteBoxProps) => {
   });
 
   const handleSubmitComment = () => {
-    uploadPostMutation.mutate();
+    uploadCommentMutation.mutate();
   };
 
   return (
