@@ -39,7 +39,7 @@ const CommentReadBox = ({ commentList, setCommentList, content, commentId }: Com
     dispatch(openSecondModal(`deleteCommentAlert${commentId}`));
   };
 
-  const handleDeleteCard = async () => {
+  const handleDeleteComment = async () => {
     try {
       const result = await deleteComment(commentId);
       if (result.status === 403) {
@@ -114,7 +114,7 @@ const CommentReadBox = ({ commentList, setCommentList, content, commentId }: Com
         </div>
       </StCommentReadBox>
       {openSecondModalName === `deleteCommentAlert${commentId}` ? (
-        <DeleteAlert handleSubmitDelete={handleDeleteCard} />
+        <DeleteAlert handleSubmitDelete={handleDeleteComment} />
       ) : null}
     </>
   );
