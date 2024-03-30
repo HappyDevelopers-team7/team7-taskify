@@ -34,6 +34,8 @@ const SideMenu = () => {
     dispatch(openModal('createSideDashboard'));
   };
 
+  const setSideDashboardListResult = () => {};
+
   const setSideDashboardListResult = async () => {
     try {
       const result = await getSideDashboardList(currentPage);
