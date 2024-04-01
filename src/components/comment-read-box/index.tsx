@@ -48,6 +48,7 @@ const CommentReadBox = ({ content, commentId }: CommentReadBoxProps) => {
     mutationFn: () => putComment(commentId, editValue),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['comments'] });
+      setIsEditable(false);
     },
   });
 
