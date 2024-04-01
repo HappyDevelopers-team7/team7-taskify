@@ -13,10 +13,10 @@ interface DetailCommentAreaProps {
 
 const DetailCommentArea = ({ idGroup, cardId }: DetailCommentAreaProps) => {
   const [size, setSize] = useState(10);
-  const [cursorId, setCursorId] = useState<number | null>(null);
   const { commentData } = useCommentQuery(size, cardId);
 
   const commentArray: CommentListType[] = commentData?.comments || [];
+  const commentCursorId: number | undefined = commentData?.cursorId;
 
   const observerTarget = useRef<HTMLDivElement>(null);
   const preventLoadRef = useRef(true);
@@ -36,7 +36,6 @@ const DetailCommentArea = ({ idGroup, cardId }: DetailCommentAreaProps) => {
     if (target.isIntersecting && preventLoadRef.current) {
       preventLoadRef.current = false;
       setSize((prev) => prev + 10);
-      setCursorId(cursorId); // TODO : 리액트 쿼리 무한 스크롤할 때 수정필요함
     }
   };
 
@@ -50,7 +49,9 @@ const DetailCommentArea = ({ idGroup, cardId }: DetailCommentAreaProps) => {
             ))
           : null}
 
-        {commentArray.length >= 10 && cursorId !== null && <div id='comment-observer' ref={observerTarget}></div>}
+        {commentArray.length >= 10 && commentCursorId !== null && (
+          <div id='comment-observer' ref={observerTarget}></div>
+        )}
       </StCommentArea>
     </>
   );
