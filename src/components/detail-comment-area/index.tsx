@@ -12,7 +12,6 @@ interface DetailCommentAreaProps {
 }
 
 const DetailCommentArea = ({ idGroup, cardId }: DetailCommentAreaProps) => {
-  const [commentList, setCommentList] = useState<CommentListType[]>([]);
   const [size, setSize] = useState(10);
   const [cursorId, setCursorId] = useState<number | null>(null);
   const { commentData } = useCommentQuery(size, cardId);
@@ -37,27 +36,9 @@ const DetailCommentArea = ({ idGroup, cardId }: DetailCommentAreaProps) => {
     if (target.isIntersecting && preventLoadRef.current) {
       preventLoadRef.current = false;
       setSize((prev) => prev + 10);
-      setCursorId(cursorId); // TODO : 수정필요함
+      setCursorId(cursorId); // TODO : 리액트 쿼리 무한 스크롤할 때 수정필요함
     }
   };
-
-  // const setCommentReadBox = useCallback(async () => {
-  //   try {
-  //     const result = await getComments(size, cardId);
-  //     if (result.status === 404) {
-  //       return toast.error(DASHBOARD_ERROR_MESSAGES.NOT_A_MEMBER);
-  //     }
-  //     preventLoadRef.current = true;
-  //     setCommentList(result.comments);
-  //     setCursorId(result.cursorId);
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // }, [cardId, setCommentList, size]);
-
-  // useEffect(() => {
-  //   setCommentReadBox();
-  // }, [setCommentReadBox]);
 
   return (
     <>
@@ -65,13 +46,7 @@ const DetailCommentArea = ({ idGroup, cardId }: DetailCommentAreaProps) => {
         <CommentWriteBox idGroup={idGroup} cardId={cardId} />
         {commentArray.length > 0
           ? commentArray.map((comment) => (
-              <CommentReadBox
-                key={comment?.id}
-                commentId={comment?.id}
-                content={comment}
-                commentList={commentList}
-                setCommentList={setCommentList}
-              />
+              <CommentReadBox key={comment?.id} commentId={comment?.id} content={comment} />
             ))
           : null}
 

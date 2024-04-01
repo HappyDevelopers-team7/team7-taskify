@@ -20,6 +20,8 @@ export const putComment = async (commentId: number, content: string) => {
     if (errorStatus === 403) {
       toast.error(COMMENT_ERROR_MESSAGES.EDIT_PERMISSION_DENIED);
     }
-    return toast.error(errorMessage);
+
+    toast.error(errorMessage);
+    return true;
   }
 };
