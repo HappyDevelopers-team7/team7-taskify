@@ -3,6 +3,7 @@ export const SIMPLE_MESSAGES = {
   ACCEPTED: '수락 되었습니다.',
   DELETED: '삭제 되었습니다.',
   TRY_AGAIN: '다시 시도해주세요.',
+  UNAUTHORIZED: '권한이 없습니다.',
 } as const;
 
 export const AUTH_MESSAGES = {

@@ -1,13 +1,10 @@
-import { getComments } from '@/api/getComments';
 import CommentReadBox from '../comment-read-box';
 import CommentWriteBox from '../comment-write-box';
 import { IdGroupType } from '@/types/idGroupType';
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { DASHBOARD_ERROR_MESSAGES } from '@/constants/message';
-import { toast } from 'react-toastify';
-import { CommentData, CommentListType } from '@/types/commentListType';
+import { useEffect, useRef, useState } from 'react';
+import { CommentListType } from '@/types/commentListType';
 import StCommentArea from './style';
-import { useQuery } from '@tanstack/react-query';
+import useCommentQuery from '@/queries/useCommentQuery';
 
 interface DetailCommentAreaProps {
   idGroup: IdGroupType;
@@ -18,11 +15,7 @@ const DetailCommentArea = ({ idGroup, cardId }: DetailCommentAreaProps) => {
   const [commentList, setCommentList] = useState<CommentListType[]>([]);
   const [size, setSize] = useState(10);
   const [cursorId, setCursorId] = useState<number | null>(null);
-
-  const { data: commentData } = useQuery<CommentData>({
-    queryKey: ['comments', size, cardId],
-    queryFn: () => getComments(size, cardId),
-  });
+  const { commentData } = useCommentQuery(size, cardId);
 
   const commentArray: CommentListType[] = commentData?.comments || [];
 
@@ -44,26 +37,27 @@ const DetailCommentArea = ({ idGroup, cardId }: DetailCommentAreaProps) => {
     if (target.isIntersecting && preventLoadRef.current) {
       preventLoadRef.current = false;
       setSize((prev) => prev + 10);
+      setCursorId(cursorId); // TODO : 수정필요함
     }
   };
 
-  const setCommentReadBox = useCallback(async () => {
-    try {
-      const result = await getComments(size, cardId);
-      if (result.status === 404) {
-        return toast.error(DASHBOARD_ERROR_MESSAGES.NOT_A_MEMBER);
-      }
-      preventLoadRef.current = true;
-      setCommentList(result.comments);
-      setCursorId(result.cursorId);
-    } catch (error) {
-      console.error(error);
-    }
-  }, [cardId, setCommentList, size]);
+  // const setCommentReadBox = useCallback(async () => {
+  //   try {
+  //     const result = await getComments(size, cardId);
+  //     if (result.status === 404) {
+  //       return toast.error(DASHBOARD_ERROR_MESSAGES.NOT_A_MEMBER);
+  //     }
+  //     preventLoadRef.current = true;
+  //     setCommentList(result.comments);
+  //     setCursorId(result.cursorId);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // }, [cardId, setCommentList, size]);
 
-  useEffect(() => {
-    setCommentReadBox();
-  }, [setCommentReadBox]);
+  // useEffect(() => {
+  //   setCommentReadBox();
+  // }, [setCommentReadBox]);
 
   return (
     <>
