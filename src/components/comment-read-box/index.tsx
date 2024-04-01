@@ -1,86 +1,59 @@
-import { Dispatch, SetStateAction, useState } from 'react';
+import { useState } from 'react';
 import ProfileImage from '../profile-image';
 import StCommentReadBox from './style';
 import InputComment from '../input/input-comment';
 import { CommentListType } from '@/types/commentListType';
 import { putComment } from '@/api/putComment';
-import { toast } from 'react-toastify';
-import { COMMENT_ERROR_MESSAGES, COMMENT_MESSAGES, DASHBOARD_ERROR_MESSAGES } from '@/constants/message';
 import dateExtractor from '@/utils/dateExtractor';
 import { deleteComment } from '@/api/deleteComment';
 import DeleteAlert from '../modal-contents/delete-alert';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  SecondModalRootState,
-  closeSecondModal,
-  openSecondModal,
-  setOpenSecondModalName,
-} from '@/redux/secondModalSlice';
+import { SecondModalRootState, openSecondModal, setOpenSecondModalName } from '@/redux/secondModalSlice';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 interface CommentReadBoxProps {
-  commentList: CommentListType[];
-  setCommentList: Dispatch<SetStateAction<CommentListType[]>>;
   content: CommentListType;
   commentId: number;
 }
 
-const CommentReadBox = ({ commentList, setCommentList, content, commentId }: CommentReadBoxProps) => {
+const CommentReadBox = ({ content, commentId }: CommentReadBoxProps) => {
   const dispatch = useDispatch();
   const openSecondModalName = useSelector((state: SecondModalRootState) => state.secondModal.openSecondModalName);
   const [isEditable, setIsEditable] = useState(false);
   const [editValue, setEditValue] = useState('');
-
-  const handleClickEditComment = () => {
-    setIsEditable((prev) => !prev);
-  };
+  const queryClient = useQueryClient();
 
   const handleClickDeleteComment = async () => {
     dispatch(setOpenSecondModalName(`deleteCommentAlert${commentId}`));
     dispatch(openSecondModal(`deleteCommentAlert${commentId}`));
   };
 
-  const handleDeleteCard = async () => {
-    try {
-      const result = await deleteComment(commentId);
-      if (result.status === 403) {
-        return toast.error(COMMENT_ERROR_MESSAGES.DELETE_PERMISSION_DENIED);
-      }
-      if (result.status === 404) {
-        return toast.error(DASHBOARD_ERROR_MESSAGES.NOT_A_MEMBER);
-      }
-      const updatedCommentList = commentList.filter((comment) => comment.id !== commentId);
-      dispatch(closeSecondModal());
-      setCommentList(updatedCommentList);
-      toast.success(COMMENT_MESSAGES.DELETE_COMMENT);
-    } catch (error) {
-      console.error(error);
-    }
+  const deleteCommentMutation = useMutation({
+    mutationFn: () => deleteComment(commentId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['comments'] });
+    },
+  });
+
+  const handleDeleteComment = () => {
+    deleteCommentMutation.mutate();
   };
 
-  const handleSubmitEditComment = async () => {
-    try {
-      const result = await putComment(commentId, editValue);
-      if (result.status === 404) {
-        toast.error(DASHBOARD_ERROR_MESSAGES.NOT_A_MEMBER);
-      }
-      if (result.status === 403) {
-        toast.error(COMMENT_ERROR_MESSAGES.EDIT_PERMISSION_DENIED);
-      }
+  const handleClickEditCommentButton = () => {
+    setIsEditable((prev) => !prev);
+  };
 
-      setCommentList((prevComments) => {
-        const updatedComments = prevComments.map((comment) => {
-          if (comment.id === commentId) {
-            return result;
-          }
-          return comment;
-        });
-        return updatedComments;
-      });
+  // TODO: api에서 에러처리되었을때 수정 상태가 true로 유지되도록 처리해야함. 지금은 onError에 해당 부분이 잡히지 않음
+  const editCommentMutation = useMutation({
+    mutationFn: () => putComment(commentId, editValue),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['comments'] });
       setIsEditable(false);
-      toast.success(COMMENT_MESSAGES.EDIT_COMMENT);
-    } catch (error) {
-      console.error(error);
-    }
+    },
+  });
+
+  const handleSubmitEditComment = () => {
+    editCommentMutation.mutate();
   };
 
   return (
@@ -107,14 +80,14 @@ const CommentReadBox = ({ commentList, setCommentList, content, commentId }: Com
             <button type='button' onClick={handleClickDeleteComment}>
               삭제
             </button>
-            <button type='button' onClick={handleClickEditComment}>
+            <button type='button' onClick={handleClickEditCommentButton}>
               {isEditable ? '취소' : '수정'}
             </button>
           </div>
         </div>
       </StCommentReadBox>
       {openSecondModalName === `deleteCommentAlert${commentId}` ? (
-        <DeleteAlert handleSubmitDelete={handleDeleteCard} />
+        <DeleteAlert handleSubmitDelete={handleDeleteComment} />
       ) : null}
     </>
   );
