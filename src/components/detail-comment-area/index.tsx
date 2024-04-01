@@ -35,7 +35,7 @@ const DetailCommentArea = ({ idGroup, cardId }: DetailCommentAreaProps) => {
     const target = entries[0];
     if (target.isIntersecting && preventLoadRef.current) {
       preventLoadRef.current = false;
-      setSize((prev) => prev + 10);
+      setSize((prev) => prev + 10); // TODO: 깜박임 현상 체크하여 수정 필요
     }
   };
 
