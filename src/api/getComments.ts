@@ -2,7 +2,6 @@ import { AxiosError } from 'axios';
 import API from './constants';
 import axiosInstance from './instance/axiosInstance';
 import { SIMPLE_MESSAGES } from '@/constants/message';
-import { toast } from 'react-toastify';
 
 export const getComments = async (size: number, cardId: number) => {
   try {
@@ -12,10 +11,11 @@ export const getComments = async (size: number, cardId: number) => {
   } catch (e) {
     const error = e as AxiosError;
     if (error.response?.status === 401) {
-      window.location.href = '/';
-      return toast.error(SIMPLE_MESSAGES.UNAUTHORIZED);
+      alert(SIMPLE_MESSAGES.UNAUTHORIZED);
+    } else {
+      alert(`${SIMPLE_MESSAGES.TRY_AGAIN}: ${error.response}`);
     }
 
-    return toast.error(`${SIMPLE_MESSAGES.TRY_AGAIN}: ${error.response}`);
+    return (window.location.href = '/');
   }
 };
