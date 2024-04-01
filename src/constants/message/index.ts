@@ -47,6 +47,7 @@ export const COMMENT_MESSAGES = {
 export const COMMENT_ERROR_MESSAGES = {
   EDIT_PERMISSION_DENIED: '댓글 수정 권한이 없습니다.',
   DELETE_PERMISSION_DENIED: '댓글 삭제 권한이 없습니다.',
+  REQUIRE_COMMENT_CONTENT: '내용을 입력해 주세요.',
 } as const;
 
 export const INVITATION_MESSAGES = {
