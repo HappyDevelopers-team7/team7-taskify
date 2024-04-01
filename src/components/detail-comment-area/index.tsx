@@ -1,12 +1,10 @@
-import { getComments } from '@/api/getComments';
 import CommentReadBox from '../comment-read-box';
 import CommentWriteBox from '../comment-write-box';
 import { IdGroupType } from '@/types/idGroupType';
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { DASHBOARD_ERROR_MESSAGES } from '@/constants/message';
-import { toast } from 'react-toastify';
+import { useEffect, useRef, useState } from 'react';
 import { CommentListType } from '@/types/commentListType';
 import StCommentArea from './style';
+import useCommentQuery from '@/queries/useCommentQuery';
 
 interface DetailCommentAreaProps {
   idGroup: IdGroupType;
@@ -14,9 +12,11 @@ interface DetailCommentAreaProps {
 }
 
 const DetailCommentArea = ({ idGroup, cardId }: DetailCommentAreaProps) => {
-  const [commentList, setCommentList] = useState<CommentListType[]>([]);
   const [size, setSize] = useState(10);
-  const [cursorId, setCursorId] = useState<number | null>(null);
+  const { commentData } = useCommentQuery(size, cardId);
+
+  const commentArray: CommentListType[] = commentData?.comments || [];
+  const commentCursorId: number | undefined = commentData?.cursorId;
 
   const observerTarget = useRef<HTMLDivElement>(null);
   const preventLoadRef = useRef(true);
@@ -35,44 +35,23 @@ const DetailCommentArea = ({ idGroup, cardId }: DetailCommentAreaProps) => {
     const target = entries[0];
     if (target.isIntersecting && preventLoadRef.current) {
       preventLoadRef.current = false;
-      setSize((prev) => prev + 10);
+      setSize((prev) => prev + 10); // TODO: 깜박임 현상 체크하여 수정 필요
     }
   };
-
-  const setCommentReadBox = useCallback(async () => {
-    try {
-      const result = await getComments(size, cardId);
-      if (result.status === 404) {
-        return toast.error(DASHBOARD_ERROR_MESSAGES.NOT_A_MEMBER);
-      }
-      preventLoadRef.current = true;
-      setCommentList(result.comments);
-      setCursorId(result.cursorId);
-    } catch (error) {
-      console.error(error);
-    }
-  }, [cardId, setCommentList, size]);
-
-  useEffect(() => {
-    setCommentReadBox();
-  }, [setCommentReadBox]);
 
   return (
     <>
       <StCommentArea>
-        <CommentWriteBox idGroup={idGroup} cardId={cardId} setCommentList={setCommentList} />
-        {commentList.length > 0 &&
-          commentList.map((content) => (
-            <CommentReadBox
-              key={content?.id}
-              commentId={content?.id}
-              content={content}
-              commentList={commentList}
-              setCommentList={setCommentList}
-            />
-          ))}
+        <CommentWriteBox idGroup={idGroup} cardId={cardId} />
+        {commentArray.length > 0
+          ? commentArray.map((comment) => (
+              <CommentReadBox key={comment?.id} commentId={comment?.id} content={comment} />
+            ))
+          : null}
 
-        {commentList.length >= 10 && cursorId !== null && <div id='comment-observer' ref={observerTarget}></div>}
+        {commentArray.length >= 10 && commentCursorId !== null && (
+          <div id='comment-observer' ref={observerTarget}></div>
+        )}
       </StCommentArea>
     </>
   );

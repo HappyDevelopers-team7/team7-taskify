@@ -1,6 +1,7 @@
 import { AxiosError } from 'axios';
 import API from './constants';
 import axiosInstance from './instance/axiosInstance';
+import { DASHBOARD_ERROR_MESSAGES, SIMPLE_MESSAGES } from '@/constants/message';
 
 export const getComments = async (size: number, cardId: number) => {
   try {
@@ -9,6 +10,15 @@ export const getComments = async (size: number, cardId: number) => {
     return response.data;
   } catch (e) {
     const error = e as AxiosError;
-    return error.response;
+    const errorStatus = error.response?.status;
+    if (errorStatus === 401) {
+      alert(SIMPLE_MESSAGES.UNAUTHORIZED);
+    } else if (errorStatus === 404) {
+      alert(DASHBOARD_ERROR_MESSAGES.NOT_A_MEMBER);
+    } else {
+      alert(`${SIMPLE_MESSAGES.TRY_AGAIN}: ${error.response}`);
+    }
+
+    return (window.location.href = '/');
   }
 };
