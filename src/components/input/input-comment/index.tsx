@@ -1,22 +1,22 @@
-import { Dispatch, FormEvent, SetStateAction } from 'react';
+import { Dispatch, FormEvent, MutableRefObject, SetStateAction } from 'react';
 import StInputComment from './style';
 
 interface InputCommentProps {
   defaultValue?: string;
-  value?: string;
+  inputRef: MutableRefObject<string | null>;
   handleSubmit: (e: FormEvent<HTMLButtonElement>) => void;
   setValue?: Dispatch<SetStateAction<string>>;
 }
-const InputComment = ({ defaultValue, value, handleSubmit, setValue }: InputCommentProps) => {
+const InputComment = ({ defaultValue, inputRef, handleSubmit }: InputCommentProps) => {
   const handleChangeTextarea = (e: FormEvent<HTMLTextAreaElement>) => {
-    setValue?.(e.currentTarget.value);
+    inputRef.current = e.currentTarget.value;
   };
   return (
     <StInputComment>
       {defaultValue ? (
         <textarea defaultValue={defaultValue} onChange={handleChangeTextarea}></textarea>
       ) : (
-        <textarea value={value} onChange={handleChangeTextarea}></textarea>
+        <textarea onChange={handleChangeTextarea}></textarea>
       )}
       <div className='submit-button-box'>
         <button type='submit' onClick={handleSubmit}>
