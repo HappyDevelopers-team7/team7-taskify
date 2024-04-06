@@ -54,7 +54,6 @@ const MyPage = () => {
         const formData = new FormData();
         formData.append('image', profileImage);
         const uploadResponse = await PostProfileImage(formData);
-        console.log(uploadResponse);
         if (uploadResponse && uploadResponse.data && uploadResponse.data.profileImageUrl) {
           imageUrl = uploadResponse.data.profileImageUrl;
         } else {

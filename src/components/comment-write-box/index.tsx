@@ -18,7 +18,6 @@ const CommentWriteBox = ({ idGroup, cardId }: CommentWriteBoxProps) => {
     mutationFn: () => postComment(inputRef.current || '', idGroup.columnId, cardId, idGroup.dashboardId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['comments'] });
-      console.log(inputRef.current);
       inputRef.current = null;
     },
   });

@@ -13,15 +13,13 @@ interface DetailCommentAreaProps {
 
 const DetailCommentArea = ({ idGroup, cardId }: DetailCommentAreaProps) => {
   const [size, setSize] = useState(10);
-  const { commentData, isCommentPending } = useCommentQuery(size, cardId);
+  const { commentData } = useCommentQuery(size, cardId);
 
   const commentArray: CommentListType[] = commentData?.comments || [];
   const commentCursorId: number | undefined = commentData?.cursorId;
 
   const observerTarget = useRef<HTMLDivElement>(null);
   const preventLoadRef = useRef(true);
-
-  console.log('pending State: ' + isCommentPending);
 
   useEffect(() => {
     const observer = new IntersectionObserver(obsHandler, { threshold: 0.5 });

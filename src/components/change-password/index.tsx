@@ -48,7 +48,6 @@ export const ChangePassword = () => {
       }
 
       const response = await PutPassword(currentPassword, newPassword);
-      console.log(response);
       if (response?.status === 204) {
         toast.error('비밀번호가 성공적으로 변경되었습니다.');
         setCurrentPassword('');
