@@ -8,7 +8,6 @@ export const postInviteDashboard = async (email: string, dashboardId: string) =>
     const res = await axiosInstance.post(`${API.DASHBOARDS.DASHBOARDS}/${dashboardId}/invitations`, {
       email,
     });
-    console.log(res);
     const resData = await res;
     return resData;
   } catch (e) {

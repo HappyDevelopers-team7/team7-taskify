@@ -2,7 +2,7 @@ import { IdGroupType } from '@/types/idGroupType';
 import InputComment from '../input/input-comment';
 import StCommentWriteBox from './style';
 import { postComment } from '@/api/postComment';
-import { useState } from 'react';
+import { LegacyRef, useRef } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 interface CommentWriteBoxProps {
@@ -11,14 +11,17 @@ interface CommentWriteBoxProps {
 }
 
 const CommentWriteBox = ({ idGroup, cardId }: CommentWriteBoxProps) => {
-  const [commentValue, setCommentValue] = useState('');
+  const inputRef: LegacyRef<HTMLTextAreaElement> = useRef(null);
 
   const queryClient = useQueryClient();
   const uploadCommentMutation = useMutation({
-    mutationFn: () => postComment(commentValue, idGroup.columnId, cardId, idGroup.dashboardId),
+    // react query 요청 보낼때 inputRef.current 값을 넣어 보낸다.
+    mutationFn: () => postComment(inputRef.current?.value || '', idGroup.columnId, cardId, idGroup.dashboardId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['comments'] });
-      setCommentValue('');
+      if (inputRef.current) {
+        inputRef.current.value = '';
+      }
     },
   });
 
@@ -30,7 +33,7 @@ const CommentWriteBox = ({ idGroup, cardId }: CommentWriteBoxProps) => {
     <>
       <StCommentWriteBox>
         <h4>댓글</h4>
-        <InputComment handleSubmit={handleSubmitComment} value={commentValue} setValue={setCommentValue} />
+        <InputComment handleSubmit={handleSubmitComment} inputRef={inputRef} />
       </StCommentWriteBox>
     </>
   );
