@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { LegacyRef, useRef, useState } from 'react';
 import ProfileImage from '../profile-image';
 import StCommentReadBox from './style';
 import InputComment from '../input/input-comment';
@@ -20,8 +20,8 @@ const CommentReadBox = ({ content, commentId }: CommentReadBoxProps) => {
   const dispatch = useDispatch();
   const openSecondModalName = useSelector((state: SecondModalRootState) => state.secondModal.openSecondModalName);
   const [isEditable, setIsEditable] = useState(false);
-  const [editValue, setEditValue] = useState('');
   const queryClient = useQueryClient();
+  const inputRef: LegacyRef<HTMLTextAreaElement> = useRef(null);
 
   const handleClickDeleteComment = async () => {
     dispatch(setOpenSecondModalName(`deleteCommentAlert${commentId}`));
@@ -45,7 +45,7 @@ const CommentReadBox = ({ content, commentId }: CommentReadBoxProps) => {
 
   // TODO: api에서 에러처리되었을때 수정 상태가 true로 유지되도록 처리해야함. 지금은 onError에 해당 부분이 잡히지 않음
   const editCommentMutation = useMutation({
-    mutationFn: () => putComment(commentId, editValue),
+    mutationFn: () => putComment(commentId, inputRef.current?.value || ''),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['comments'] });
       setIsEditable(false);
@@ -67,11 +67,7 @@ const CommentReadBox = ({ content, commentId }: CommentReadBoxProps) => {
           </div>
           <div className='comment-body'>
             {isEditable ? (
-              <InputComment
-                defaultValue={content.content}
-                handleSubmit={handleSubmitEditComment}
-                setValue={setEditValue}
-              />
+              <InputComment inputRef={inputRef} defaultValue={content.content} handleSubmit={handleSubmitEditComment} />
             ) : (
               <p>{content.content}</p>
             )}
