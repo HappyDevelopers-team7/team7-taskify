@@ -10,7 +10,6 @@ function EditDeleteButton({ dashboardId }: EditDeleteButtonProps) {
   const navigate = useNavigate();
 
   const handleDelete = async () => {
-    console.log(dashboardId);
     if (dashboardId !== undefined) {
       try {
         await deleteDashboard(dashboardId);
